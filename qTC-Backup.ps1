@@ -61,12 +61,8 @@ Get-Content $env:APPDATA\stderr.txt
 
 
 #region send to GitHub
-try {
-    Set-Location -Path $workingFolder
-    git add .
-    git commit -m "Backup"
-    git push -f
-} catch {
-    Throw
-}
+Set-Location -Path $workingFolder
+git add .
+git commit -m "Backup"
+git push -f
 #endregion

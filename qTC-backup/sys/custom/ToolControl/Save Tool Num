@@ -1,4 +1,4 @@
-echo "0:/sys/custom/ToolControl/Save Tool Num: param.T: "^{param.T}
+;echo "0:/sys/custom/ToolControl/Save Tool Num: param.T: "^{param.T}
 
 if {param.T} != {global.lastTool}
     M98 P"persistantglobal.g" V"lastTool" X{param.T}

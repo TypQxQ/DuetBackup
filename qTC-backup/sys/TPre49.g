@@ -24,7 +24,7 @@ G0 X500	Y515 F40000       		; Rapid to the approach position with tool-0. (park_
 G0 X590 F40000       			; Fast Move to the pickup position with tool.
 G0 X598 F6000        			; Slow Move to the pickup position with tool-0.
 
-	;Lock the tool
+;Lock the tool
 M98 P"/sys/custom/ToolControl/tool_lock.g" 		; Lock the tool
 
 ; Move nozzle to purge area
