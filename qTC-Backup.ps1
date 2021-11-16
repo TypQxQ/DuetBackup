@@ -65,7 +65,7 @@ try {
     Set-Location -Path $workingFolder
     git add .
     git commit -m "Backup"
-    git push
+#    git push
 } catch {
     Throw
 }
