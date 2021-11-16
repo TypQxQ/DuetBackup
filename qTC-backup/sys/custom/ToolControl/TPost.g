@@ -1,4 +1,6 @@
-;M291 S2 P"Now in TPOST" R"Q"
+; Runs after firmware thinks ToolN is selected
+; Note: tool offsets are applied at this point!
+; Note that commands prefixed with G53 will NOT apply the tool offset.
 
 M116 P{state.nextTool} S5    	; Wait for set temperatures to be reached, +-5 degC
 
@@ -21,25 +23,16 @@ if #tools[state.currentTool].heaters > 0 & heat.heaters[tools[state.currentTool]
 G0 X500 F40000       				; Wipe Backwards, and move away from other tools, incase next move is Y only. 
 M400 								; Wait for current moves to finish
 
-; Check so the tool is mounted steady.
-;if sensors.gpIn[3].value!=0
-;  abort "0:/sys/custom/ToolControl/TPost.g: Tool not picked up correctly."
+; Check so the tool is mounted steady
+if !sensors.endstops[3].triggered	; If Toolchanger is not trigered then maybe it's not coupled.
+  M98 P"/sys/custom/ToolControl/tool_lock_NoCheck.g" 	; Try locking the tool again. If the tool fell off then
+  if move.axes[3].machinePosition > 170	; If lock is at maximum assume the lock turned without gripping the tool.
+    M98 P"/sys/custom/ToolControl/Save Tool Num" T-2			; Set the saved tool as unknown loaded tool.
+    abort "0:/sys/custom/ToolControl/TPost.g: Locked at maximum and thus not connected to tool."	; Abort.
 
 	; Prepare for printing
 M208 X500							; Set axis software limits and min/max switch-triggering positions. Extended with tools
 M98 P"/sys/custom/EndStop_X-Max_Activate.g"	; Use the X max as EmergencyStop.
-
-;if move.axes[3].machinePosition >10 && move.axes[3].machinePosition < 170  ; Check if locked on tool
-;  echo move.axes[3].machinePosition
-;  M400
-;  M906 U1200			; Set to 120% of rated current
-;  M400
-;  G91                 ; Set relative mode
-;  G0 U10 F9000 H0     ; Advance the lock a litle to tighten the lock
-;  G90                 ; Set absolute mode
-;  M400
-;  M906 U900			; Set to 90% of rated current
-;  echo move.axes[3].machinePosition
 
 	; Restore for printing
 G1 R2 X0 Y0 Z1     					; Restore prior position now accounting for new tool offset. X first to avoid certain collisions when near tool parking. 

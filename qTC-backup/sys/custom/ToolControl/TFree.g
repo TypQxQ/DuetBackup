@@ -38,7 +38,7 @@ G53 G0 X597 F6000        			; Move to the parking position with tool-0. This is 
 M581 P-1 T4							; Remove trigger for when tool disconects while disconnecting it.
 
 	; Unlock
-M98 P"/sys/custom/tool_unlock.g"	; Unlock the tool
+M98 P"/sys/custom/ToolControl/tool_unlock.g"	; Unlock the tool
 
 	; Move back carriage
 G53 G0 X575 F6000   				; Move the carraige to retract the pin until it clears the tool.

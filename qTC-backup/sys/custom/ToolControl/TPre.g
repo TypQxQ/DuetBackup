@@ -29,6 +29,6 @@ G53 G0 X575 F40000       		; Fast Move to the pickup position with tool.
 G53 G0 X598 F6000        		; Move to the pickup position with tool-0. Is 1mm more than parking position
 
 	;Lock the tool
-M98 P"/sys/custom/tool_lock.g" 	; Lock the tool
+M98 P"/sys/custom/ToolControl/tool_lock.g" 	; Lock the tool
 
 

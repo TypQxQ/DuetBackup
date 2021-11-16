@@ -1,1 +1,1 @@
-M98 P"/sys/custom/tool_unlock.g"  ; Unlock the tool
+M98 P"/sys/custom/ToolControl/tool_unlock.g"  ; Unlock the tool

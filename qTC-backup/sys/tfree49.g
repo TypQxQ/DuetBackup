@@ -4,4 +4,4 @@
 
 M98 P"/sys/custom/ToolControl/TFree.g" Y515	; Run the general script for tool at Y position of the tool
 
-G53 G0 		Y500 F34000       		; Rapid to the Y max for printing so nozzle dowsn't get stuck outside. 
+G53 G0 		Y500 F34000       		; Rapid to the Y max for printing so nozzle dowsn't get stuck outside printable area. 
