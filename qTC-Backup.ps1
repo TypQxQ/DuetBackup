@@ -55,7 +55,7 @@ if ([IO.Directory]::Exists($backupDestination)) {
 $null = New-Item -ItemType Directory -Path $backupDestination
 
 
-Start-Process $workingFolder"\rfm.exe" -Wait -ArgumentList $rfmParams -NoNewWindow -RedirectStandardOutput $env:APPDATA\stdout.txt -RedirectStandardError $env:APPDATA\stderr.txt
+Start-Process $workingFolder"\rfm\rfm.exe" -Wait -ArgumentList $rfmParams -NoNewWindow -RedirectStandardOutput $env:APPDATA\stdout.txt -RedirectStandardError $env:APPDATA\stderr.txt
 Get-Content $env:APPDATA\stderr.txt
 #endregion
 

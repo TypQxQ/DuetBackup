@@ -1,0 +1,10 @@
+echo #tools[state.currentTool].heaters
+if #tools[state.currentTool].heaters > 0 
+  if heat.heaters[tools[state.currentTool].heaters[0]].current > heat.coldRetractTemperature
+    G1 E-1 F2400					; Retract
+
+
+if exists(tools[state.currentTool].heaters)  == true
+  echo "q"
+;  if heat.heaters[tools[state.currentTool].heaters[0]].current > heat.coldRetractTemperature
+    echo "qq"

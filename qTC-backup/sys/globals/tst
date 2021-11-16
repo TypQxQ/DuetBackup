@@ -1,0 +1,4 @@
+if exists(global.tst)
+    set global.tst = 3
+else
+    global tst=3

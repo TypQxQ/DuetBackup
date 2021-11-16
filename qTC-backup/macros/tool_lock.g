@@ -1,0 +1,1 @@
+M98 P"/sys/custom/tool_lock.g" ; Lock the tool
