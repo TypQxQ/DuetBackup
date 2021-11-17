@@ -1,4 +1,6 @@
-﻿#region user defined
+﻿# Based on Oneshot Duet Backup and modified by Andrei Ignat
+
+#region user defined
 $workingFolder = ('{0}\DuetBackup' -f [Environment]::GetFolderPath("MyDocuments")) 
 $rfmDownloadUrl = 'https://github.com/wilriker/rfm/releases/download/v1.1.1/rfm-windows_amd64.zip'
 $rfmOutputDestination = ('{0}\{1}' -f "$workingFolder\rfm", (Split-Path $rfmDownloadUrl -Leaf))
@@ -8,7 +10,6 @@ $railCoreHostOrIp = '192.168.1.210'
 $printerName = 'qTC'
 
 $backupDestination = ('{0}\{1}-backup' -f $workingFolder, $printerName)
-#$backupDestination = ('{0}\{1}-backup-{2}' -f $workingFolder, $printerName, (Get-Date -Format 'MMddyy'))
 #endregion
 
 #region Only download rfm if not present
