@@ -1,0 +1,19 @@
+; homev.g
+; called to home the V axis
+;
+M98 Pstallsettingshome.g  ; Set stallsettings for homing.
+M400                      ; make sure everything has stopped before we make changes
+
+M913 U30 V30         ; set motor current to 70%
+M915 V S2 R0 F0     ; set V to sensitivity 32, do nothing when stall, unfiltered
+M574 V1 S3           ; set endstops to use motor stall
+
+G91                  ; relative positioning
+G1 S1 V-310 F4000    ; Move to V min
+
+M400              ; make sure everything has stopped before we make changes
+G90 ; absolute positioning
+M913 U100 V100 ; set motor current to 100%
+
+M98 Pstallsettings.g  ; Set stallsettings for print.
+M99 ; end macro
