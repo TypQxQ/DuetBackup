@@ -1,0 +1,31 @@
+; Free up endstops
+M574 X1 P"nil"
+M574 Y1 P"nil"
+; Create Emergency Buttons
+M950 J2 C"!0.io1.in"								; Use the input pin on io0 on the main board
+M950 J3 C"0.io2.in"								; Use the input pin on io0 on the main board
+M581 P2 T0 S1									; Use above to trigger Emergency Reset.
+M581 P3 T0 S1									; Use above to trigger Emergency Reset.
+
+;M203 X12000 Y12000	; Max speed 200mm/s
+;M203 X18000 Y18000	; Max speed 300mm/s
+M203 X24000 Y24000	; Max speed 400mm/s
+;M203 X30000 Y30000	; Max speed 500mm/s
+;M203 X36000 Y36000	; Max speed 600mm/s
+;M203 X42000 Y42000	; Max speed 700mm/s
+;M203 X48000 Y48000	; Max speed 800mm/s
+
+M201 X6000 Y6000	; Acceleration. Max 6000 på förra
+M566 X2000 Y2000	; Instant speed change, Max 2000 på förra.
+
+G1 F30000
+
+G1 X100 Y001 
+G1 X100 Y499 
+G1 X100 Y001 
+G1 X100 Y499 
+G1 X100 Y001 
+G1 X100 Y499 
+G1 X100 Y001 
+G1 X100 Y499 
+

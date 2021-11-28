@@ -1,0 +1,4 @@
+if exists(global.lastTool)
+    set global.lastTool = -1
+else
+    global lastTool=-1
