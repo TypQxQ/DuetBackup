@@ -14,7 +14,6 @@ M669 K8                          ; Select CoreXYUV
 ; Network
 M550 PqHEVO                      ; Set machine name
 M552 S1                          ; Enable network
-M587 S"Q" P"DetVarEnGang9"       ; Configure access point. You can delete this line once connected
 ;M587 S"event" P"sundsparlan"       ; Configure access point. You can delete this line once connected
 ;M551 PPassword123
 M586 P0 S1                       ; Enable HTTP
