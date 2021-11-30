@@ -1,0 +1,6 @@
+M203 X12000 Y12000 ; MAX SPEED 200MM/S
+;M201 Z100  ; Z Acc for BigBox
+;M203 Z360  ; Z Max Speed for BigBox
+
+;M915 X Y S8 R1 F1  ; R3 Pausa och starta om, R1 logga, R2 pausa
+;M915 E S5 R1 F1  ;

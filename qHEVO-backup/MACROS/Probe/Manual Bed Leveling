@@ -1,0 +1,8 @@
+; ---- For manual assistant
+;G28 ; home
+M561 ; clear any bed transform
+M671 X-10.0:310.0:150.0 Y317.0:317.0:-2.0 P0.5 ; adjusting screws at rear left (-15,190), front middle (100,-10) and rear right (215,190), thread pitch 0.5mm
+G30 P0 X10 Y300 H0 Z-99999; probe near an adjusting screw
+G30 P1 X295 Y300 H0 Z-99999; probe near an adjusting screw
+G30 P2 X150 Y3 H0 Z-99999; probe near an adjusting screw
+G30 P3 X150 Y150 H0 Z-99999 S-1 ; probe center and report adjustments needed

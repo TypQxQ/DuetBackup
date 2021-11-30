@@ -1,0 +1,29 @@
+M203 X12000 Y12000 ; MAX SPEED 200MM/S
+;M201 Z100  ; Z Acc for BigBox
+;M203 Z360  ; Z Max Speed for BigBox
+
+;M915 X Y S8 R1 F1  ; R3 Pausa och starta om, R1 logga, R2 pausa
+;M915 E S5 R1 F1  ; S8 funkar utan fel
+;M915 Z S7 R1 F1  ; S8 funkar utan fel
+
+M201 X9001 Y4001   ; Set accelerations (mm/s^2) is 1000 on config - 3000 on Klipper
+M566 X800 Y400     ; Jerk på BigBox has 480. 480mm/min=8mm/s. 800=13,3 1200=20  800 funkar bra tror jag  15=900
+
+M566 E3000  ; Jerk on E is hih for Pressure Advance.
+M201 E12000   ; Working is 250, 1000 is a bit ryckig. 800 Works fine.
+
+M572 D0 S0
+;M572 D0 S0.2 ;Working
+
+;Maximum jerk rates: X: 250.0, Y: 250.0, Z: 24.0, E: 600.0
+;Accelerations: X: 500.0, Y: 500.0, Z: 100.0, E: 250.0
+
+;Print
+M566
+M201
+M203
+M915 x y
+M915 z
+M915 e
+M572 
+;M92

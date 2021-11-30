@@ -6,7 +6,7 @@ $rfmDownloadUrl = 'https://github.com/wilriker/rfm/releases/download/v1.1.1/rfm-
 $rfmOutputDestination = ('{0}\{1}' -f "$workingFolder\rfm", (Split-Path $rfmDownloadUrl -Leaf))
 
 
-$railCoreHostOrIp = '192.168.1.204'
+$railCoreHostOrIp = '192.168.1.205'
 $printerName = 'qHEVO'
 
 $backupDestination = ('{0}\{1}-backup' -f $workingFolder, $printerName)

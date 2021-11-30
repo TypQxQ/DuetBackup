@@ -1,0 +1,10 @@
+;Print settings
+M201      ; Max speed
+M203      ; Acceleration
+M566      ; Jerk
+M593      ; Dynamic Acceleration
+M572      ; Pressure Advance
+M915 x y  ; Stall detection on XY
+M915 z    ; Stall detection on Z
+M915 e    ; Stall detection on E
+M906      ; Motor effect
