@@ -7,4 +7,4 @@ G92 U0
 G1 X+5 U+5 F2000           ; go back a few mm
 G1 S1 X-10 U-10 F360     ; move slowly to Y axis endstop once more (second pass)
 
-G92 U0
+G92 U0 ; Also set the U min.

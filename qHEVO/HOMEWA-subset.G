@@ -1,7 +1,6 @@
 ; homeWA-subset.g
 ; called to home the W and A axis, move over to UV for homing.
 ;
-;M98 Pstallsettingshome.g  ; Set stallsettings for homing.
 
 M400                ; make sure everything has stopped before we make changes
 
@@ -20,9 +19,9 @@ M574 V1 S3          ; set endstops to use motor stall
 ;     Set acceleration and max speed and jerk for homing. To high and sensorless homing fails.
 M201 U1000 V1000    ; SET ACCELERATIONS (MM/S^2)
 M203 U24000 V24000  ; SET MAXIMUM SPEEDS (MM/MIN)
-M566 U480 V480      ; XY Jerk as in BigBox
+M566 U300 V300      ; Jerk
 
-
+M400
 G91                 ; relative positioning
 G1 S1 U-310 F4000   ; Move to W min
 G0 U10 F4000        ; Move out of the way so not to interfere with next homing
@@ -48,6 +47,6 @@ G0 U20 V20 F24000   ; Move to oposite of where XY is when homing
 
 
 M584 U10 V11 P3
-M584 X0:3:4 Y6:7:8 U10 V11 P3    ; Använd bara XY
+M584 X0:3:4 Y6:7:8 U10 V11 P3    ; Använd bara som XY
 
 M99  ; Return

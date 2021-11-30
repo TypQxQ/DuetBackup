@@ -1,18 +1,18 @@
 ; homeall.g
 ; called to home all axes
 
-M104 S130		 ; Start heating extruder to probing temperature
+M568 S130		 ; Start heating extruder to probing temperature
 M109 R130 		 ; Wait for extruder to reach probing before proceeding
 
 M400                     ; make sure everything has stopped before we make changes
-M98 Pstallsettingshome.g ; Set stallsettings for homing.
+M98 P"stallsettingshome.g" ; Set stallsettings for homing.
 
 G91                      ; relative positioning
 G1 Z5 F6000 S2           ; lift Z relative to current position
 
-M98 PHOMEY_subset.G      ; Call the actual homing of Y
+M98 P"HOMEY_subset.G"      ; Call the actual homing of Y
 G1 Y5 V5 F6000 S2        ; Move 5mm so not X gets upset when homing sensorless.
-M98 PHOMEX_subset.G      ; Call the actual homing of X
+M98 P"HOMEX_subset.G"      ; Call the actual homing of X
 
 M913 X60 Y60 U60 V60          ; Use less power not to dammage belts.
 
@@ -31,11 +31,9 @@ M400                      ; make sure everything has stopped before we make chan
 ;M290 Z0.1 R0             ; Babystep to Ultrabase height
 ;M290 Z0 R0                ; Reset Babystep 
 
-M98 PHOMEWA-subset.G      ; Home carriage for active vibration dampening.
+M98 P"HOMEWA-subset.G"      ; Home carriage for active vibration dampening.
 
-M98 Pstallsettings.g      ; Set stallsettings for print.
+M98 P"stallsettings.g"      ; Set stallsettings for print.
 G90                       ; absolute positioning
 
 M99                       ; end macro
-
-

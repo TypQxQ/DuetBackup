@@ -42,65 +42,83 @@ M92 X80 Y80 U80 V80 W80 A80 Z1600 E830       ; Set steps per mm (BMG = 415) on 1
 ; Load speed settings for homing.
 M98 P"/sys/speeds4probing.g"
 
-M572 D0 S0.2                       ; Pressure advance
-
 ; Changing XY to 1500=89%. UV stays same for sensorless homing. Z to 1100=82% 06/04/2019
-M906 X1500 Y1500 U1500 V1500 W1500 A1500 Z1000:1000:1000 E900 I30 ; Try lower currents so steppers don't get too hot, especially when enclosed. 1600,1000,500 works fine 
-;M906 X1800 Y1800 U1800 V1800 W1800 A1800 Z900:900:900 E900 I30 ; Set motor currents (mA) and motor idle factor in per cent 
-				 ; E3D High Torq and slim but powerfull= 1,68A - e3d Lead Screw Motor= 1,33A - Pankake = 0,7A - LDO HT pankake = 1,4A
+M906 X1500 Y1500 U1500 V1500 W1500 A1500 Z1000:1000:1000 E900 I30 ; Set motor currents (mA) and motor idle factor in per cent 
+; M906 X1700 Y1700 U1700 V1700 W1700 A1700 Z1000:1000:1000 E900 I30 ; Set motor currents (mA) and motor idle factor in per cent 
+				 ; E3D High Torq and slim but powerfull= 1,68A - e3d Lead Screw Motor= 1,33A - Pankake = 0,7A - LDO HT pankake = 1,4A - Moons = 2A
 
-M84 S30                          ; Set idle timeout
+M84 S30											; Set idle timeout
 
-M915 X Y U V E W A S8 R1 F1              ; Log  axis stall
+M915 X Y U V E W A S8 R1 F1						; Log  axis stall
 
 ; Axis Limits
-M208 X0 Y0 U0 V0 W0 A0 Z0 S1                 ; Set axis minima -  Can be -15 if endstop is at -15
-M208 X290 Y295 U290 V295 W290 A295 Z300 S0           ; Set axis maxima
+M208 X0:290 Y0:295 U0:290 V0:295 W0:290 A0:295 Z0:300	; Set axis minima:maxima -  Can be -15 if endstop is at -15
 
 ; Endstops
-M574 X1 S1                       ; Set active high endstops for X
-M574 Y1 S1                       ; Set active high endstops for Y
-M574 U1 V1 W1 A1 S3              ; Set endstops controlled by motor load detection for U and V
-M581 E0 S1 T0 C0                 ; Invoke trigger 0 (emergency stop) when a rising edge is detected on the E0 endstop input at any time.
-M591 D0 C4 P2 S1 				 ; Filament Sensor on E1 endstop (low signal when filament present) Active
+M574 X1 P"xstop" S1								; Set active high endstops for X
+M574 Y1 P"ystop" S1								; Set active high endstops for Y
+M574 U1 V1 W1 A1 S3								; Set endstops controlled by motor load detection for U and V
 
+; Filament Monitor
+M591 D0 C"e1stop" P2 S1							; Filament Sensor on E1 endstop (low signal when filament present) Active
+
+; EndStop
+M950 J0 C"e0stop"
+M581 P0 S1 R0 T0								; Invoke trigger 0 (emergency stop) when a rising edge is detected on the E0 endstop input at any time.
 
 ; Z-Probe
-M558 P8 F360 T12000 I1 R1.0 A5 H3  ; Piezo
-G31 P100 X0 Y0 Z0                 ; Piezo - Set Z probe trigger value, offset and trigger height Default was -0.1
-M557 X15:285 Y15:285 S20         ; Define mesh grid
+M558 P8 C"!zprobe.in" F360 T12000 R1.0 A5 H3	; Piezo
+G31 P100 X0 Y0 Z0								; Piezo - Set Z probe trigger value, offset and trigger height Default was -0.1
+M557 X15:285 Y15:285 S20						; Define mesh grid
 
-; Heaters
-M305 P0 T100000 ;B4138 C0 R4700   ; Set thermistor + ADC parameters for heater 0
-M143 H0 S180                     ; Set temperature limit for heater 0 to 120C
-M305 P1 B4725 C7.060000e-8       ; Settings according to e3D for V6
-M143 H1 S300                     ; The e3d included thermistor cartridge will strugle with temperatures over 285°C 
-M570 H1 S600                     ; Wait 10h before canceling a print on heater fault.
-M305 P103 X3 T100000 S"HotEnd level stepper"
-M305 P104 X4 T100000 S"Extruder level stepper"
-M305 P105 X5 T100000 S"Dynamic level stepper"
-M305 P106 X6 T100000 S"Extruder stepper"
-M305 P107 X7 T100000 S"Chamber"
+; Bed Heater
+M308 S0 P"bed_temp" Y"thermistor" T100000 A"Bed"	; Define bed temperature sensor
+M143 H0 S125										; Set the maximum bed temperature to 125C
+M950 H0 C"bedheat" Q1 T0							; create heater 0 - Bed Heater
+M140 H0												; map heated bed to heater 0
+
+; ------------------------ Tool ------------------------
+; Heater
+M308 S1 P"e0temp" Y"thermistor" T100000 B4725 C7.06e-8	; define tool temperature sensor
+M950 H1 C"e0heat" T1											; create nozzle heater output on out0 and map it to temp sensor 1
+M143 H1 S300													; set temperature limit for heater 1 to 300C (e3d v6 all metal)
+M307 H1 B0 S1.00												; disable bang-bang mode for heater  and set PWM limit
+
+; Hotend Fan
+M950 F1 C"fan2"					; Define Hotend Fan on out6 (2pin)
+M106 P1 S255 T45 H1				; Setup Hotend Fan for thermal control, full on when H1 reaches 45C
+M143 H1 S300					; The e3d included thermistor cartridge will strugle with temperatures over 285°C 
+M570 H1 S600					; Wait 10h before canceling a print on heater fault.
+
+; Part cooling fan
+M950 F2 C"duex.fan7"			; Define Part Cooling fan on out3 (4pin)
+M106 P2 C"Part Cooling"			; Setup Part Cooling Fan as Part Cooling T0
+
+; Define tool
+M563 P0 S"Tool" D0 H1 F2		; Define tool 0
+;M572 D0 S0.2					; Set pressure advance on Extruder Drive 0
+
+G10 P0 R0 S0					; Set initial tool 0 active and standby temperatures to 0C
+T0								; Select First tool
+; //////////////////////// Tool ////////////////////////
+
+
+; Other temp sensors
+M308 S2 P"duex.e2temp" Y"thermistor" T100000 A"HotEnd level stepper"
+M308 S3 P"duex.e3temp" Y"thermistor" T100000 A"Extruder level stepper"
+M308 S4 P"duex.e4temp" Y"thermistor" T100000 A"Dynamic level stepper"
+;M308 S5 P"duex.e5temp" Y"thermistor" T100000 A"Extruder stepper"
+;M308 S6 P"duex.e6temp" Y"thermistor" T100000 A"Chamber"
+
 
 ; Fans
-;M106 P0 S0 F500 H-1 L0.2          ; Set fan 0 value, PWM signal inversion and frequency. Thermostatic control is turned off
-M106 P2 S1 F500 H1 T45            ; Set fan 1 value, PWM signal inversion and frequency. Thermostatic control is turned on
-M106 P8 S1 H-1 C"DriverCooler"    ; Set fan 8 value, PWM signal inversion and frequency. Thermostatic control is disabled
-M106 P7 S0 H-1 C"PartCooler"    ; Set fan 8 value, PWM signal inversion and frequency. Thermostatic control is disabled
-M106 P6 H103 T70 C"HotEnd lvl Y Fan"
-M106 P5 H103 T70 C"HotEnd lvl Y Fan"
-M106 P4 S255 H-1 C"OutputFan"
+M950 F3 C"duex.fan4"			; Output Fan
+M106 P3 S0 H-1 C"Output Fan"	; Set zero speed and Thermostatic control is disabled
+M950 F3 C"duex.fan8"			; DriverCooler on Fan8
+M106 P3 S1 H-1 C"DriverCooler"	; Set Full speed and Thermostatic control is disabled
+;M106 P6 H103 T70 C"HotEnd lvl Y Fan"
+;M106 P5 H103 T70 C"HotEnd lvl Y Fan"
 
 
-; Tools
-M563 P0 D0 H1 F7                 ; Define tool 0
-G10 P0 X0 Y0 Z0                  ; Set tool 0 axis offsets
-G10 P0 R0 S0                     ; Set initial tool 0 active and standby temperatures to 0C
-T0                               ; Select First tool
 
-M501                          ; Load PID tuning from override file
-
-;M290 Z0.2 R0             ; Babystep to Buildtak height
-
-; Automatic saving after power loss is not enabled
-; M911 S22 R23 P"M913 X0 Y0 G91 M83 G1 Z3 E-5 F1000" ; Set voltage thresholds and actions to run on power loss
+M501							; Load PID tuning from override file
