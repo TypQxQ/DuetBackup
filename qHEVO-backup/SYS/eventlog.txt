@@ -1439,3 +1439,63 @@ power up + 00:00:07 [warn] HTTP client 192.168.1.126 login succeeded
 2021-12-01 00:23:19 [warn] Finished printing file 0:/gcodes/RigidX_CFFFP_groove-mount-bowden.gcode, print time was 0h 19m
 2021-12-01 00:47:28 [warn] HTTP client 192.168.1.126 login succeeded
 2021-12-01 01:01:08 [warn] HTTP client 192.168.1.126 login succeeded
+2021-12-01 06:55:18 [warn] HTTP client 192.168.1.99 login succeeded
+2021-12-01 08:04:52 [warn] HTTP client 192.168.1.126 login succeeded
+2021-12-01 08:13:57 [warn] HTTP client 192.168.1.126 login succeeded
+2021-12-01 08:14:09 [warn] HTTP client 192.168.1.126 disconnected
+2021-12-01 08:14:09 [warn] Started printing file 0:/gcodes/CFFFP_CalibrationCombined - thin on pla.gcode
+2021-12-01 08:15:22 [warn] Leadscrew adjustments made: -0.031 -0.123 -0.039, points used 3, (mean, deviation) before (-0.065, 0.033) after (-0.000, 0.000)
+2021-12-01 08:59:41 [warn] Resume state saved
+2021-12-01 08:59:47 [warn] Printing paused at X170.8 Y127.9 Z3.9
+2021-12-01 08:59:47 [warn] Cancelled printing file 0:/gcodes/CFFFP_CalibrationCombined - thin on pla.gcode, print time was 0h 45m
+2021-12-01 10:13:13 [warn] HTTP client 192.168.1.126 login succeeded
+2021-12-01 10:13:16 [warn] HTTP client 192.168.1.126 disconnected
+2021-12-01 10:13:16 [warn] Started printing file 0:/gcodes/pla-ss-fast-CalibrationCombined.gcode
+2021-12-01 10:15:15 [warn] Leadscrew adjustments made: -0.040 -0.095 -0.110, points used 3, (mean, deviation) before (-0.080, 0.025) after (0.000, 0.000)
+2021-12-01 10:19:29 [warn] HTTP client 192.168.1.126 login succeeded
+2021-12-01 11:02:24 [warn] Finished printing file 0:/gcodes/pla-ss-fast-CalibrationCombined.gcode, print time was 0h 49m
+2021-12-01 13:16:03 [warn] HTTP client 192.168.1.126 login succeeded
+2021-12-01 13:16:06 [warn] HTTP client 192.168.1.126 disconnected
+2021-12-01 13:16:06 [warn] Started printing file 0:/gcodes/CalibrationCombined.gcode
+2021-12-01 13:17:14 [warn] Leadscrew adjustments made: -0.046 -0.083 -0.160, points used 3, (mean, deviation) before (-0.093, 0.042) after (-0.000, 0.000)
+2021-12-01 13:28:12 [warn] HTTP client 192.168.1.99 login succeeded
+2021-12-01 14:02:05 [warn] Finished printing file 0:/gcodes/CalibrationCombined.gcode, print time was 0h 45m
+2021-12-01 14:55:47 [warn] HTTP client 192.168.1.126 login succeeded
+2021-12-01 14:55:51 [warn] HTTP client 192.168.1.126 disconnected
+2021-12-01 14:55:51 [warn] Started printing file 0:/gcodes/CalibrationCombined.gcode
+2021-12-01 14:57:51 [warn] Leadscrew adjustments made: -0.054 -0.051 0.019, points used 3, (mean, deviation) before (-0.031, 0.030) after (-0.000, 0.000)
+2021-12-01 14:57:57 [warn] HTTP client 192.168.1.99 login succeeded
+2021-12-01 14:58:02 [warn] Cancelled printing file 0:/gcodes/CalibrationCombined.gcode, print time was 0h 2m
+2021-12-01 14:58:02 [info] Event logging stopped
+power up + 00:00:00 [info] Event logging started at level warn
+power up + 00:00:00 [info] Running: Duet WiFi 1.02 or later: 3.4.0beta6 (2021-11-06 11:37:41)
+power up + 00:00:00 [warn] Error: Heater 0 does not exist
+power up + 00:00:00 [warn] Warning: Heater 0 appears to be over-powered. If left on at full power, its temperature is predicted to reach 222C
+power up + 00:00:01 [warn] WiFi module started
+power up + 00:00:06 [warn] WiFi module is connected to access point Q, IP address 192.168.1.205
+power up + 00:00:07 [warn] HTTP client 192.168.1.126 login succeeded
+2021-12-01 14:58:18 [warn] Date and time set at power up + 00:00:07
+2021-12-01 14:58:18 [warn] HTTP client 192.168.1.99 login succeeded
+2021-12-01 14:58:24 [warn] Started printing file 0:/gcodes/CalibrationCombined.gcode
+2021-12-01 14:59:45 [warn] Leadscrew adjustments made: -0.040 -0.093 0.004, points used 3, (mean, deviation) before (-0.045, 0.034) after (0.000, 0.000)
+2021-12-01 15:44:20 [warn] Finished printing file 0:/gcodes/CalibrationCombined.gcode, print time was 0h 45m
+2021-12-01 15:58:35 [warn] HTTP client 192.168.1.2 login succeeded
+2021-12-01 16:32:25 [warn] Leadscrew adjustments made: -0.107 -0.079 -0.112, points used 3, (mean, deviation) before (-0.099, 0.012) after (-0.000, 0.000)
+2021-12-01 16:32:50 [warn] Leadscrew adjustments made: -0.000 0.023 0.014, points used 3, (mean, deviation) before (0.012, 0.008) after (0.000, 0.000)
+2021-12-01 18:25:50 [warn] Started printing file 0:/gcodes/CalibrationCombined.gcode
+2021-12-01 18:27:37 [warn] Leadscrew adjustments made: -0.046 -0.116 -0.041, points used 3, (mean, deviation) before (-0.069, 0.028) after (-0.000, 0.000)
+2021-12-01 18:28:02 [warn] Leadscrew adjustments made: -0.017 0.003 -0.029, points used 3, (mean, deviation) before (-0.014, 0.011) after (-0.000, 0.000)
+2021-12-01 19:12:41 [warn] Finished printing file 0:/gcodes/CalibrationCombined.gcode, print time was 0h 46m
+2021-12-01 19:31:10 [warn] HTTP client 192.168.1.2 login succeeded
+2021-12-01 19:31:14 [warn] HTTP client 192.168.1.2 login succeeded
+2021-12-01 19:48:57 [warn] HTTP client 192.168.1.126 login succeeded
+2021-12-01 19:49:01 [warn] HTTP client 192.168.1.126 disconnected
+2021-12-01 19:49:01 [warn] Started printing file 0:/gcodes/groove-mount-bowden.gcode
+2021-12-01 19:50:58 [warn] Leadscrew adjustments made: -0.034 -0.066 -0.096, points used 3, (mean, deviation) before (-0.063, 0.022) after (0.000, 0.000)
+2021-12-01 19:51:23 [warn] Leadscrew adjustments made: -0.060 -0.028 0.040, points used 3, (mean, deviation) before (-0.019, 0.037) after (-0.000, 0.000)
+2021-12-01 19:51:46 [warn] Leadscrew adjustments made: -0.009 0.011 0.003, points used 3, (mean, deviation) before (0.001, 0.006) after (-0.000, 0.000)
+2021-12-01 20:05:53 [warn] Finished printing file 0:/gcodes/groove-mount-bowden.gcode, print time was 0h 16m
+2021-12-01 20:38:32 [warn] HTTP client 192.168.1.126 login succeeded
+2021-12-01 20:38:50 [warn] HTTP client 192.168.1.126 disconnected
+2021-12-01 20:38:50 [warn] Started printing file 0:/gcodes/CFFFP_CalibrationCombined.gcode
+2021-12-01 20:41:19 [warn] HTTP client 192.168.1.126 login succeeded
