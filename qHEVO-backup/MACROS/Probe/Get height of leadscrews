@@ -1,0 +1,13 @@
+G28
+M561 ; clear any bed transform
+
+; ---- For 2 Leadscrews
+M671 X-37.0:337.0 Y150.0:150.0 ; Position of Z0(left) and Z1(right) Leadscews.
+G0 Z3
+G0 X10 Y150  ; probe near a leadscrew
+G30 S-1
+G0 Z3
+G0 X290 Y150  ; probe near a leadscrew
+G30 S-1
+G0 Z3
+M18
