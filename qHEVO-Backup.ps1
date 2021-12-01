@@ -43,7 +43,11 @@ $rfmParams = @(
     '-exclude'
     '0:/gcodes'
     '-exclude'
+    '0:/GCODES'
+    '-exclude'
     '0:/www'
+    '-exclude'
+    '0:/WWW'
     '-exclude'
     '0:/firmware'
     $backupDestination
