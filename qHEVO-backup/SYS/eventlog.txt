@@ -1713,3 +1713,127 @@ power up + 00:03:05 [warn] HTTP client 192.168.1.2 login succeeded
 Height map saved to file 0:/sys/heightmap.csv
 2021-12-04 17:22:14 [warn] Finished printing file 0:/gcodes/v7b (Thread).gcode, print time was 1h 53m
 2021-12-04 17:38:03 [warn] HTTP client 192.168.1.126 login succeeded
+2021-12-04 17:53:46 [warn] HTTP client 192.168.1.126 login succeeded
+2021-12-04 17:53:57 [warn] HTTP client 192.168.1.126 disconnected
+2021-12-04 17:54:50 [warn] Started printing file 0:/gcodes/Body1.gcode
+2021-12-04 17:56:48 [warn] Leadscrew adjustments made: -0.043 -0.080 -0.059, points used 3, (mean, deviation) before (-0.061, 0.012) after (-0.000, 0.000)
+2021-12-04 17:58:36 [warn] 25 points probed, min error -0.024, max error 0.092, mean 0.043, deviation 0.028
+Height map saved to file 0:/sys/heightmap.csv
+2021-12-04 18:30:59 [warn] Finished printing file 0:/gcodes/Body1.gcode, print time was 0h 36m
+2021-12-04 19:08:53 [warn] HTTP client 192.168.1.126 login succeeded
+2021-12-04 19:09:00 [warn] HTTP client 192.168.1.126 disconnected
+2021-12-04 19:11:13 [warn] HTTP client 192.168.1.2 login succeeded
+2021-12-04 19:21:31 [warn] Started printing file 0:/gcodes/Body1.gcode
+2021-12-04 19:23:32 [warn] Leadscrew adjustments made: -0.045 -0.052 -0.073, points used 3, (mean, deviation) before (-0.056, 0.011) after (-0.000, 0.000)
+2021-12-04 19:23:42 [warn] Error: Probe already triggered before probing move started
+2021-12-04 19:45:07 [warn] Resume state saved
+2021-12-04 19:45:13 [warn] Printing paused at X147.4 Y122.4 Z9.0
+2021-12-04 19:45:13 [warn] Cancelled printing file 0:/gcodes/Body1.gcode, print time was 0h 23m
+2021-12-04 20:19:20 [warn] HTTP client 192.168.1.126 login succeeded
+2021-12-04 20:19:36 [warn] HTTP client 192.168.1.126 disconnected
+2021-12-04 20:30:55 [warn] Started printing file 0:/gcodes/3knappar.gcode
+2021-12-04 20:32:15 [warn] Leadscrew adjustments made: -0.051 -0.055 -0.017, points used 3, (mean, deviation) before (-0.042, 0.015) after (-0.000, 0.000)
+2021-12-04 20:37:54 [warn] 81 points probed, min error -0.342, max error 0.177, mean 0.008, deviation 0.100
+Height map saved to file 0:/sys/heightmap.csv
+2021-12-04 20:39:05 [warn] Cancelled printing file 0:/gcodes/3knappar.gcode, print time was 0h 8m
+2021-12-04 20:39:05 [info] Event logging stopped
+power up + 00:00:00 [info] Event logging started at level warn
+power up + 00:00:00 [info] Running: Duet WiFi 1.02 or later: 3.4.0beta6 (2021-11-06 11:37:41)
+power up + 00:00:00 [warn] Error: Heater 0 does not exist
+power up + 00:00:00 [warn] Warning: Heater 0 appears to be over-powered. If left on at full power, its temperature is predicted to reach 222C
+power up + 00:00:01 [warn] WiFi module started
+power up + 00:00:06 [warn] WiFi module is connected to access point Q, IP address 192.168.1.205
+power up + 00:00:07 [warn] HTTP client 192.168.1.126 login succeeded
+2021-12-04 20:40:57 [warn] Date and time set at power up + 00:00:07
+2021-12-04 20:40:57 [warn] HTTP client 192.168.1.2 login succeeded
+2021-12-04 20:40:57 [warn] HTTP client 192.168.1.2 login succeeded
+2021-12-04 20:40:58 [warn] HTTP client 192.168.1.2 login succeeded
+2021-12-04 20:40:58 [warn] HTTP client 192.168.1.126 login succeeded
+2021-12-04 20:40:59 [warn] HTTP client 192.168.1.2 login succeeded
+2021-12-04 20:42:45 [warn] HTTP client 192.168.1.126 login succeeded
+2021-12-04 20:43:26 [warn] HTTP client 192.168.1.126 disconnected
+2021-12-04 20:44:58 [warn] Started printing file 0:/gcodes/Body1.gcode
+2021-12-04 20:46:06 [warn] Leadscrew adjustments made: -0.046 -0.058 -0.050, points used 3, (mean, deviation) before (-0.052, 0.004) after (-0.000, 0.000)
+2021-12-04 20:51:45 [warn] 81 points probed, min error -0.350, max error 0.181, mean 0.011, deviation 0.096
+Height map saved to file 0:/sys/heightmap.csv
+2021-12-04 20:57:55 [warn] Resume state saved
+2021-12-04 20:58:01 [warn] Printing paused at X152.1 Y143.8 Z0.3
+2021-12-04 20:58:08 [warn] Cancelled printing file 0:/gcodes/Body1.gcode, print time was 0h 12m
+2021-12-04 22:37:41 [warn] HTTP client 192.168.1.99 login succeeded
+2021-12-04 22:46:01 [warn] HTTP client 192.168.1.126 login succeeded
+2021-12-04 22:46:03 [warn] Started printing file 0:/gcodes/Body1.gcode
+2021-12-04 22:48:03 [warn] Leadscrew adjustments made: -0.046 -0.069 -0.079, points used 3, (mean, deviation) before (-0.064, 0.012) after (-0.000, 0.000)
+2021-12-04 22:53:44 [warn] 81 points probed, min error -0.312, max error 0.192, mean 0.018, deviation 0.094
+Height map saved to file 0:/sys/heightmap.csv
+2021-12-04 23:03:36 [warn] Resume state saved
+2021-12-04 23:03:42 [warn] Printing paused at X222.4 Y72.8 Z0.3
+2021-12-04 23:04:04 [warn] Cancelled printing file 0:/gcodes/Body1.gcode, print time was 0h 17m
+2021-12-04 23:04:59 [warn] Started printing file 0:/gcodes/Body1.gcode
+2021-12-04 23:07:40 [warn] Leadscrew adjustments made: -0.045 -0.056 -0.037, points used 3, (mean, deviation) before (-0.046, 0.007) after (0.000, 0.000)
+2021-12-04 23:13:20 [warn] 81 points probed, min error -0.322, max error 0.190, mean 0.021, deviation 0.098
+Height map saved to file 0:/sys/heightmap.csv
+2021-12-05 01:01:20 [warn] Resume state saved
+2021-12-05 01:01:25 [warn] Printing paused at X114.2 Y139.9 Z11.1
+2021-12-05 01:01:25 [warn] Cancelled printing file 0:/gcodes/Body1.gcode, print time was 1h 56m
+2021-12-05 09:11:32 [warn] HTTP client 192.168.1.126 login succeeded
+2021-12-05 09:12:07 [warn] HTTP client 192.168.1.126 disconnected
+2021-12-05 09:14:41 [warn] Started printing file 0:/gcodes/3KNAPPAR.gcode
+2021-12-05 09:16:33 [warn] Leadscrew adjustments made: -0.047 -0.045 -0.025, points used 3, (mean, deviation) before (-0.040, 0.009) after (-0.000, 0.000)
+2021-12-05 09:19:42 [warn] 45 points probed, min error -0.065, max error 0.159, mean 0.049, deviation 0.052
+Height map saved to file 0:/sys/heightmap.csv
+2021-12-05 09:28:43 [warn] Resume state saved
+2021-12-05 09:28:49 [warn] Printing paused at X167.9 Y140.8 Z0.5
+2021-12-05 09:29:13 [warn] Cancelled printing file 0:/gcodes/3KNAPPAR.gcode, print time was 0h 14m
+2021-12-05 09:30:17 [warn] Started printing file 0:/gcodes/3KNAPPAR.gcode
+2021-12-05 09:32:39 [warn] Leadscrew adjustments made: -0.058 -0.041 -0.052, points used 3, (mean, deviation) before (-0.051, 0.005) after (-0.000, 0.000)
+2021-12-05 09:35:49 [warn] Error: Probe already triggered before probing move started
+2021-12-05 09:43:23 [warn] Resume state saved
+2021-12-05 09:43:30 [warn] Printing paused at X112.8 Y160.0 Z0.3
+2021-12-05 09:43:46 [warn] Cancelled printing file 0:/gcodes/3KNAPPAR.gcode, print time was 0h 13m
+2021-12-05 09:43:57 [warn] Error: M290: insufficient axes homed
+2021-12-05 09:44:50 [warn] Started printing file 0:/gcodes/3KNAPPAR.gcode
+2021-12-05 09:47:09 [warn] Leadscrew adjustments made: -0.056 -0.049 -0.040, points used 3, (mean, deviation) before (-0.049, 0.006) after (-0.000, 0.000)
+2021-12-05 09:49:09 [warn] Error: Z probe readings not consistent
+2021-12-05 12:00:17 [warn] HTTP client 192.168.1.99 login succeeded
+2021-12-05 13:07:33 [warn] Finished printing file 0:/gcodes/3KNAPPAR.gcode, print time was 3h 22m
+2021-12-05 14:02:34 [warn] HTTP client 192.168.1.99 login succeeded
+2021-12-05 15:08:01 [warn] HTTP client 192.168.1.126 login succeeded
+2021-12-05 15:09:04 [warn] HTTP client 192.168.1.126 disconnected
+2021-12-05 15:09:04 [warn] Started printing file 0:/gcodes/Body1.gcode
+2021-12-05 15:11:05 [warn] Leadscrew adjustments made: -0.050 -0.076 -0.100, points used 3, (mean, deviation) before (-0.074, 0.018) after (-0.000, 0.000)
+2021-12-05 15:14:14 [warn] 45 points probed, min error -0.066, max error 0.124, mean 0.031, deviation 0.043
+Height map saved to file 0:/sys/heightmap.csv
+2021-12-05 15:17:54 [warn] HTTP client 192.168.1.2 login succeeded
+2021-12-05 15:17:58 [warn] Resume state saved
+2021-12-05 15:18:05 [warn] Printing paused at X94.0 Y142.6 Z0.3
+2021-12-05 15:18:30 [warn] Cancelled printing file 0:/gcodes/Body1.gcode, print time was 0h 8m
+2021-12-05 15:19:12 [warn] Started printing file 0:/gcodes/Body1.gcode
+2021-12-05 15:22:20 [warn] Leadscrew adjustments made: -0.050 -0.041 -0.082, points used 3, (mean, deviation) before (-0.056, 0.016) after (-0.000, 0.000)
+2021-12-05 15:25:29 [warn] 45 points probed, min error -0.077, max error 0.120, mean 0.021, deviation 0.045
+Height map saved to file 0:/sys/heightmap.csv
+2021-12-05 15:44:58 [warn] Resume state saved
+2021-12-05 15:45:03 [warn] Printing paused at X48.8 Y162.6 Z0.4
+2021-12-05 15:45:53 [warn] Cancelled printing file 0:/gcodes/Body1.gcode, print time was 0h 25m
+2021-12-05 18:21:21 [warn] HTTP client 192.168.1.99 login succeeded
+2021-12-05 18:42:50 [warn] HTTP client 192.168.1.126 login succeeded
+2021-12-05 18:42:55 [warn] HTTP client 192.168.1.126 disconnected
+2021-12-05 18:42:55 [warn] Started printing file 0:/gcodes/Pistol345.gcode
+2021-12-05 18:44:59 [warn] Leadscrew adjustments made: -0.058 -0.023 -0.039, points used 3, (mean, deviation) before (-0.040, 0.011) after (-0.000, 0.000)
+2021-12-05 18:46:45 [warn] 25 points probed, min error -0.032, max error 0.085, mean 0.042, deviation 0.031
+Height map saved to file 0:/sys/heightmap.csv
+2021-12-05 19:25:50 [warn] HTTP client 192.168.1.126 login succeeded
+2021-12-05 19:26:00 [warn] HTTP client 192.168.1.126 disconnected
+2021-12-05 19:51:24 [warn] Finished printing file 0:/gcodes/Pistol345.gcode, print time was 1h 8m
+2021-12-05 20:30:37 [warn] Leadscrew adjustments made: 0.103 -0.474 -0.247, points used 3, (mean, deviation) before (-0.202, 0.187) after (-0.000, 0.000)
+2021-12-05 20:31:00 [warn] Leadscrew adjustments made: 0.104 -0.195 -0.015, points used 3, (mean, deviation) before (-0.035, 0.097) after (-0.000, 0.000)
+2021-12-05 20:31:24 [warn] Leadscrew adjustments made: 0.097 -0.148 0.005, points used 3, (mean, deviation) before (-0.016, 0.079) after (-0.000, 0.000)
+2021-12-05 20:31:47 [warn] Leadscrew adjustments made: 0.075 -0.019 0.002, points used 3, (mean, deviation) before (0.020, 0.032) after (0.000, 0.000)
+2021-12-05 20:32:11 [warn] Leadscrew adjustments made: 0.007 -0.014 -0.007, points used 3, (mean, deviation) before (-0.005, 0.007) after (0.000, 0.000)
+2021-12-05 20:32:33 [warn] Started printing file 0:/gcodes/CarbonPower.gcode
+2021-12-05 20:33:19 [warn] Leadscrew adjustments made: 0.020 -0.055 -0.063, points used 3, (mean, deviation) before (-0.031, 0.031) after (0.000, 0.000)
+2021-12-05 20:33:43 [warn] Leadscrew adjustments made: -0.037 -0.025 0.003, points used 3, (mean, deviation) before (-0.021, 0.015) after (-0.000, 0.000)
+2021-12-05 20:34:49 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2021-12-05 20:34:49 [warn] 15 points probed, min error 0.078, max error 0.157, mean 0.127, deviation 0.023
+Height map saved to file 0:/sys/heightmap.csv
+2021-12-05 22:08:16 [warn] Finished printing file 0:/gcodes/CarbonPower.gcode, print time was 1h 35m
+2021-12-05 22:23:05 [warn] HTTP client 192.168.1.126 login succeeded
