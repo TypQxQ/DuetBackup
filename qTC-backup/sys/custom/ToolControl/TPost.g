@@ -8,7 +8,7 @@ M116 P{state.nextTool} S5    	; Wait for set temperatures to be reached, +-5 deg
 G53 G0 X570 F6000
 
 	; Purge the nozzle
-if #tools[state.currentTool].heaters > 0 & heat.heaters[tools[state.currentTool].heaters[0]].current > heat.coldRetractTemperature
+if #tools[state.currentTool].heaters > 0 & heat.heaters[tools[state.currentTool].heaters[0]].current > heat.coldRetractTemperature & global.purgeOnToolChange=true
   G1 E3 F500     			        ; Purge the nozzle. the amount when docked
   G1 E4 F100						; Purge the nozzle. to clean
   G4 H1.0                 			; Slight Delay

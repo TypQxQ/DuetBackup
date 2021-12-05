@@ -1,4 +1,4 @@
 if exists(global.lastTool)
-    set global.lastTool = -1
+    set global.lastTool = 0
 else
-    global lastTool=-1
+    global lastTool=0

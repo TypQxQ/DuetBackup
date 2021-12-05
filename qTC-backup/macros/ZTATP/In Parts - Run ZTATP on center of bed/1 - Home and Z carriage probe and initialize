@@ -1,5 +1,6 @@
-;M98 P"/sys/custom/EndStop_Z_Probe.g"		; Set Z switch to Probe
+set global.purgeOnToolChange=false
 
+G28 Z
 M561 					; Disable any Mesh Bed Compensation
 
 ; ---------------- First carriage probe ----------------
@@ -11,11 +12,8 @@ G30 ; Probe once
 T-1
 
 ; ---------------- Nozzle probe setup ----------------
-; Put Z back to Emergency Stop.
-;M98 P"/sys/custom/EndStop_Z_Emergency.g"    ; Set Z switch to Emergency Stop button
 ;M98 P"/sys/custom/EndStop_ZPlate_Probe.g"	; Set Z-Plate switch to Probe
 
-;M558 P8 C"!0.io6.in" F250 H5 T24000 A2 S0.02		; Set the pin of Z probe
 M558 P8 C"!0.io6.in" F120 H5 T24000 A2 S0.02		; Set the pin of Z probe (Slower Z Feed)
 G31 Z0										        ; Set probe height as 0 because it activates when touching the probe
 

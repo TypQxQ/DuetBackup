@@ -44,11 +44,11 @@ M584 X0.0:0.1 Y1.0:1.1 Z0.4:0.3:0.5 E2.0:2.1:2.2 U0.2 	; set drive mapping ( Z i
 ;M584 X0.0:1.0 Y0.1:1.1 Z0.4:0.3:0.5 E2.0:2.1:2.2 U0.2 	; set drive mapping ( Z in the order of bed leveling )
 
 
-M350 X16 Y16 I1
-;M350 X32 Y32 I1
-M350 E16 I1                          			; configure 16x for XY and E microstepping with interpolation
-M350 U1 I1                    					; configure 1x microstepping with interpolation for U, better torque. x4 is original
-M350 Z16 I1                    					; configure microstepping with interpolation. Full steps on Z means 200 steps per mm and a resolution of 0,005mm per step.
+;M350 X16 Y16 I1
+M350 X32 Y32 I0
+M350 E16 I0                          			; configure 16x for XY and E microstepping with interpolation
+M350 U4 I1                    					; configure 1x microstepping with interpolation for U, better torque. x4 is original
+M350 Z16 I0                    					; configure microstepping with interpolation. Full steps on Z means 200 steps per mm and a resolution of 0,005mm per step.
 
 ; ---------- Motor currents ----------
 ;M906 X2263 Y2263                        ; LDO XY motor currents (mA). 2263mA is 80% of 2828mA Peak Current. (2828mA Peak is 2000mA RMS)
@@ -117,16 +117,22 @@ T1 P0
 T2 P0
 T-1 P0
 
+; Set global variables
+if !exists(purgeOnToolChange)
+  global purgeOnToolChange=true
+else
+  set global.purgeOnToolChange=true
+
 ; Load persistant global variables
-;M98 P"globals/lastTool"
+M98 P"globals/lastTool"
 
 ; Set last active tool
-;if {global.lastTool} == -2
-;    M291 S2 P"Unknown tool loaded" R"Tool Detected"
-;    G92 U169
-;elif {global.lastTool} >= 0
-;    M291 S2 P{"Tool Loaded on Power Off, automatically setting tool to T"^{global.lastTool}} R"Power Resume Tool Auto Set"
-;    T{global.lastTool} P0
-;    G92 U169
-;else
-;    G28 U                             ; home coupler
+if {global.lastTool} == -2
+    M291 S2 P"Unknown tool loaded" R"Tool Detected"
+    G92 U169
+elif {global.lastTool} >= 0
+    M291 S2 P{"Tool Loaded on Power Off, automatically setting tool to T"^{global.lastTool}} R"Power Resume Tool Auto Set"
+    T{global.lastTool} P0
+    G92 U169
+else
+    G28 U                             ; home coupler
