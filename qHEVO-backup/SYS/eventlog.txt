@@ -1837,3 +1837,26 @@ Height map saved to file 0:/sys/heightmap.csv
 Height map saved to file 0:/sys/heightmap.csv
 2021-12-05 22:08:16 [warn] Finished printing file 0:/gcodes/CarbonPower.gcode, print time was 1h 35m
 2021-12-05 22:23:05 [warn] HTTP client 192.168.1.126 login succeeded
+2021-12-05 22:31:13 [warn] HTTP client 192.168.1.126 login succeeded
+2021-12-05 22:31:24 [warn] HTTP client 192.168.1.126 disconnected
+2021-12-05 22:31:24 [warn] Started printing file 0:/gcodes/KnobbCover_SS.gcode
+2021-12-05 22:32:46 [warn] Leadscrew adjustments made: 0.041 -0.012 -0.081, points used 3, (mean, deviation) before (-0.014, 0.044) after (0.000, 0.000)
+2021-12-05 22:33:10 [warn] Leadscrew adjustments made: -0.058 -0.045 0.000, points used 3, (mean, deviation) before (-0.036, 0.022) after (-0.000, 0.000)
+2021-12-05 22:34:16 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2021-12-05 22:34:16 [warn] 15 points probed, min error 0.090, max error 0.194, mean 0.153, deviation 0.029
+Height map saved to file 0:/sys/heightmap.csv
+2021-12-05 22:34:24 [warn] HTTP client 192.168.1.2 login succeeded
+2021-12-05 23:36:11 [warn] Finished printing file 0:/gcodes/KnobbCover_SS.gcode, print time was 1h 4m
+power up + 00:00:00 [info] Event logging started at level warn
+power up + 00:00:00 [info] Running: Duet WiFi 1.02 or later: 3.4.0beta6 (2021-11-06 11:37:41)
+power up + 00:00:00 [warn] Error: Heater 0 does not exist
+power up + 00:00:00 [warn] Warning: Heater 0 appears to be over-powered. If left on at full power, its temperature is predicted to reach 222C
+power up + 00:00:01 [warn] WiFi module started
+power up + 00:00:06 [warn] WiFi module is connected to access point Q, IP address 192.168.1.205
+power up + 00:00:07 [warn] HTTP client 192.168.1.126 login succeeded
+2021-12-06 09:01:05 [warn] Date and time set at power up + 00:00:07
+2021-12-06 09:01:06 [warn] HTTP client 192.168.1.2 login succeeded
+2021-12-06 09:01:06 [warn] HTTP client 192.168.1.126 login succeeded
+2021-12-06 09:01:07 [warn] HTTP client 192.168.1.2 login succeeded
+2021-12-07 11:24:02 [warn] HTTP client 192.168.1.99 login succeeded
+2021-12-07 12:00:24 [warn] HTTP client 192.168.1.126 login succeeded
