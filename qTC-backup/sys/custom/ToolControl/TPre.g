@@ -17,7 +17,7 @@ else	; Move first X and then Y.
   G0 X500 F40000       			; Rapid to the approach position with tool-0. (park_x, park_y - offset).  X first in case close to tool row. (4 example above camera)
   G0 Y{param.Y} F34000			; Rapid to the approach position with tool-0. (park_x, park_y - offset).  Y next to make a square move. 
 
-M116 P{state.nextTool} S5    	; Wait for set temperatures to be reached, +-5 degC
+;M116 P{state.nextTool} S5    	; Wait for set temperatures to be reached, +-5 degC
 
 	; Prepare for moving
 M400 							; Wait for current moves to finish

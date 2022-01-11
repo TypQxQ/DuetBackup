@@ -24,6 +24,6 @@ G32							; Run 3-point bed calibration defined in bed.g
 
 G0 Z5
 
-M122 B0	; Prints diagnostics and resets the CAN counter for 6HC
-M122 B1	; Prints diagnostics and resets the CAN counter for 3HC
-M122 B2	; Prints diagnostics and resets the CAN counter for 3HC
+;M122 B0	; Prints diagnostics and resets the CAN counter for 6HC
+;M122 B1	; Prints diagnostics and resets the CAN counter for 3HC
+;M122 B2	; Prints diagnostics and resets the CAN counter for 3HC

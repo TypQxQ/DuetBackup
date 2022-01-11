@@ -39,8 +39,29 @@ if (param.V - param.Y) < 5
 M557 X{param.X,param.U} Y{param.Y,param.V} P{var.m557PointsX,var.m557PointsY} ; put your required spacing here
 M557
 
+; Mount Z Tool
 T49
-G29 S0
+
+; Set the new dive height
+;M558 P8 C"1.io2.in" F250 H5 T40000 A2 S0.02		; Set the pin of Z probe
+M558 H3
+
+while true
+  if iterations = 10
+    abort "Too many auto calibration attempts"
+  G29 S0 ; Probe mesh
+  if result != 0
+    echo "Failed Mesh. Restarting"
+    continue
+  if move.compensation.meshDeviation.deviation <= 0.1 & move.compensation.meshDeviation.deviation >= -0.1 & move.compensation.meshDeviation.mean <= 0.1 & move.compensation.meshDeviation.mean >= -0.1
+    break
+  echo "Repeating mesh because deviation or mean is too high."
+; end loop
+;echo "Auto calibration successful, deviation", move.calibration.final.deviation ^ "mm"
+
+
+
+
 G0 Z5
 
 ;T-1

@@ -2,10 +2,6 @@
 ; called to perform automatic bed compensation via G32
 ;
 
-
-
--------------------
-
 T49						; Select and Set Z switch to Probe
 M400                    ; make sure everything has stopped before we make changes
 M561                    ; clear any bed transform
@@ -13,7 +9,7 @@ G90                     ; absolute positioning
 
 ; Using 3 independent leadscrews to adjust them independently.
 ; Probe the bed and do auto calibration
-G1 X5 Y264.5 Z10 F10000        ; go to just above the first probe point
+; G1 X5 Y264.5 Z10 F10000        ; go to just above the first probe point
 while true
   if iterations = 5
     abort "Too many auto calibration attempts"

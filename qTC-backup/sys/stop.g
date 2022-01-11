@@ -12,8 +12,8 @@ T-1				; Unload tools ; Resume tool doesn't work
 M104 S0 		; turn off temperature
 G10 P0 S0 R0	; turn off extruder 0
 G10 P1 S0 R0	; turn off extruder 1
-;G10 P2 S0 R0	; turn off extruder 2
-T-1         	; desect current tool
+G10 P2 S0 R0	; turn off extruder 2
+;T-1         	; desect current tool
 G91 			; relative moves
 G0 Z5  		; move bed down another 30mm
 G90 			; absolute moves

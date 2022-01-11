@@ -57,7 +57,7 @@ M350 Z16 I0                    					; configure microstepping with interpolation
 M906 X1200 Y1200 						; set motor currents (mA) 1200 is Good up to 400mm/s without back EMF at 31,1V on one stepper
 M906 Z1000 
 M906 E900 										; 900 for BMG up to 135*C. Rated for 1.4A so runing at 86% with 1200
-M906 U900 I60                           		; StepperOnline Toolchanger Elastic Lock Motor current and idle motor percentage, must be 60% idle and 90% current. Goes up to 120% when locking
+M906 U900 i100 ;I60                           		; StepperOnline Toolchanger Elastic Lock Motor current and idle motor percentage, must be 60% idle and 90% current. Goes up to 120% when locking
 M84 S30                                         ; Set idle timeout
 
 ; ---------- Steps per mm ----------
@@ -118,7 +118,7 @@ T2 P0
 T-1 P0
 
 ; Set global variables
-if !exists(purgeOnToolChange)
+if !exists(global.purgeOnToolChange)
   global purgeOnToolChange=true
 else
   set global.purgeOnToolChange=true
