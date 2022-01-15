@@ -1,21 +1,18 @@
 set global.purgeOnToolChange=false
 
+M291 P"Check that the ZTATP switch is in the middle under the carriage Z switch while it is moving down in the center of the bed." R"ZATP" S3
+
 G28 Z
 M561 					; Disable any Mesh Bed Compensation
 
 ; ---------------- First carriage probe ----------------
-T49
-G0 X255 Y255 F24000 	; Move to the center of the bed
+;G0 X255 Y255 F24000 	; Move to the center of the bed
 ; Check the user is ready
-;M291 P"Check that the Z-SwitchPlate is under the carriage Z switch." R"ZATP" S3
 G30 ; Probe once
 T-1
 
 ; ---------------- Nozzle probe setup ----------------
-;M98 P"/sys/custom/EndStop_ZPlate_Probe.g"	; Set Z-Plate switch to Probe
-
-M558 P8 C"!0.io6.in" F120 H5 T24000 A2 S0.02		; Set the pin of Z probe (Slower Z Feed)
-G31 Z0										        ; Set probe height as 0 because it activates when touching the probe
-
+M558 P8 C"0.io4.in" F60 H5 T24000 A2 S0.02		; Set the pin of Z probe (Slower Z Feed)
+G31 Z0										    ; Set probe height as 0 because it activates when touching the probe
 
 

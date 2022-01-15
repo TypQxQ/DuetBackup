@@ -124,6 +124,7 @@ else
   set global.purgeOnToolChange=true
 
 ; Load persistant global variables
+;M98 P"globals/T_CoolDownCheck"
 M98 P"globals/lastTool"
 
 ; Set last active tool

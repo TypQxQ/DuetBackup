@@ -54,8 +54,8 @@ M350 Z16 I0                    					; configure microstepping with interpolation
 ;M906 X2263 Y2263                        ; LDO XY motor currents (mA). 2263mA is 80% of 2828mA Peak Current. (2828mA Peak is 2000mA RMS)
                                         ; Do not exceed 90% of full XY motor current rating without heatsinking the XY motor drivers.
 
-M906 X1200 Y1200 						; set motor currents (mA) 1200 is Good up to 400mm/s without back EMF at 31,1V on one stepper
-M906 Z1000 
+M906 X1400 Y1400 						; set motor currents (mA) 1200 is Good up to 400mm/s without back EMF at 31,1V on one stepper
+M906 Z1400 
 M906 E900 										; 900 for BMG up to 135*C. Rated for 1.4A so runing at 86% with 1200
 M906 U900 i100 ;I60                           		; StepperOnline Toolchanger Elastic Lock Motor current and idle motor percentage, must be 60% idle and 90% current. Goes up to 120% when locking
 M84 S30                                         ; Set idle timeout
