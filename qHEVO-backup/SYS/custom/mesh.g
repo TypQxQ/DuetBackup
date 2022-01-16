@@ -35,5 +35,16 @@ if (param.V - param.Y) < 5
 M557 X{param.X,param.U} Y{param.Y,param.V} P{var.m557PointsX,var.m557PointsY} ; put your required spacing here
 M557
 
-G29 S0
+while true
+  if iterations = 10
+    abort "Too many auto calibration attempts"
+  G29 S0 ; Probe mesh
+  if result != 0
+    echo "Failed Mesh. Restarting"
+    continue
+  if move.compensation.meshDeviation.deviation <= 0.3 & move.compensation.meshDeviation.deviation >= -0.3 & move.compensation.meshDeviation.mean <= 0.3 & move.compensation.meshDeviation.mean >= -0.3
+    break
+  echo "Repeating mesh because deviation or mean is too high."
+; end loop
+
 G0 Z5
