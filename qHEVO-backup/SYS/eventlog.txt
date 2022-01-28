@@ -3449,3 +3449,598 @@ power up + 00:00:07 [warn] HTTP client 192.168.1.126 login succeeded
 2022-01-16 08:55:29 [warn] HTTP client 192.168.1.126 login succeeded
 2022-01-16 08:57:03 [warn] HTTP client 192.168.1.2 login succeeded
 2022-01-16 09:41:32 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-16 10:08:31 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-16 10:09:11 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-16 10:09:11 [warn] Started printing file 0:/gcodes/[a]_Bearing_Insert_Feet_x2.gcode
+2022-01-16 10:11:07 [warn] Leadscrew adjustments made: -0.059 -0.012 0.011, points used 3, (mean, deviation) before (-0.022, 0.025) after (0.000, 0.000)
+2022-01-16 10:16:31 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2022-01-16 10:16:31 [warn] 81 points probed, min error 0.077, max error 0.221, mean 0.147, deviation 0.032
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-16 13:23:58 [warn] Finished printing file 0:/gcodes/[a]_Bearing_Insert_Feet_x2.gcode, print time was 3h 14m
+2022-01-16 14:24:13 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-16 14:24:26 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-16 14:24:26 [warn] Started printing file 0:/gcodes/NewFan2.gcode
+2022-01-16 14:26:18 [warn] Leadscrew adjustments made: -0.061 -0.083 -0.101, points used 3, (mean, deviation) before (-0.080, 0.014) after (0.000, 0.000)
+2022-01-16 14:27:24 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2022-01-16 14:27:24 [warn] 15 points probed, min error 0.054, max error 0.172, mean 0.119, deviation 0.032
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-16 15:29:19 [warn] Finished printing file 0:/gcodes/NewFan2.gcode, print time was 1h 4m
+2022-01-16 17:14:42 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-16 17:14:48 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-16 17:14:48 [warn] Started printing file 0:/gcodes/NewFan2.gcode
+2022-01-16 17:16:41 [warn] Leadscrew adjustments made: -0.048 -0.030 -0.039, points used 3, (mean, deviation) before (-0.039, 0.006) after (-0.000, 0.000)
+2022-01-16 17:17:47 [warn] 15 points probed, min error -0.030, max error 0.077, mean 0.027, deviation 0.030
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-16 17:54:16 [warn] HTTP client 192.168.1.99 login succeeded
+2022-01-16 17:54:29 [warn] Resume state saved
+2022-01-16 17:54:35 [warn] Printing paused at X140.5 Y164.6 Z19.2
+2022-01-16 17:54:39 [warn] Cancelled printing file 0:/gcodes/NewFan2.gcode, print time was 0h 39m
+2022-01-16 17:59:27 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-16 17:59:37 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-16 17:59:37 [warn] Started printing file 0:/gcodes/NewFan2.gcode
+2022-01-16 18:00:50 [warn] Leadscrew adjustments made: -0.046 -0.023 -0.055, points used 3, (mean, deviation) before (-0.040, 0.011) after (0.000, 0.000)
+2022-01-16 18:01:56 [warn] 15 points probed, min error -0.120, max error 0.009, mean -0.051, deviation 0.044
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-16 18:25:20 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-16 19:19:03 [warn] Finished printing file 0:/gcodes/NewFan2.gcode, print time was 1h 19m
+2022-01-16 19:19:26 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-16 19:47:23 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-16 19:47:30 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-16 19:47:30 [warn] Started printing file 0:/gcodes/esun abs.gcode
+2022-01-16 19:49:19 [warn] Leadscrew adjustments made: -0.042 -0.062 -0.110, points used 3, (mean, deviation) before (-0.070, 0.025) after (-0.000, 0.000)
+2022-01-16 19:50:25 [warn] 15 points probed, min error 0.010, max error 0.159, mean 0.063, deviation 0.041
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-16 19:53:11 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-16 19:53:13 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-16 19:53:17 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-16 19:53:18 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-16 19:53:20 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-16 19:53:21 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-16 19:53:22 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-16 19:53:24 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-16 19:53:25 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-16 19:53:26 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-16 19:53:27 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-16 19:53:29 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-16 19:53:30 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-16 19:53:31 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-16 19:53:32 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-16 19:53:33 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-16 19:53:35 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-16 19:53:36 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-16 19:53:38 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-16 19:53:39 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-16 19:53:40 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-16 19:53:41 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-16 19:53:41 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-16 19:53:42 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-16 19:53:43 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-16 19:53:44 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-16 19:53:44 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-16 19:53:45 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-16 19:53:46 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-16 19:53:47 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-16 19:53:47 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-16 19:53:53 [warn] Resume state saved
+2022-01-16 19:53:58 [warn] Printing paused at X105.6 Y133.8 Z0.2
+2022-01-16 19:53:58 [warn] Cancelled printing file 0:/gcodes/esun abs.gcode, print time was 0h 6m
+2022-01-16 19:55:07 [warn] Started printing file 0:/gcodes/esun abs.gcode
+2022-01-16 19:59:45 [warn] Leadscrew adjustments made: -0.052 -0.080 0.018, points used 3, (mean, deviation) before (-0.041, 0.037) after (0.000, 0.000)
+2022-01-16 20:00:09 [warn] Leadscrew adjustments made: -0.035 0.020 0.016, points used 3, (mean, deviation) before (-0.001, 0.020) after (-0.000, 0.000)
+2022-01-16 20:01:14 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2022-01-16 20:01:14 [warn] 15 points probed, min error 0.129, max error 0.234, mean 0.175, deviation 0.032
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-16 20:06:54 [warn] Resume state saved
+2022-01-16 20:07:01 [warn] Printing paused at X166.6 Y161.9 Z0.2
+2022-01-16 20:07:01 [warn] Cancelled printing file 0:/gcodes/esun abs.gcode, print time was 0h 11m
+2022-01-16 21:06:49 [warn] HTTP client 192.168.1.2 login succeeded
+power up + 00:00:00 [info] Event logging started at level warn
+power up + 00:00:00 [info] Running: Duet WiFi 1.02 or later: 3.4.0beta6 (2021-11-06 11:37:41)
+power up + 00:00:00 [warn] Error: Heater 0 does not exist
+power up + 00:00:00 [warn] Warning: Heater 0 appears to be over-powered. If left on at full power, its temperature is predicted to reach 222C
+power up + 00:00:01 [warn] WiFi module started
+power up + 00:00:08 [warn] WiFi module is connected to access point Q, IP address 192.168.1.205
+power up + 00:00:08 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-16 21:09:22 [warn] Date and time set at power up + 00:00:08
+2022-01-16 21:09:23 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-16 21:14:25 [warn] HTTP client 192.168.1.2 login succeeded
+power up + 00:00:00 [info] Event logging started at level warn
+power up + 00:00:00 [info] Running: Duet WiFi 1.02 or later: 3.4.0beta6 (2021-11-06 11:37:41)
+power up + 00:00:00 [warn] Error: Heater 0 does not exist
+power up + 00:00:00 [warn] Warning: Heater 0 appears to be over-powered. If left on at full power, its temperature is predicted to reach 222C
+power up + 00:00:01 [warn] WiFi module started
+power up + 00:00:06 [warn] WiFi module is connected to access point Q, IP address 192.168.1.205
+power up + 00:00:06 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-16 21:15:54 [warn] Date and time set at power up + 00:00:06
+2022-01-16 21:15:55 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-16 21:16:07 [warn] HTTP client 192.168.1.2 login succeeded
+power up + 00:00:00 [info] Event logging started at level warn
+power up + 00:00:00 [info] Running: Duet WiFi 1.02 or later: 3.4.0beta6 (2021-11-06 11:37:41)
+power up + 00:00:00 [warn] Error: Heater 0 does not exist
+power up + 00:00:00 [warn] Warning: Heater 0 appears to be over-powered. If left on at full power, its temperature is predicted to reach 222C
+power up + 00:00:01 [warn] WiFi module started
+power up + 00:00:06 [warn] WiFi module is connected to access point Q, IP address 192.168.1.205
+power up + 00:00:07 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-16 21:16:59 [warn] Date and time set at power up + 00:00:07
+2022-01-16 21:16:59 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-16 21:16:59 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-16 21:17:00 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-16 21:29:27 [warn] Started printing file 0:/gcodes/esun abs.gcode
+2022-01-16 21:30:37 [warn] Leadscrew adjustments made: -0.054 -0.053 -0.067, points used 3, (mean, deviation) before (-0.057, 0.006) after (0.000, 0.000)
+2022-01-16 21:31:22 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-16 21:31:42 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2022-01-16 21:31:42 [warn] 15 points probed, min error 0.070, max error 0.201, mean 0.132, deviation 0.037
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-16 22:07:54 [warn] Finished printing file 0:/gcodes/esun abs.gcode, print time was 0h 38m
+2022-01-16 22:32:36 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-16 22:33:01 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-16 22:33:01 [warn] Started printing file 0:/gcodes/BackPlate.gcode
+2022-01-16 22:34:51 [warn] Leadscrew adjustments made: -0.081 -0.054 -0.110, points used 3, (mean, deviation) before (-0.080, 0.020) after (-0.000, 0.000)
+2022-01-16 22:36:36 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2022-01-16 22:36:36 [warn] 25 points probed, min error 0.037, max error 0.172, mean 0.117, deviation 0.037
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-16 23:09:06 [warn] HTTP client 192.168.1.99 login succeeded
+2022-01-16 23:54:46 [warn] Finished printing file 0:/gcodes/BackPlate.gcode, print time was 1h 21m
+2022-01-17 07:48:00 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-17 08:47:46 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-17 08:48:25 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-17 08:48:25 [warn] Started printing file 0:/gcodes/[a]_M4_80T_Wheel.gcode
+2022-01-17 08:50:15 [warn] Leadscrew adjustments made: -0.083 -0.062 -0.124, points used 3, (mean, deviation) before (-0.088, 0.023) after (-0.000, 0.000)
+2022-01-17 08:51:59 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2022-01-17 08:51:59 [warn] 25 points probed, min error 0.060, max error 0.182, mean 0.115, deviation 0.031
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-17 10:18:12 [warn] Finished printing file 0:/gcodes/[a]_M4_80T_Wheel.gcode, print time was 1h 29m
+2022-01-17 11:49:03 [warn] HTTP client 192.168.1.99 login succeeded
+2022-01-17 12:07:29 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-17 12:07:56 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-17 12:07:56 [warn] Started printing file 0:/gcodes/3DBenchy.gcode
+2022-01-17 12:09:55 [warn] Leadscrew adjustments made: -0.056 0.006 0.056, points used 3, (mean, deviation) before (-0.001, 0.040) after (-0.000, 0.000)
+2022-01-17 12:10:19 [warn] Leadscrew adjustments made: -0.014 0.007 0.010, points used 3, (mean, deviation) before (0.000, 0.009) after (0.000, 0.000)
+2022-01-17 12:11:00 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2022-01-17 12:11:00 [warn] 9 points probed, min error 0.118, max error 0.181, mean 0.153, deviation 0.019
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-17 13:48:43 [warn] Finished printing file 0:/gcodes/3DBenchy.gcode, print time was 1h 40m
+2022-01-17 14:14:53 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-17 14:14:58 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-17 14:14:58 [warn] Started printing file 0:/gcodes/esun abs.gcode
+2022-01-17 14:20:20 [warn] Leadscrew adjustments made: -0.059 -0.058 -0.159, points used 3, (mean, deviation) before (-0.089, 0.043) after (0.000, 0.000)
+2022-01-17 14:20:43 [warn] Leadscrew adjustments made: -0.004 0.001 -0.025, points used 3, (mean, deviation) before (-0.008, 0.010) after (-0.000, 0.000)
+2022-01-17 14:21:49 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2022-01-17 14:21:49 [warn] 15 points probed, min error 0.071, max error 0.163, mean 0.120, deviation 0.024
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-17 14:53:51 [warn] Finished printing file 0:/gcodes/esun abs.gcode, print time was 0h 38m
+2022-01-17 15:11:59 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-17 15:12:11 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-17 15:12:11 [warn] Started printing file 0:/gcodes/Insert.gcode
+2022-01-17 15:14:02 [warn] Leadscrew adjustments made: -0.057 -0.085 -0.008, points used 3, (mean, deviation) before (-0.052, 0.028) after (0.000, 0.000)
+2022-01-17 15:14:44 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2022-01-17 15:14:44 [warn] 9 points probed, min error 0.053, max error 0.158, mean 0.107, deviation 0.032
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-17 15:50:24 [warn] Finished printing file 0:/gcodes/Insert.gcode, print time was 0h 38m
+2022-01-17 16:55:14 [warn] HTTP client 192.168.1.99 login succeeded
+2022-01-17 16:55:14 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-17 17:04:52 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-17 17:04:54 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-17 17:04:54 [warn] Started printing file 0:/gcodes/Flow calibration.gcode
+2022-01-17 17:06:45 [warn] Leadscrew adjustments made: -0.067 -0.065 -0.038, points used 3, (mean, deviation) before (-0.057, 0.012) after (-0.000, 0.000)
+2022-01-17 17:12:11 [warn] 81 points probed, min error -0.038, max error 0.203, mean 0.108, deviation 0.064
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-17 17:28:09 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:28:10 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:28:11 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:28:12 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:28:14 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:28:16 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:28:18 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:28:20 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:28:22 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:28:24 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:28:26 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:28:27 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:28:29 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:28:32 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:28:34 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:28:36 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:28:38 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:28:39 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:28:41 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:28:43 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:28:45 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:28:46 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:28:48 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:28:49 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:28:51 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:28:52 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:28:54 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:28:55 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:28:57 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:28:58 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:29:00 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:29:02 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:29:04 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:29:05 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:29:07 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:29:09 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:29:10 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:29:12 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:29:14 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:29:15 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:29:17 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:29:18 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:29:20 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:29:22 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:29:24 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:29:25 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:29:27 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:29:29 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:29:30 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:29:32 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:29:34 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:29:36 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:29:37 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:29:39 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:29:41 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:29:44 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:29:48 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:29:49 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:29:50 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:29:52 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:29:54 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:29:56 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:29:58 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:30:00 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:30:01 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:30:03 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:30:05 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:30:07 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:30:09 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:30:11 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:30:12 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:30:13 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:30:15 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:30:17 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:30:19 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:30:22 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:30:24 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:30:26 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:30:29 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:30:30 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:30:32 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:30:34 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:30:36 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:30:37 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:30:39 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:30:41 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:30:42 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:30:43 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:30:45 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:30:46 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:30:49 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:30:51 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:30:54 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:30:56 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:30:58 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:31:00 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:31:02 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:31:04 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:31:05 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:31:07 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:31:09 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:31:11 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:31:13 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:31:16 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:31:18 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:31:20 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:31:22 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:31:24 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:31:26 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:31:28 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:31:30 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:31:33 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:31:35 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:31:37 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:31:39 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:31:41 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:31:43 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:31:46 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:31:48 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:31:50 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:31:52 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:31:54 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:31:56 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:31:58 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:32:01 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:32:03 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:32:05 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:32:07 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:32:09 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:32:12 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:32:14 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:32:16 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:32:18 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:32:20 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:32:22 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:32:24 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:32:26 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:32:28 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:32:30 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:32:32 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:32:35 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:32:37 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:32:39 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:32:41 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:32:43 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:32:45 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 17:35:46 [warn] Finished printing file 0:/gcodes/Flow calibration.gcode, print time was 0h 30m
+2022-01-17 17:50:43 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-17 17:50:45 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-17 17:50:45 [warn] Started printing file 0:/gcodes/Flow calibration.gcode
+2022-01-17 17:52:29 [warn] Leadscrew adjustments made: -0.047 -0.062 -0.155, points used 3, (mean, deviation) before (-0.085, 0.043) after (0.000, 0.000)
+2022-01-17 17:52:53 [warn] Leadscrew adjustments made: -0.008 -0.015 -0.013, points used 3, (mean, deviation) before (-0.012, 0.002) after (0.000, 0.000)
+2022-01-17 17:58:18 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2022-01-17 17:58:18 [warn] 81 points probed, min error -0.001, max error 0.234, mean 0.137, deviation 0.054
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-17 18:21:53 [warn] Finished printing file 0:/gcodes/Flow calibration.gcode, print time was 0h 31m
+2022-01-17 18:38:56 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-17 18:39:44 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-17 18:39:44 [warn] Started printing file 0:/gcodes/Flow calibration.gcode
+2022-01-17 18:41:29 [warn] Leadscrew adjustments made: -0.048 -0.104 -0.039, points used 3, (mean, deviation) before (-0.064, 0.024) after (-0.000, 0.000)
+2022-01-17 18:42:11 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2022-01-17 18:42:11 [warn] 9 points probed, min error 0.068, max error 0.145, mean 0.104, deviation 0.023
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-17 20:03:26 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 20:19:53 [warn] Finished printing file 0:/gcodes/Flow calibration.gcode, print time was 1h 40m
+2022-01-17 20:26:41 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-17 20:38:58 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-17 20:39:04 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-17 20:39:04 [warn] Started printing file 0:/gcodes/Temperature calibration.gcode
+2022-01-17 20:40:53 [warn] Leadscrew adjustments made: -0.071 -0.050 -0.040, points used 3, (mean, deviation) before (-0.055, 0.011) after (-0.000, 0.000)
+2022-01-17 22:21:12 [warn] Finished printing file 0:/gcodes/Temperature calibration.gcode, print time was 1h 42m
+2022-01-17 23:21:10 [warn] HTTP client 192.168.1.99 login succeeded
+2022-01-17 23:58:01 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-17 23:58:45 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-17 23:58:45 [warn] Started printing file 0:/gcodes/qTcBedHolder.gcode
+2022-01-18 00:00:47 [warn] Leadscrew adjustments made: -0.072 -0.024 -0.041, points used 3, (mean, deviation) before (-0.046, 0.016) after (-0.000, 0.000)
+2022-01-18 00:01:29 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2022-01-18 00:01:29 [warn] 9 points probed, min error 0.077, max error 0.169, mean 0.127, deviation 0.030
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-18 03:36:52 [warn] Finished printing file 0:/gcodes/qTcBedHolder.gcode, print time was 3h 38m
+2022-01-18 06:30:10 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-18 06:30:58 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-18 06:30:58 [warn] Started printing file 0:/gcodes/Temperature calibration.gcode
+2022-01-18 06:32:53 [warn] Leadscrew adjustments made: -0.083 -0.021 -0.009, points used 3, (mean, deviation) before (-0.039, 0.027) after (-0.000, 0.000)
+2022-01-18 06:33:34 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2022-01-18 06:33:34 [warn] 9 points probed, min error 0.059, max error 0.160, mean 0.119, deviation 0.030
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-18 10:08:47 [warn] Finished printing file 0:/gcodes/Temperature calibration.gcode, print time was 3h 37m
+2022-01-18 10:31:24 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-18 11:11:31 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-18 11:44:46 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-18 11:45:15 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-18 11:45:15 [warn] Started printing file 0:/gcodes/Body1.gcode
+2022-01-18 11:47:05 [warn] Leadscrew adjustments made: -0.067 -0.075 -0.101, points used 3, (mean, deviation) before (-0.080, 0.013) after (-0.000, 0.000)
+2022-01-18 11:50:08 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2022-01-18 11:50:08 [warn] 45 points probed, min error 0.029, max error 0.192, mean 0.122, deviation 0.041
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-18 15:13:06 [warn] Finished printing file 0:/gcodes/Body1.gcode, print time was 3h 27m
+2022-01-18 16:15:11 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-18 16:15:32 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-18 16:15:32 [warn] Started printing file 0:/gcodes/Filament_Block_xN.gcode
+2022-01-18 16:17:27 [warn] Leadscrew adjustments made: -0.066 -0.065 -0.058, points used 3, (mean, deviation) before (-0.063, 0.003) after (-0.000, 0.000)
+2022-01-18 16:20:31 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2022-01-18 16:20:31 [warn] 45 points probed, min error 0.036, max error 0.213, mean 0.125, deviation 0.043
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-18 19:05:20 [warn] Finished printing file 0:/gcodes/Filament_Block_xN.gcode, print time was 2h 49m
+2022-01-18 19:21:45 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-18 19:22:20 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-18 19:22:20 [warn] Started printing file 0:/gcodes/Body1.gcode
+2022-01-18 19:24:07 [warn] Leadscrew adjustments made: -0.060 -0.068 -0.104, points used 3, (mean, deviation) before (-0.076, 0.017) after (-0.000, 0.000)
+2022-01-18 19:25:53 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2022-01-18 19:25:53 [warn] 25 points probed, min error 0.024, max error 0.183, mean 0.110, deviation 0.043
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-18 22:41:57 [warn] Finished printing file 0:/gcodes/Body1.gcode, print time was 3h 19m
+2022-01-18 22:42:46 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-18 22:42:48 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-18 22:48:28 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-18 22:49:16 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-18 22:49:16 [warn] Started printing file 0:/gcodes/Filament_Blocks_End.gcode
+2022-01-18 22:50:52 [warn] Leadscrew adjustments made: -0.078 -0.057 -0.066, points used 3, (mean, deviation) before (-0.067, 0.007) after (0.000, 0.000)
+2022-01-18 22:52:38 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2022-01-18 22:52:38 [warn] 25 points probed, min error 0.016, max error 0.248, mean 0.117, deviation 0.057
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-19 05:38:23 [warn] Finished printing file 0:/gcodes/Filament_Blocks_End.gcode, print time was 6h 49m
+2022-01-19 09:01:58 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-19 09:02:49 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-19 09:02:49 [warn] Started printing file 0:/gcodes/Filament_Block_xN.gcode
+2022-01-19 09:04:45 [warn] Leadscrew adjustments made: -0.084 -0.071 -0.003, points used 3, (mean, deviation) before (-0.055, 0.032) after (-0.000, 0.000)
+2022-01-19 09:05:09 [warn] Leadscrew adjustments made: -0.022 0.015 0.000, points used 3, (mean, deviation) before (-0.002, 0.012) after (-0.000, 0.000)
+2022-01-19 09:06:55 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2022-01-19 09:06:55 [warn] 25 points probed, min error 0.003, max error 0.208, mean 0.117, deviation 0.053
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-19 15:33:25 [warn] Finished printing file 0:/gcodes/Filament_Block_xN.gcode, print time was 6h 30m
+2022-01-19 15:52:32 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-19 15:53:37 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-19 15:53:37 [warn] Started printing file 0:/gcodes/Top_Hat_Locker_1_xN.gcode
+2022-01-19 15:55:26 [warn] Leadscrew adjustments made: -0.058 -0.070 -0.091, points used 3, (mean, deviation) before (-0.072, 0.012) after (0.000, 0.000)
+2022-01-19 16:00:52 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2022-01-19 16:00:52 [warn] 81 points probed, min error 0.015, max error 0.250, mean 0.126, deviation 0.054
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-19 19:56:49 [warn] Finished printing file 0:/gcodes/Top_Hat_Locker_1_xN.gcode, print time was 4h 3m
+2022-01-19 20:33:30 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-19 20:33:57 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-19 20:33:57 [warn] Started printing file 0:/gcodes/Gear_Box_Front.gcode
+2022-01-19 20:35:47 [warn] Leadscrew adjustments made: -0.045 -0.069 -0.077, points used 3, (mean, deviation) before (-0.063, 0.011) after (-0.000, 0.000)
+2022-01-19 20:37:32 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2022-01-19 20:37:32 [warn] 25 points probed, min error 0.048, max error 0.148, mean 0.100, deviation 0.029
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-20 00:23:23 [warn] Finished printing file 0:/gcodes/Gear_Box_Front.gcode, print time was 3h 49m
+2022-01-20 09:51:45 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-20 09:54:25 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-20 09:54:35 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-20 10:04:56 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-20 10:10:30 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-20 10:12:03 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-20 10:12:03 [warn] Started printing file 0:/gcodes/Motor_Arm_NEMA17.gcode
+2022-01-20 10:14:01 [warn] Leadscrew adjustments made: -0.037 -0.065 0.020, points used 3, (mean, deviation) before (-0.030, 0.031) after (-0.000, 0.000)
+2022-01-20 10:14:24 [warn] Leadscrew adjustments made: 0.010 -0.020 -0.027, points used 3, (mean, deviation) before (-0.012, 0.014) after (-0.000, 0.000)
+2022-01-20 10:17:29 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2022-01-20 10:17:29 [warn] 45 points probed, min error 0.035, max error 0.210, mean 0.114, deviation 0.048
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-20 15:21:02 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-20 17:26:03 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-20 17:26:05 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-20 17:35:07 [warn] Finished printing file 0:/gcodes/Motor_Arm_NEMA17.gcode, print time was 7h 23m
+2022-01-20 17:40:29 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-20 17:41:17 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-20 17:41:17 [warn] Started printing file 0:/gcodes/Belt_Tensionner.gcode
+2022-01-20 17:42:46 [warn] Leadscrew adjustments made: -0.040 -0.028 -0.168, points used 3, (mean, deviation) before (-0.074, 0.057) after (0.000, 0.000)
+2022-01-20 17:43:09 [warn] Leadscrew adjustments made: 0.008 -0.007 -0.002, points used 3, (mean, deviation) before (-0.000, 0.005) after (0.000, 0.000)
+2022-01-20 17:44:55 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2022-01-20 17:44:55 [warn] 25 points probed, min error 0.056, max error 0.172, mean 0.120, deviation 0.037
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-20 19:02:35 [warn] HTTP client 192.168.1.99 login succeeded
+2022-01-20 20:51:05 [warn] HTTP client 192.168.1.99 login succeeded
+2022-01-20 21:11:37 [warn] Finished printing file 0:/gcodes/Belt_Tensionner.gcode, print time was 3h 30m
+2022-01-20 21:17:39 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-20 21:18:00 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-20 21:18:00 [warn] Started printing file 0:/gcodes/Pulley_Tool_NEMA17.gcode
+2022-01-20 21:19:29 [warn] Leadscrew adjustments made: -0.047 -0.060 -0.005, points used 3, (mean, deviation) before (-0.039, 0.021) after (-0.000, 0.000)
+2022-01-20 21:24:59 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2022-01-20 21:24:59 [warn] 81 points probed, min error -0.026, max error 0.212, mean 0.125, deviation 0.059
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-20 23:38:04 [warn] Finished printing file 0:/gcodes/Pulley_Tool_NEMA17.gcode, print time was 2h 20m
+2022-01-21 01:11:40 [warn] HTTP client 192.168.1.99 login succeeded
+2022-01-21 07:52:37 [warn] HTTP client 192.168.1.99 login succeeded
+2022-01-21 09:52:31 [warn] HTTP client 192.168.1.99 login succeeded
+2022-01-21 09:52:41 [warn] HTTP client 192.168.1.99 disconnected
+2022-01-21 10:15:04 [warn] HTTP client 192.168.1.99 login succeeded
+2022-01-21 11:00:47 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-21 11:00:56 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-21 11:01:31 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-21 11:01:31 [warn] Started printing file 0:/gcodes/[a]_Latch_xN.gcode
+2022-01-21 11:03:29 [warn] Leadscrew adjustments made: -0.100 0.105 0.024, points used 3, (mean, deviation) before (0.008, 0.066) after (-0.000, 0.000)
+2022-01-21 11:03:52 [warn] Leadscrew adjustments made: -0.058 -0.055 -0.070, points used 3, (mean, deviation) before (-0.060, 0.006) after (-0.000, 0.000)
+2022-01-21 11:06:59 [warn] 45 points probed, min error -0.036, max error 0.213, mean 0.079, deviation 0.064
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-21 11:52:29 [warn] HTTP client 192.168.1.99 login succeeded
+2022-01-21 11:52:34 [warn] Resume state saved
+2022-01-21 11:52:39 [warn] Printing paused at X152.2 Y99.2 Z3.8
+2022-01-21 11:52:56 [warn] Cancelled printing file 0:/gcodes/[a]_Latch_xN.gcode, print time was 0h 51m
+2022-01-21 11:55:00 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-21 11:55:43 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-21 11:55:43 [warn] Started printing file 0:/gcodes/[a]_Latch_xN.gcode
+2022-01-21 11:58:30 [warn] Error: Probe already triggered at start of probing move
+2022-01-21 11:58:53 [warn] Leadscrew adjustments made: -0.091 -0.155 -0.092, points used 3, (mean, deviation) before (-0.114, 0.024) after (-0.000, 0.000)
+2022-01-21 12:02:13 [warn] 45 points probed, min error -0.304, max error 0.176, mean -0.119, deviation 0.145
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-21 12:19:16 [warn] Resume state saved
+2022-01-21 12:19:21 [warn] Printing paused at X106.3 Y165.1 Z0.8
+2022-01-21 12:47:11 [warn] Cancelled printing file 0:/gcodes/[a]_Latch_xN.gcode, print time was 0h 23m
+2022-01-21 12:47:12 [warn] Warning: Tool 0 was not driven because its heater temperatures were not high enough or it has a heater fault
+2022-01-21 12:47:19 [warn] Started printing file 0:/gcodes/[a]_Latch_xN.gcode
+2022-01-21 12:49:24 [warn] Leadscrew adjustments made: -0.061 -0.078 -0.082, points used 3, (mean, deviation) before (-0.073, 0.007) after (-0.000, 0.000)
+2022-01-21 12:52:30 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2022-01-21 12:52:30 [warn] 45 points probed, min error 0.030, max error 0.198, mean 0.116, deviation 0.047
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-21 15:13:08 [warn] Finished printing file 0:/gcodes/[a]_Latch_xN.gcode, print time was 2h 25m
+2022-01-21 17:28:09 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-21 17:28:26 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-21 17:28:26 [warn] Started printing file 0:/gcodes/[a]_Top_Hat_xN.gcode
+2022-01-21 17:30:19 [warn] Leadscrew adjustments made: -0.081 -0.064 -0.041, points used 3, (mean, deviation) before (-0.063, 0.014) after (0.000, 0.000)
+2022-01-21 17:33:24 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2022-01-21 17:33:24 [warn] 45 points probed, min error 0.011, max error 0.192, mean 0.102, deviation 0.047
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-21 20:12:00 [warn] Finished printing file 0:/gcodes/[a]_Top_Hat_xN.gcode, print time was 2h 43m
+2022-01-21 22:12:01 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-21 22:12:06 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-21 22:12:06 [warn] Started printing file 0:/gcodes/[a]_Magnetic_Gate_0.gcode
+2022-01-21 22:13:59 [warn] Leadscrew adjustments made: -0.055 -0.094 -0.082, points used 3, (mean, deviation) before (-0.077, 0.013) after (-0.000, 0.000)
+2022-01-21 22:15:05 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2022-01-21 22:15:05 [warn] 15 points probed, min error 0.045, max error 0.124, mean 0.088, deviation 0.023
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-21 22:58:40 [warn] Finished printing file 0:/gcodes/[a]_Magnetic_Gate_0.gcode, print time was 0h 46m
+2022-01-22 21:47:51 [warn] HTTP client 192.168.1.99 login succeeded
+2022-01-22 21:54:40 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-22 22:13:27 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-22 22:13:47 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-22 22:14:07 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-22 22:14:43 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-22 22:14:43 [warn] Started printing file 0:/gcodes/[a]_Magnetic_Gate_8.gcode
+2022-01-22 22:16:35 [warn] Leadscrew adjustments made: -0.065 -0.075 -0.050, points used 3, (mean, deviation) before (-0.064, 0.009) after (-0.000, 0.000)
+2022-01-22 22:22:15 [warn] 81 points probed, min error -0.110, max error 0.190, mean 0.019, deviation 0.081
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-23 01:28:04 [warn] Finished printing file 0:/gcodes/[a]_Magnetic_Gate_8.gcode, print time was 3h 13m
+2022-01-23 11:34:21 [warn] HTTP client 192.168.1.99 login succeeded
+2022-01-23 11:34:22 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-23 11:43:54 [warn] HTTP client 192.168.1.99 login succeeded
+2022-01-23 22:06:20 [warn] HTTP client 192.168.1.99 login succeeded
+2022-01-23 22:08:48 [warn] HTTP client 192.168.1.182 login succeeded
+2022-01-23 22:24:45 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-23 22:26:01 [warn] Started printing file 0:/gcodes/[a]_Side_Latch_x2.gcode
+2022-01-23 22:26:01 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-23 22:28:00 [warn] Leadscrew adjustments made: -0.190 -0.146 -0.196, points used 3, (mean, deviation) before (-0.176, 0.019) after (-0.000, 0.000)
+2022-01-23 22:31:14 [warn] 45 points probed, min error -0.153, max error 0.155, mean -0.007, deviation 0.075
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-23 22:40:54 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-23 22:40:57 [warn] Resume state saved
+2022-01-23 22:41:03 [warn] Printing paused at X125.0 Y170.1 Z0.4
+2022-01-23 22:41:14 [warn] Cancelled printing file 0:/gcodes/[a]_Side_Latch_x2.gcode, print time was 0h 14m
+2022-01-23 22:42:48 [warn] Started printing file 0:/gcodes/[a]_Side_Latch_x2.gcode
+2022-01-23 22:46:47 [warn] Leadscrew adjustments made: -0.012 -0.078 -0.067, points used 3, (mean, deviation) before (-0.051, 0.023) after (-0.000, 0.000)
+2022-01-23 22:49:54 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2022-01-23 22:49:54 [warn] 45 points probed, min error 0.001, max error 0.175, mean 0.097, deviation 0.045
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-24 03:31:07 [warn] Finished printing file 0:/gcodes/[a]_Side_Latch_x2.gcode, print time was 4h 48m
+power up + 00:00:00 [info] Event logging started at level warn
+power up + 00:00:00 [info] Running: Duet WiFi 1.02 or later: 3.4.0beta6 (2021-11-06 11:37:41)
+power up + 00:00:00 [warn] Error: Heater 0 does not exist
+power up + 00:00:01 [warn] Warning: Heater 0 appears to be over-powered. If left on at full power, its temperature is predicted to reach 222C
+power up + 00:00:01 [warn] WiFi module started
+power up + 00:00:06 [warn] WiFi module is connected to access point Q, IP address 192.168.1.205
+power up + 00:05:54 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-26 07:19:41 [warn] Date and time set at power up + 00:05:54
+2022-01-26 07:32:34 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-26 07:32:36 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-26 07:32:41 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-26 08:07:05 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-26 08:14:38 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-26 08:14:48 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-26 08:14:48 [warn] Started printing file 0:/gcodes/Pin_4_knob.gcode
+2022-01-26 08:16:41 [warn] Leadscrew adjustments made: -0.010 -0.069 -0.065, points used 3, (mean, deviation) before (-0.047, 0.022) after (0.000, 0.000)
+2022-01-26 08:17:22 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2022-01-26 08:17:22 [warn] 9 points probed, min error 0.071, max error 0.136, mean 0.111, deviation 0.020
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-26 08:52:49 [warn] Finished printing file 0:/gcodes/Pin_4_knob.gcode, print time was 0h 38m
+2022-01-26 09:26:00 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-26 09:26:10 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-26 09:26:10 [warn] Started printing file 0:/gcodes/Pin_4_knob.gcode
+2022-01-26 09:28:05 [warn] Leadscrew adjustments made: -0.022 -0.042 -0.061, points used 3, (mean, deviation) before (-0.041, 0.014) after (0.000, 0.000)
+2022-01-26 09:28:46 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2022-01-26 09:28:46 [warn] 9 points probed, min error 0.066, max error 0.123, mean 0.102, deviation 0.016
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-26 10:06:59 [warn] Finished printing file 0:/gcodes/Pin_4_knob.gcode, print time was 0h 40m
+2022-01-26 10:11:07 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-26 10:11:17 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-26 10:11:17 [warn] Started printing file 0:/gcodes/Pin_4_knob.gcode
+2022-01-26 10:12:53 [warn] Leadscrew adjustments made: -0.006 -0.065 -0.041, points used 3, (mean, deviation) before (-0.037, 0.019) after (-0.000, 0.000)
+2022-01-26 10:13:34 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2022-01-26 10:13:34 [warn] 9 points probed, min error 0.086, max error 0.128, mean 0.115, deviation 0.013
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-26 10:58:20 [warn] Finished printing file 0:/gcodes/Pin_4_knob.gcode, print time was 0h 47m
+2022-01-26 11:02:21 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-26 11:02:41 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-26 11:02:41 [warn] Started printing file 0:/gcodes/Pin_4_knob.gcode
+2022-01-26 11:04:14 [warn] Leadscrew adjustments made: -0.017 -0.061 -0.051, points used 3, (mean, deviation) before (-0.042, 0.015) after (0.000, 0.000)
+2022-01-26 11:04:55 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2022-01-26 11:04:55 [warn] 9 points probed, min error 0.092, max error 0.136, mean 0.119, deviation 0.014
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-26 11:48:51 [warn] Finished printing file 0:/gcodes/Pin_4_knob.gcode, print time was 0h 46m
+2022-01-26 18:46:58 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-26 18:47:27 [warn] HTTP client 192.168.1.126 disconnected
+2022-01-26 18:47:27 [warn] Started printing file 0:/gcodes/bed_coupling_back_plate_4_e3d -3.gcode
+2022-01-26 18:49:25 [warn] Leadscrew adjustments made: -0.039 -0.034 -0.051, points used 3, (mean, deviation) before (-0.041, 0.006) after (0.000, 0.000)
+2022-01-26 18:50:30 [warn] Warning: the height map has a substantial Z offset. Suggest use Z-probe to establish Z=0 datum, then re-probe the mesh.
+2022-01-26 18:50:30 [warn] 15 points probed, min error 0.077, max error 0.152, mean 0.123, deviation 0.020
+Height map saved to file 0:/sys/heightmap.csv
+2022-01-26 21:34:14 [warn] Finished printing file 0:/gcodes/bed_coupling_back_plate_4_e3d -3.gcode, print time was 2h 46m
+2022-01-28 16:39:06 [warn] HTTP client 192.168.1.126 login succeeded
