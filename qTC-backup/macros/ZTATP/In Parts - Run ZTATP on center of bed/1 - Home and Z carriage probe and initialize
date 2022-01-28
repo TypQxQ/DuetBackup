@@ -1,13 +1,11 @@
 set global.purgeOnToolChange=false
 
-M291 P"Check that the ZTATP switch is in the middle under the carriage Z switch while it is moving down in the center of the bed." R"ZATP" S3
+;M291 P"Check that the ZTATP switch is in the middle under the carriage Z switch while it is moving down in the center of the bed." R"ZTATP" S3
 
 G28 Z
 M561 					; Disable any Mesh Bed Compensation
 
 ; ---------------- First carriage probe ----------------
-;G0 X255 Y255 F24000 	; Move to the center of the bed
-; Check the user is ready
 G30 ; Probe once
 T-1
 

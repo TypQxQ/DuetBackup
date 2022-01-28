@@ -6,8 +6,8 @@
 ;M204 P7000 T7000
 ;M566 X2000 Y2000	; Instant speed change, Max 2000 på förra.
 
-;G1 F6000
-G1 F40000
+G1 F3000
+;G1 F40000
 ;G1 F18000
 
 G1 X001 Y001 

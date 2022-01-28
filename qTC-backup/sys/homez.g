@@ -18,7 +18,7 @@ T49											; Mount probe
 
 M561 										; Disable any Mesh Bed Compensation
 G90											; Set to Absolute Positioning
-G0 X255 Y255 F34000 						; Move to the center of the bed
+G0 X250 Y250 F34000 						; Move to the center of the bed
 
 G30
 

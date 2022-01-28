@@ -13,7 +13,8 @@ if move.axes[3].machinePosition >= 10 ; check so the tool isn't already locked
 
 ; Set Z Probe settings
 M558 P8 C"1.io2.in" F250 H5 T40000 A2 S0.02		; Set the pin of Z probe
-G31 Z-1											; Set probe height as -1 so 0 is 1mm below the probe
+;G31 Z-1										; Set probe height as -1 so 0 is 1mm below the probe
+G31 Z0										; Set probe height as -1 so 0 is 1mm below the probe
 
 
 M400 								; Wait for current moves to finish

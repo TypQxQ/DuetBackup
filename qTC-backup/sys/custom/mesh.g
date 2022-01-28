@@ -53,7 +53,8 @@ while true
   if result != 0
     echo "Failed Mesh. Restarting"
     continue
-  if move.compensation.meshDeviation.deviation <= 0.1 & move.compensation.meshDeviation.deviation >= -0.1 & move.compensation.meshDeviation.mean <= 0.1 & move.compensation.meshDeviation.mean >= -0.1
+  ;if move.compensation.meshDeviation.deviation <= 0.1 & move.compensation.meshDeviation.deviation >= -0.1 & move.compensation.meshDeviation.mean <= 0.1 & move.compensation.meshDeviation.mean >= -0.1
+  if move.compensation.meshDeviation.deviation <= 0.25 & move.compensation.meshDeviation.deviation >= -0.25 & move.compensation.meshDeviation.mean <= 0.25 & move.compensation.meshDeviation.mean >= -0.25
     break
   echo "Repeating mesh because deviation or mean is too high."
 ; end loop

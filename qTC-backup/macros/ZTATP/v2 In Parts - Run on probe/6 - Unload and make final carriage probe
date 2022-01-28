@@ -1,0 +1,27 @@
+; ---------------- Final Check ----------------
+; Carriage Z switch as probe again
+T49
+M400 							; Wait for current moves to finish
+M561 					; Disable any Mesh Bed Compensation
+M208 X550						; Set axis software limits and min/max switch-triggering positions. Extended with tools
+M98 P"/sys/custom/EndStop_X-Max_Deactivate.g"	; Don't use the X max as EmergencyStop.
+
+; ---------------- Move to KnobProbe ----------------
+G0 F24000
+G0 X500
+G0 Y497
+G0 X525
+
+; ---------------- Probe Tool on KnobProbe ----------------
+M118 S"If the last height isn't -1 as stated by probe height then the probe bed has moved during nozzle probes."
+G30 S-1 	; Probe the bed at the current XY position. When the probe is triggered, do not adjust the Z coordinate, just report the machine height at which the probe was triggered.
+
+; ---------------- Finish up ----------------
+G0 Z5
+T-1
+
+G10 P0
+G10 P1
+G10 P2
+
+set global.purgeOnToolChange=true

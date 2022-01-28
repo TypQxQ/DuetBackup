@@ -14,6 +14,9 @@
 	M950 F2 C"2.out6"	                            ; Define Hotend Fan on out6 (2pin)
 	M106 P2 S255 T45 H1                             ; Setup Hotend Fan for thermal control, full on when H1 reaches 45C
 
+; Filament Runout Sensor - D0 is first extruder, P1 is simple sensor (high signal when filament present), S0 disables because it will always be fed by the extruder.
+    M591 D0 P1 C"2.io2.in" S0
+
 ; Create Tool
 	M563 P0 S"Tool 0" D0 H1 F1          			; Define tool 0
 	M572 D0 S0.025									; Set pressure advance on Extruder Drive 0

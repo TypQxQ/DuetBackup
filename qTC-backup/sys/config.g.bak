@@ -47,6 +47,7 @@ M584 X0.0:0.1 Y1.0:1.1 Z0.4:0.3:0.5 E2.0:2.1:2.2 U0.2 	; set drive mapping ( Z i
 ;M350 X16 Y16 I1
 M350 X32 Y32 I0
 M350 E16 I0                          			; configure 16x for XY and E microstepping with interpolation
+M350 E32 I0 									;Testing with 32 microsteps from 28/01/2022
 M350 U4 I1                    					; configure 1x microstepping with interpolation for U, better torque. x4 is original
 M350 Z16 I0                    					; configure microstepping with interpolation. Full steps on Z means 200 steps per mm and a resolution of 0,005mm per step.
 
@@ -56,12 +57,12 @@ M350 Z16 I0                    					; configure microstepping with interpolation
 
 M906 X1400 Y1400 						; set motor currents (mA) 1200 is Good up to 400mm/s without back EMF at 31,1V on one stepper
 M906 Z1400 
-M906 E900 										; 900 for BMG up to 135*C. Rated for 1.4A so runing at 86% with 1200
+M906 E900:900:900								; 900 for BMG up to 135*C. Rated for 1.4A so runing at 86% with 1200
 M906 U900 i100 ;I60                           		; StepperOnline Toolchanger Elastic Lock Motor current and idle motor percentage, must be 60% idle and 90% current. Goes up to 120% when locking
 M84 S30                                         ; Set idle timeout
 
 ; ---------- Steps per mm ----------
-M92 X160 Y160 Z3200.00 E830 S16 		; set steps per mm as defined for 16 microsteps
+M92 X160 Y160 Z3200.00 E562:830:830 S16 		; set steps per mm as defined for 16 microsteps
 M92 U11.515 S4                          ; Stepper-Online Toolchanger Elastic Lock Motor Steps/deg for U from (200 * 4 * 5.18181)/360
 
 ; ---------- Motor speeds ----------
@@ -124,6 +125,7 @@ else
   set global.purgeOnToolChange=true
 
 ; Load persistant global variables
+;M98 P"globals/T_CoolDownCheck"
 M98 P"globals/lastTool"
 
 ; Set last active tool

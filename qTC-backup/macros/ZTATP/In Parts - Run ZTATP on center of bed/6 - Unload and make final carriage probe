@@ -3,10 +3,8 @@
 T-1	;Unload tools
 
 ; Carriage Z switch as probe again
-;M98 P"/sys/custom/EndStop_ZPlate_Emergency.g"	; Set Z-Plate switch to Emergency Stop button
-;M98 P"/sys/custom/EndStop_Z_Probe.g"		; Set Z switch to Probe
-
 T49
+
 G0 X255 Y255 F24000 	; Move to the center of the bed
 M118 S"If the last height isn't -1 as stated by probe height then the probe bed has moved during nozzle probes."
 G30 S-1 	; Probe the bed at the current XY position. When the probe is triggered, do not adjust the Z coordinate, just report the machine height at which the probe was triggered.

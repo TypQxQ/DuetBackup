@@ -3,8 +3,8 @@
 ;--- 0.1 = X
 ;--- 0.2 = Y
 ;--- 0.3 = Carriage connection to tool.
-;--- 0.4 = -
-;--- 0.5 = Z-Plate to Nozzle Switch
+;--- 0.4 = KnobProbe
+;--- 0.5 = -
 ;--- 0.6 = -
 ;--- 0.7 = U
 ;--- 0.8 = Z-Plate Emergency Stop
@@ -41,3 +41,4 @@ M581 P3 T4 S1			; Use triggers as info.(Run Trigger4.g)
 M574 U1	S1 P"0.io7.in"	; U uses two microswitches in series
 M950 J15 C"nil"		; Use the input pin on io3 on the main board as carriage coupling check.
 M581 P15 T5 S1		; Use pin 15 for Trigger5.
+
