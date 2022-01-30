@@ -1,0 +1,65 @@
+; P8 --> probe type: Unfiltered switch
+; C"0.io3.in" --> endstop
+; H5 --> dive height
+; A1 --> max number of times to probe
+; T100000 --> travel speed between probe points
+; S0.02 --> tolerance when probing multiple times
+; F150 --> Feed rate (i.e. probing speed, mm/min) 2,5mm/s
+; ----------------------------------------------------------
+
+M950 J4 C"nil"			; Use the input pin on io3 on the main board Z
+M558 P8 C"0.io3.in" F250 H5 T24000 A2 S0.02	; Set the pin of Z probe
+G31 Z-1					; Set the trigger height as -1 so that 0 is not touching the switch.
+
+M561 					; Disable any Mesh Bed Compensation
+G0 X255 Y255 F24000 	; Move to the center of the bed
+
+; Check the user is ready
+M291 P"Check that the Z-SwitchPlate is under the carriage Z switch." R"ZATP" S3
+
+; ---------------- First carriage probe ----------------
+G30 ; Probe once
+
+; ---------------- Nozzle probe setup ----------------
+; Put Z back to Emergency Stop.
+M558 P8 C"nil"			; Set the pin of Z probe
+M950 J4 C"0.io3.in"		; Use the input pin on io3 on the main board Z to estop
+
+; Prepare for probing with nozzle tip.
+M558 P8 C"!0.io5.in" F25 H5 T1000 A2 S0.02	; Set the pin of Z probe to nozzle to aluminiumplate
+G31 Z0										; Set the trigger height at touch
+
+; ---------------- First Tool ----------------
+G0 Z5
+T0 ; Load first tool.
+
+G0 X255 Y255 F24000 	; Move to the center of the bed
+G30 S-2 ; Probe the bed at the current XY position. When the probe is triggered, adjust the Z offset of the current tool to make the current position Z=0.
+;G30 S-1 	; Probe the bed at the current XY position. When the probe is triggered, do not adjust the Z coordinate, just report the machine height at which the probe was triggered.
+
+; ---------------- Second Tool ----------------
+G0 Z5
+T1 ; Load second tool
+
+G0 X255 Y255 F24000 	; Move to the center of the bed
+G30 S-2 ; Probe the bed at the current XY position. When the probe is triggered, adjust the Z offset of the current tool to make the current position Z=0.
+G0 Z5
+
+; ---------------- Final Check ----------------
+
+T-1	;Unload tools
+
+; Carriage Z switch as probe again
+M950 J4 C"nil"			; Use the input pin on io3 on the main board Z
+M558 P8 C"0.io3.in" F250 H5 T24000 A2 S0.02	; Set the pin of Z probe
+G31 Z-1					; Set the trigger height as -1 so that 0 is not touching the switch.
+
+G0 X255 Y255 F24000 	; Move to the center of the bed
+M118 S"If the last height isn't -1 as stated by probe height then the probe bed has moved during nozzle probes."
+G30 S-1 	; Probe the bed at the current XY position. When the probe is triggered, do not adjust the Z coordinate, just report the machine height at which the probe was triggered.
+G0 Z5
+
+; ---------------- Put Z back to Emergency Stop ----------------
+M400
+M558 P8 C"nil"			; Set the pin of Z probe
+M950 J4 C"0.io3.in"		; Use the input pin on io3 on the main board Z to estop

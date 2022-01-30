@@ -1,0 +1,38 @@
+; ---------------- Prepare ----------------
+G0 Z10
+T{param.T} ; Load first tool.
+M400 							; Wait for current moves to finish
+M208 X600						; Set axis software limits and min/max switch-triggering positions. Extended with tools
+M98 P"/sys/custom/EndStop_X-Max_Deactivate.g"	; Don't use the X max as EmergencyStop.
+G10 P{param.T} Z0
+
+; ---------------- Move to KnobProbe ----------------
+G0 F24000
+G0 X500
+G0 Y495
+G0 X525
+
+; ---------------- Probe Tool on KnobProbe ----------------
+while true
+  if iterations = 5
+    abort "Too many probe attempts"
+  G30 K1 S-2 ; Probe the bed at the current XY position. When the probe is triggered, adjust the Z offset of the current tool to make the current position Z=0.
+  if result != 0
+    echo "Failed probing. Restarting"
+    continue
+  break
+; end loop
+
+; ---------------- Probe again and report the height for testing ----------------
+;echo "Z offset calculated for T" ^ {param.T} ^ "is now at " ^ tools[{param.T}].offsets[2]
+;G0 Z5
+;G30 K1 S-1
+;echo "Tool stoppded at Z" ^ move.axes[2].machinePosition
+;G10 P{param.T} Z{0-move.axes[2].machinePosition}
+;G0 Z5
+
+
+; ---------------- Finish up ----------------
+G0 Z10
+;G10 P{param.T}  ; Return the offset.
+echo "New Z offset for T" ^ {param.T} ^ " is now " ^ tools[{param.T}].offsets[2]
