@@ -46162,3 +46162,1270 @@ power up + 00:00:03 [warn] Ethernet running, IP address = 192.168.1.210
 power up + 02:01:23 [warn] HTTP client 192.168.1.126 login succeeded
 2022-01-30 12:26:15 [warn] Date and time set at power up + 02:01:23
 2022-01-30 12:26:25 [warn] HTTP client 192.168.1.126 login succeeded
+power up + 00:00:00 [info] Event logging started at level debug
+power up + 00:00:00 [info] Running: Duet 3 MB6HC v0.6 or 1.0: 3.4.0beta7 (2021-12-16 12:22:39)
+power up + 00:00:00 [warn] Warning: Heater 0 predicted maximum temperature at full power is 209°C
+power up + 00:00:00 [warn] Warning: Heater 3 predicted maximum temperature at full power is 559°C
+power up + 00:00:00 [info] G10 P0 X-11.28 Y-4.73 Z-3.49 U0.00
+power up + 00:00:00 [info] G10 P1 X0.50 Y0.49 Z-0.10 U0.00
+power up + 00:00:00 [warn] Error: in file macro line 11: G10: Invalid tool number
+power up + 00:00:00 [info] G10 L2 P1 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P2 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P3 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P4 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P5 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P6 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P7 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P8 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P9 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] M568 P0 S0 R0[0x09][0x09][0x09]
+power up + 00:00:00 [info] M568 P1 S0 R0[0x09][0x09][0x09]
+power up + 00:00:00 [warn] Error: in file macro line 115: M568: Invalid tool number
+power up + 00:00:00 [warn] Warning: Driver 0.2 warning: phase A may be disconnected, phase B may be disconnected
+power up + 00:00:01 [debug] Homed U, setting active tool to T-1
+power up + 00:00:01 [debug] Done!
+power up + 00:00:01 [debug] RepRapFirmware for Duet 3 MB6HC is up and running.
+power up + 00:00:02 [warn] Ethernet running, IP address = 192.168.1.210
+power up + 00:00:14 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-30 14:38:02 [warn] Date and time set at power up + 00:00:14
+2022-01-30 14:38:03 [warn] HTTP client 192.168.1.126 login succeeded
+power up + 00:00:00 [info] Event logging started at level debug
+power up + 00:00:00 [info] Running: Duet 3 MB6HC v0.6 or 1.0: 3.4.0beta7 (2021-12-16 12:22:39)
+power up + 00:00:00 [warn] Warning: Heater 0 predicted maximum temperature at full power is 209°C
+power up + 00:00:00 [warn] Warning: Heater 3 predicted maximum temperature at full power is 559°C
+power up + 00:00:00 [info] G10 P0 X-11.28 Y-4.73 Z-3.49 U0.00
+power up + 00:00:00 [info] G10 P1 X0.50 Y0.49 Z-0.10 U0.00
+power up + 00:00:00 [warn] Error: in file macro line 11: G10: Invalid tool number
+power up + 00:00:00 [info] G10 L2 P1 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P2 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P3 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P4 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P5 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P6 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P7 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P8 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P9 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] M568 P0 S0 R0[0x09][0x09][0x09]
+power up + 00:00:00 [info] M568 P1 S0 R0[0x09][0x09][0x09]
+power up + 00:00:00 [warn] Error: in file macro line 115: M568: Invalid tool number
+power up + 00:00:00 [warn] Warning: Driver 0.2 warning: phase A may be disconnected, phase B may be disconnected
+power up + 00:00:01 [debug] Homed U, setting active tool to T-1
+power up + 00:00:01 [debug] Done!
+power up + 00:00:01 [debug] RepRapFirmware for Duet 3 MB6HC is up and running.
+power up + 00:00:02 [warn] Ethernet running, IP address = 192.168.1.210
+power up + 00:00:05 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-30 19:03:05 [warn] Date and time set at power up + 00:00:05
+2022-01-30 19:03:14 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-30 19:03:16 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-30 21:10:54 [warn] Error: Cannot pause print, because no file is being printed!
+2022-01-30 21:10:54 [debug] === Diagnostics ===
+2022-01-30 21:10:54 [debug] RepRapFirmware for Duet 3 MB6HC version 3.4.0beta7 (2021-12-16 12:22:39) running on Duet 3 MB6HC v0.6 or 1.0 (standalone mode)
+2022-01-30 21:10:54 [debug] Board ID: 08DJM-956L2-G43S4-6JKDD-3SJ6L-TB62G
+2022-01-30 21:10:54 [debug] Used output buffers: 2 of 40 (16 max)
+2022-01-30 21:10:54 [debug] === RTOS ===
+2022-01-30 21:10:54 [debug] Static ram: 150664
+2022-01-30 21:10:54 [debug] Dynamic ram: 96900 of which 48 recycled
+2022-01-30 21:10:54 [debug] Never used RAM 100132, free system stack 194 words
+2022-01-30 21:10:54 [debug] Tasks:
+2022-01-30 21:10:54 [debug]  NETWORK(ready,105.1%,223)
+2022-01-30 21:10:54 [debug]  ETHERNET(notifyWait,0.2%,176)
+2022-01-30 21:10:54 [debug]  HEAT(notifyWait,0.0%,344)
+2022-01-30 21:10:54 [debug]  Move(notifyWait,0.0%,276)
+2022-01-30 21:10:54 [debug]  CanReceiv(notifyWait,0.1%,772)
+2022-01-30 21:10:54 [debug]  CanSender(notifyWait,0.0%,374)
+2022-01-30 21:10:54 [debug]  CanClock(delaying,0.0%,339)
+2022-01-30 21:10:54 [debug]  TMC(notifyWait,30.8%,58)
+2022-01-30 21:10:54 [debug]  MAIN(running,257.5%,925)
+2022-01-30 21:10:54 [debug]  IDLE(ready,0.0%,30)
+2022-01-30 21:10:54 [debug] , total 393.9%
+Owned mutexes:
+2022-01-30 21:10:54 [debug]  Trigger(MAIN)
+2022-01-30 21:10:54 [debug] === Platform ===
+2022-01-30 21:10:54 [debug] Last reset 02:07:54 ago, cause: power up
+2022-01-30 21:10:54 [debug] Last software reset at 2022-01-28 18:20, reason: User, GCodes spinning, available RAM 99816, slot 0
+2022-01-30 21:10:54 [debug] Software reset code 0x0003 HFSR 0x00000000 CFSR 0x00000000 ICSR 0x0044a000 BFAR 0x00000000 SP 0x00000000 Task MAIN Freestk 0 n/a
+2022-01-30 21:10:54 [debug] Error status: 0x00
+2022-01-30 21:10:54 [debug] Step timer max interval 179
+2022-01-30 21:10:54 [debug] MCU temperature: min 25.7, current 40.3, max 40.7
+2022-01-30 21:10:54 [debug] Supply voltage: min 31.9, current 31.9, max 32.0, under voltage events: 0, over voltage events: 0, power good: yes
+2022-01-30 21:10:54 [debug] 12V rail voltage: min 12.0, current 12.0, max 12.1, under voltage events: 0
+2022-01-30 21:10:54 [debug] Heap OK, handles allocated/used 99/2, heap memory allocated/used/recyclable 2048/74/42, gc cycles 0
+2022-01-30 21:10:54 [debug] Events: 1 queued, 1 completed
+2022-01-30 21:10:54 [debug] Driver 0: pos 0, standstill, SG min 0, mspos 4, reads 54452, writes 14 timeouts 0
+2022-01-30 21:10:54 [debug] Driver 1: pos 0, standstill, SG min 0, mspos 4, reads 54453, writes 14 timeouts 0
+2022-01-30 21:10:54 [debug] Driver 2: pos 0, standstill, SG min 0, mspos 736, reads 54448, writes 19 timeouts 0
+2022-01-30 21:10:54 [debug] Driver 3: pos 69, standstill, SG min 0, mspos 8, reads 54459, writes 14 timeouts 0
+2022-01-30 21:10:54 [debug] Driver 4: pos 0, standstill, SG min 0, mspos 8, reads 54459, writes 14 timeouts 0
+2022-01-30 21:10:54 [debug] Driver 5: pos 0, standstill, SG min 0, mspos 8, reads 54460, writes 14 timeouts 0
+2022-01-30 21:10:54 [debug] Date/time: 
+2022-01-30 21:10:54 [debug] 2022-01-30 21:10:54
+2022-01-30 21:10:54 [debug] Slowest loop: 5.51ms; fastest: 0.06ms
+2022-01-30 21:10:54 [debug] === Storage ===
+Free file entries: 8
+2022-01-30 21:10:54 [debug] SD card 0 detected, interface speed: 25.0MBytes/sec
+2022-01-30 21:10:54 [debug] SD card longest read time 3.5ms, write time 3.7ms, max retries 0
+2022-01-30 21:10:54 [debug] === Move ===
+DMs created 125, segments created 3, maxWait 672ms, bed compensation in use: none, comp offset 0.000
+2022-01-30 21:10:54 [debug] === MainDDARing ===
+Scheduled moves 3, completed 3, hiccups 0, stepErrors 0, LaErrors 0, Underruns [0, 0, 0], CDDA state -1
+2022-01-30 21:10:54 [debug] === AuxDDARing ===
+Scheduled moves 0, completed 0, hiccups 0, stepErrors 0, LaErrors 0, Underruns [0, 0, 0], CDDA state -1
+2022-01-30 21:10:54 [debug] === Heat ===
+2022-01-30 21:10:54 [debug] Bed heaters 0 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1, chamber heaters -1 -1 -1 -1, ordering errs 0
+2022-01-30 21:10:54 [debug] === GCodes ===
+2022-01-30 21:10:54 [debug] Segments left: 0
+2022-01-30 21:10:54 [debug] Movement lock held by null
+2022-01-30 21:10:54 [debug] HTTP is idle in state(s) 0
+2022-01-30 21:10:54 [debug] Telnet is idle in state(s) 0
+2022-01-30 21:10:54 [debug] File is idle in state(s) 0
+2022-01-30 21:10:54 [debug] USB is idle in state(s) 0
+2022-01-30 21:10:54 [debug] Aux is idle in state(s) 0
+2022-01-30 21:10:54 [debug] Trigger is ready with "M122 B0" in state(s) 0 0, running macro
+2022-01-30 21:10:54 [debug] Queue is idle in state(s) 0
+2022-01-30 21:10:54 [debug] LCD is idle in state(s) 0
+2022-01-30 21:10:54 [debug] SBC is idle in state(s) 0
+2022-01-30 21:10:54 [debug] Daemon is idle in state(s) 0
+2022-01-30 21:10:54 [debug] Aux2 is idle in state(s) 0
+2022-01-30 21:10:54 [debug] Autopause is idle in state(s) 0
+2022-01-30 21:10:54 [debug] Code queue is empty
+2022-01-30 21:10:54 [debug] === Filament sensors ===
+2022-01-30 21:10:54 [debug] Extruder 0 sensor: no filament
+2022-01-30 21:10:54 [debug] === CAN ===
+2022-01-30 21:10:54 [debug] Messages queued 69130, received 218800, lost 0, boc 0
+2022-01-30 21:10:54 [debug] Longest wait 1ms for reply type 6018, peak Tx sync delay 386, free buffers 49 (min 48), ts 38375/38374/0
+2022-01-30 21:10:54 [debug] Tx timeouts 0,0,0,0,0,0
+2022-01-30 21:10:54 [debug] === Network ===
+2022-01-30 21:10:54 [debug] Slowest loop: 9.47ms; fastest: 0.02ms
+2022-01-30 21:10:54 [debug] Responder states:
+2022-01-30 21:10:54 [debug]  HTTP(4)
+2022-01-30 21:10:54 [debug]  HTTP(0)
+2022-01-30 21:10:54 [debug]  HTTP(0)
+2022-01-30 21:10:54 [debug]  HTTP(0)
+2022-01-30 21:10:54 [debug]  HTTP(0)
+2022-01-30 21:10:54 [debug]  HTTP(0)
+2022-01-30 21:10:54 [debug]  FTP(0)
+2022-01-30 21:10:54 [debug]  Telnet(0), 0 sessions
+2022-01-30 21:10:54 [debug]  Telnet(0), 0 sessions
+2022-01-30 21:10:54 [debug] HTTP sessions: 1 of 8
+2022-01-30 21:10:54 [debug] - Ethernet -
+State: active
+2022-01-30 21:10:54 [debug] Error counts: 0 0 1 0 0
+Socket states:
+2022-01-30 21:10:54 [debug]  5
+2022-01-30 21:10:54 [debug]  2
+2022-01-30 21:10:54 [debug]  2
+2022-01-30 21:10:54 [debug]  2
+2022-01-30 21:10:54 [debug]  2
+2022-01-30 21:10:54 [debug]  0
+2022-01-30 21:10:54 [debug]  0
+2022-01-30 21:10:54 [debug]  0
+2022-01-30 21:10:54 [debug] Diagnostics for board 1:
+2022-01-30 21:10:54 [debug] Duet EXP3HC firmware version 3.4.0beta7 (2021-12-16 12:24:41)
+Bootloader ID: SAME5x bootloader version 2.2 (2021-01-16b1)
+2022-01-30 21:10:54 [debug] Never used RAM 158880, free system stack 4392 words
+Tasks: Move(notifyWait<null>,0.0%,160) HEAT(notifyWait<null>,0.1%,88) CanAsync(notifyWait<null>,0.0%,65) CanRecv(notifyWait<null>,0.0%,82) CanClock(notifyWait<null>,0.0%,71) TMC(notifyWait<null>,29.2%,99) MAIN(running<null>,65.5%,442) IDLE(ready<null>,0.0%,39) AIN(delaying<null>,5.2%,263), total 100.0%
+Last reset 02:07:55 ago, cause: power up
+2022-01-30 21:10:54 [debug] Last software reset at 2021-06-06 23:40, reason: deliberate HardFault zeroDiv, available RAM 159008, slot 1
+Software reset code 0x8060 HFSR 0x40000000 CFSR 0x02000000 ICSR 0x00430803 BFAR 0xe000ed38 SP 0x20003700 Task MAIN Freestk 804 ok
+2022-01-30 21:10:54 [debug] Stack: 00000001 00000000 00000000 00000004 20000aac 0001dd33 0001f220 41000000 c0100394 80a02024 3a36d584 41200000 00000000 11a80100 0000002c a300a5a5 20003bc8 00000000 00000000 00000000 20003bc8 0005b8bd 20003bc8 0005b8bd 000001d9 0001da41 41318189
+2022-01-30 21:10:54 [debug] Driver 0: pos 0, 320.0 steps/mm,standstill, SG min 0, mspos 4, reads 1526, writes 16 timeouts 0, steps req 0 done 0
+Driver 1: pos 0, 320.0 steps/mm,standstill, SG min 0, mspos 4, reads 1526, writes 16 timeouts 0, steps req 0 done 0
+Driver 2: pos 0, 80.0 steps/mm,standstill, SG min 0, mspos 8, reads 1532, writes 11 timeouts 0, steps req 0 done 0
+2022-01-30 21:10:54 [debug] Moves scheduled 0, completed 0, in progress 0, hiccups 0, step errors 0, maxPrep 0, maxOverdue 0, maxInc 0, mcErrs 0, gcmErrs 0
+Peak sync jitter -3/17, peak Rx sync delay 184, resyncs 0/0, no step interrupt scheduled
+VIN voltage: min 32.1, current 32.1, max 32.1
+V12 voltage: min 12.1, current 12.2, max 12.2
+MCU temperature: min 28.8C, current 36.1C, max 36.5C
+2022-01-30 21:10:54 [debug] Last sensors broadcast 0x00000000 found 0 66 ticks ago, 0 ordering errs, loop time 0
+CAN messages queued 61446, send timeouts 0, received 99794, lost 0, free buffers 37, min 37, error reg 20000
+dup 0, oos 0/0/0/0, bm 0, wbm 0, rxMotionDelay 0
+2022-01-30 21:10:54 [debug] Diagnostics for board 2:
+2022-01-30 21:10:54 [debug] Duet EXP3HC firmware version 3.4.0beta7 (2021-12-16 12:24:41)
+Bootloader ID: not available
+2022-01-30 21:10:54 [debug] Never used RAM 157624, free system stack 4392 words
+Tasks: Move(notifyWait<null>,0.0%,160) HEAT(notifyWait<null>,0.2%,78) CanAsync(notifyWait<null>,0.0%,69) CanRecv(notifyWait<null>,0.0%,82) CanClock(notifyWait<null>,0.0%,71) TMC(notifyWait<null>,30.3%,99) MAIN(running<null>,64.3%,302) IDLE(ready<null>,0.0%,39) AIN(delaying<null>,5.2%,263), total 100.0%
+Last reset 02:07:55 ago, cause: software
+2022-01-30 21:10:54 [debug] Last software reset at 2021-05-30 19:40, reason: AssertionFailed, available RAM 157912, slot 2
+Software reset code 0x0120 HFSR 0x00000000 CFSR 0x00000000 ICSR 0x00000000 BFAR 0xe000ed38 SP 0x20004874 Task HEAT Freestk 146 ok
+2022-01-30 21:10:54 [debug] Stack: 00000544 0002eb3c 0002614f 42000400 00022387 00000000 00000020 2002f020 2000159c 00000003 0001d30f 00000000 2002f020 00000020 000157b1 00000000 00e7460e 00e7460e 41d5d9f0 a5a5a5a5 a5a5a5a5 a5a5a5a5 00024f9d a5a5a5a5 00000058 00000000 2002ee70
+2022-01-30 21:10:54 [debug] Driver 0: pos 0, 1124.0 steps/mm,standstill, SG min 0, mspos 4, reads 52252, writes 16 timeouts 0, steps req 0 done 0
+Driver 1: pos 0, 1660.0 steps/mm,standstill, SG min 0, mspos 4, reads 52253, writes 16 timeouts 0, steps req 0 done 0
+Driver 2: pos 0, 1660.0 steps/mm,standstill, SG min 0, mspos 4, reads 52254, writes 16 timeouts 0, steps req 0 done 0
+2022-01-30 21:10:54 [debug] Moves scheduled 0, completed 0, in progress 0, hiccups 0, step errors 0, maxPrep 0, maxOverdue 0, maxInc 0, mcErrs 0, gcmErrs 0
+Peak sync jitter 3/21, peak Rx sync delay 181, resyncs 0/0, no step interrupt scheduled
+VIN voltage: min 24.1, current 24.1, max 24.2
+V12 voltage: min 12.2, current 12.2, max 12.2
+MCU temperature: min 31.2C, current 37.9C, max 38.1C
+2022-01-30 21:10:54 [debug] Last sensors broadcast 0x0000000e found 3 240 ticks ago, 0 ordering errs, loop time 0
+CAN messages queued 157416, send timeouts 0, received 69129, lost 0, free buffers 37, min 37, error reg 20000
+dup 0, oos 0/0/0/0, bm 0, wbm 0, rxMotionDelay 0
+2022-01-30 21:10:54 [debug] === Filament sensors ===
+Interrupt 5726621 to 0us, poll 1 to 196us
+Driver 0: ok
+2022-01-30 21:10:54 [info] Event logging stopped
+power up + 00:00:00 [info] Event logging started at level debug
+power up + 00:00:00 [info] Running: Duet 3 MB6HC v0.6 or 1.0: 3.4.0beta7 (2021-12-16 12:22:39)
+power up + 00:00:00 [warn] Warning: Heater 0 predicted maximum temperature at full power is 209°C
+power up + 00:00:00 [warn] Warning: Heater 3 predicted maximum temperature at full power is 559°C
+power up + 00:00:00 [info] G10 P0 X-11.28 Y-4.73 Z-3.49 U0.00
+power up + 00:00:00 [info] G10 P1 X0.50 Y0.49 Z-0.10 U0.00
+power up + 00:00:00 [warn] Error: in file macro line 11: G10: Invalid tool number
+power up + 00:00:00 [info] G10 L2 P1 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P2 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P3 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P4 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P5 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P6 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P7 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P8 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P9 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] M568 P0 S0 R0[0x09][0x09][0x09]
+power up + 00:00:00 [info] M568 P1 S0 R0[0x09][0x09][0x09]
+power up + 00:00:00 [warn] Error: in file macro line 115: M568: Invalid tool number
+power up + 00:00:00 [warn] Warning: Driver 0.2 warning: phase A may be disconnected, phase B may be disconnected
+power up + 00:00:00 [debug] Homed U, setting active tool to T-1
+power up + 00:00:00 [debug] Done!
+power up + 00:00:00 [debug] RepRapFirmware for Duet 3 MB6HC is up and running.
+power up + 00:00:02 [warn] Ethernet running, IP address = 192.168.1.210
+power up + 00:00:03 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-30 21:22:35 [warn] Date and time set at power up + 00:00:03
+2022-01-30 23:13:09 [warn] Error: Cannot pause print, because no file is being printed!
+2022-01-30 23:13:09 [debug] === Diagnostics ===
+2022-01-30 23:13:09 [debug] RepRapFirmware for Duet 3 MB6HC version 3.4.0beta7 (2021-12-16 12:22:39) running on Duet 3 MB6HC v0.6 or 1.0 (standalone mode)
+2022-01-30 23:13:09 [debug] Board ID: 08DJM-956L2-G43S4-6JKDD-3SJ6L-TB62G
+2022-01-30 23:13:09 [debug] Used output buffers: 2 of 40 (16 max)
+2022-01-30 23:13:09 [debug] === RTOS ===
+2022-01-30 23:13:09 [debug] Static ram: 150664
+2022-01-30 23:13:09 [debug] Dynamic ram: 96900 of which 48 recycled
+2022-01-30 23:13:09 [debug] Never used RAM 100132, free system stack 195 words
+2022-01-30 23:13:09 [debug] Tasks:
+2022-01-30 23:13:09 [debug]  NETWORK(ready,195.0%,223)
+2022-01-30 23:13:09 [debug]  ETHERNET(notifyWait,0.4%,174)
+2022-01-30 23:13:09 [debug]  HEAT(notifyWait,0.1%,344)
+2022-01-30 23:13:09 [debug]  Move(notifyWait,0.0%,276)
+2022-01-30 23:13:09 [debug]  CanReceiv(notifyWait,0.2%,772)
+2022-01-30 23:13:09 [debug]  CanSender(notifyWait,0.0%,374)
+2022-01-30 23:13:09 [debug]  CanClock(delaying,0.0%,339)
+2022-01-30 23:13:09 [debug]  TMC(notifyWait,57.1%,58)
+2022-01-30 23:13:09 [debug]  MAIN(running,476.1%,925)
+2022-01-30 23:13:09 [debug]  IDLE(ready,0.0%,30)
+2022-01-30 23:13:09 [debug] , total 728.9%
+Owned mutexes:
+2022-01-30 23:13:09 [debug]  Trigger(MAIN)
+2022-01-30 23:13:09 [debug] === Platform ===
+2022-01-30 23:13:09 [debug] Last reset 01:50:37 ago, cause: software
+2022-01-30 23:13:09 [debug] Last software reset at 2022-01-30 21:22, reason: User, GCodes spinning, available RAM 100132, slot 1
+2022-01-30 23:13:09 [debug] Software reset code 0x0003 HFSR 0x00000000 CFSR 0x00000000 ICSR 0x0044a000 BFAR 0x00000000 SP 0x00000000 Task MAIN Freestk 0 n/a
+2022-01-30 23:13:09 [debug] Error status: 0x00
+2022-01-30 23:13:09 [debug] Step timer max interval 135
+2022-01-30 23:13:09 [debug] MCU temperature: min 40.0, current 40.4, max 40.6
+2022-01-30 23:13:09 [debug] Supply voltage: min 31.8, current 31.9, max 31.9, under voltage events: 0, over voltage events: 0, power good: yes
+2022-01-30 23:13:09 [debug] 12V rail voltage: min 12.0, current 12.0, max 12.1, under voltage events: 0
+2022-01-30 23:13:09 [debug] Heap OK, handles allocated/used 99/2, heap memory allocated/used/recyclable 2048/74/42, gc cycles 0
+2022-01-30 23:13:09 [debug] Events: 1 queued, 1 completed
+2022-01-30 23:13:09 [debug] Driver 0: pos 0, standstill, SG min 0, mspos 4, reads 13202, writes 14 timeouts 0
+2022-01-30 23:13:09 [debug] Driver 1: pos 0, standstill, SG min 0, mspos 4, reads 13202, writes 14 timeouts 0
+2022-01-30 23:13:09 [debug] Driver 2: pos 0, standstill, SG min 0, mspos 416, reads 13198, writes 19 timeouts 0
+2022-01-30 23:13:09 [debug] Driver 3: pos 69, standstill, SG min 0, mspos 8, reads 13203, writes 14 timeouts 0
+2022-01-30 23:13:09 [debug] Driver 4: pos 0, standstill, SG min 0, mspos 8, reads 13209, writes 14 timeouts 0
+2022-01-30 23:13:09 [debug] Driver 5: pos 0, standstill, SG min 0, mspos 8, reads 13209, writes 14 timeouts 0
+2022-01-30 23:13:09 [debug] Date/time: 
+2022-01-30 23:13:09 [debug] 2022-01-30 23:13:09
+2022-01-30 23:13:09 [debug] Slowest loop: 5.63ms; fastest: 0.06ms
+2022-01-30 23:13:09 [debug] === Storage ===
+Free file entries: 8
+2022-01-30 23:13:09 [debug] SD card 0 detected, interface speed: 25.0MBytes/sec
+2022-01-30 23:13:09 [debug] SD card longest read time 3.3ms, write time 3.7ms, max retries 0
+2022-01-30 23:13:09 [debug] === Move ===
+DMs created 125, segments created 3, maxWait 672ms, bed compensation in use: none, comp offset 0.000
+2022-01-30 23:13:09 [debug] === MainDDARing ===
+Scheduled moves 3, completed 3, hiccups 0, stepErrors 0, LaErrors 0, Underruns [0, 0, 0], CDDA state -1
+2022-01-30 23:13:09 [debug] === AuxDDARing ===
+Scheduled moves 0, completed 0, hiccups 0, stepErrors 0, LaErrors 0, Underruns [0, 0, 0], CDDA state -1
+2022-01-30 23:13:09 [debug] === Heat ===
+2022-01-30 23:13:09 [debug] Bed heaters 0 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1, chamber heaters -1 -1 -1 -1, ordering errs 0
+2022-01-30 23:13:09 [debug] === GCodes ===
+2022-01-30 23:13:09 [debug] Segments left: 0
+2022-01-30 23:13:09 [debug] Movement lock held by null
+2022-01-30 23:13:09 [debug] HTTP is idle in state(s) 0
+2022-01-30 23:13:09 [debug] Telnet is idle in state(s) 0
+2022-01-30 23:13:09 [debug] File is idle in state(s) 0
+2022-01-30 23:13:09 [debug] USB is idle in state(s) 0
+2022-01-30 23:13:09 [debug] Aux is idle in state(s) 0
+2022-01-30 23:13:09 [debug] Trigger is ready with "M122 B0" in state(s) 0 0, running macro
+2022-01-30 23:13:09 [debug] Queue is idle in state(s) 0
+2022-01-30 23:13:09 [debug] LCD is idle in state(s) 0
+2022-01-30 23:13:09 [debug] SBC is idle in state(s) 0
+2022-01-30 23:13:09 [debug] Daemon is idle in state(s) 0
+2022-01-30 23:13:09 [debug] Aux2 is idle in state(s) 0
+2022-01-30 23:13:09 [debug] Autopause is idle in state(s) 0
+2022-01-30 23:13:09 [debug] Code queue is empty
+2022-01-30 23:13:09 [debug] === Filament sensors ===
+2022-01-30 23:13:09 [debug] Extruder 0 sensor: no filament
+2022-01-30 23:13:09 [debug] === CAN ===
+2022-01-30 23:13:09 [debug] Messages queued 59791, received 189221, lost 0, boc 0
+2022-01-30 23:13:09 [debug] Longest wait 1ms for reply type 6018, peak Tx sync delay 384, free buffers 49 (min 48), ts 33186/33185/0
+2022-01-30 23:13:09 [debug] Tx timeouts 0,0,0,0,0,0
+2022-01-30 23:13:09 [debug] === Network ===
+2022-01-30 23:13:09 [debug] Slowest loop: 4.64ms; fastest: 0.02ms
+2022-01-30 23:13:09 [debug] Responder states:
+2022-01-30 23:13:09 [debug]  HTTP(0)
+2022-01-30 23:13:09 [debug]  HTTP(0)
+2022-01-30 23:13:09 [debug]  HTTP(0)
+2022-01-30 23:13:09 [debug]  HTTP(0)
+2022-01-30 23:13:09 [debug]  HTTP(0)
+2022-01-30 23:13:09 [debug]  HTTP(0)
+2022-01-30 23:13:09 [debug]  FTP(0)
+2022-01-30 23:13:09 [debug]  Telnet(0), 0 sessions
+2022-01-30 23:13:09 [debug]  Telnet(0), 0 sessions
+2022-01-30 23:13:09 [debug] HTTP sessions: 1 of 8
+2022-01-30 23:13:09 [debug] - Ethernet -
+State: active
+2022-01-30 23:13:09 [debug] Error counts: 0 0 1 0 0
+Socket states:
+2022-01-30 23:13:09 [debug]  2
+2022-01-30 23:13:09 [debug]  2
+2022-01-30 23:13:09 [debug]  2
+2022-01-30 23:13:09 [debug]  2
+2022-01-30 23:13:09 [debug]  2
+2022-01-30 23:13:09 [debug]  0
+2022-01-30 23:13:09 [debug]  0
+2022-01-30 23:13:09 [debug]  0
+2022-01-30 23:13:09 [debug] Diagnostics for board 1:
+2022-01-30 23:13:09 [debug] Duet EXP3HC firmware version 3.4.0beta7 (2021-12-16 12:24:41)
+Bootloader ID: SAME5x bootloader version 2.2 (2021-01-16b1)
+2022-01-30 23:13:09 [debug] Never used RAM 158880, free system stack 4388 words
+Tasks: Move(notifyWait<null>,0.0%,160) HEAT(notifyWait<null>,0.1%,88) CanAsync(notifyWait<null>,0.0%,69) CanRecv(notifyWait<null>,0.0%,82) CanClock(notifyWait<null>,0.0%,71) TMC(notifyWait<null>,33.8%,99) MAIN(running<null>,60.0%,450) IDLE(ready<null>,0.0%,39) AIN(delaying<null>,6.0%,263), total 100.0%
+Last reset 02:02:15 ago, cause: software
+2022-01-30 23:13:09 [debug] Last software reset at 2021-06-06 23:40, reason: deliberate HardFault zeroDiv, available RAM 159008, slot 1
+Software reset code 0x8060 HFSR 0x40000000 CFSR 0x02000000 ICSR 0x00430803 BFAR 0xe000ed38 SP 0x20003700 Task MAIN Freestk 804 ok
+2022-01-30 23:13:09 [debug] Stack: 00000001 00000000 00000000 00000004 20000aac 0001dd33 0001f220 41000000 c0100394 80a02024 3a36d584 41200000 00000000 11a80100 0000002c a300a5a5 20003bc8 00000000 00000000 00000000 20003bc8 0005b8bd 20003bc8 0005b8bd 000001d9 0001da41 41318189
+2022-01-30 23:13:09 [debug] Driver 0: pos 0, 320.0 steps/mm,standstill, SG min 0, mspos 4, reads 1852, writes 16 timeouts 0, steps req 0 done 0
+Driver 1: pos 0, 320.0 steps/mm,standstill, SG min 0, mspos 4, reads 1853, writes 16 timeouts 0, steps req 0 done 0
+Driver 2: pos 0, 80.0 steps/mm,standstill, SG min 0, mspos 8, reads 1858, writes 11 timeouts 0, steps req 0 done 0
+2022-01-30 23:13:09 [debug] Moves scheduled 0, completed 0, in progress 0, hiccups 0, step errors 0, maxPrep 0, maxOverdue 0, maxInc 0, mcErrs 0, gcmErrs 0
+Peak sync jitter -3/15, peak Rx sync delay 182, resyncs 0/0, no step interrupt scheduled
+VIN voltage: min 32.1, current 32.1, max 32.1
+V12 voltage: min 12.2, current 12.2, max 12.2
+MCU temperature: min 35.6C, current 36.2C, max 36.2C
+2022-01-30 23:13:09 [debug] Last sensors broadcast 0x00000000 found 0 221 ticks ago, 0 ordering errs, loop time 0
+CAN messages queued 61514, send timeouts 0, received 89093, lost 0, free buffers 37, min 37, error reg 20000
+dup 0, oos 0/0/0/0, bm 0, wbm 0, rxMotionDelay 0
+2022-01-30 23:13:09 [debug] Diagnostics for board 2:
+2022-01-30 23:13:09 [debug] Duet EXP3HC firmware version 3.4.0beta7 (2021-12-16 12:24:41)
+Bootloader ID: not available
+2022-01-30 23:13:09 [debug] Never used RAM 157624, free system stack 4392 words
+Tasks: Move(notifyWait<null>,0.0%,160) HEAT(notifyWait<null>,0.2%,68) CanAsync(notifyWait<null>,0.0%,69) CanRecv(notifyWait<null>,0.0%,82) CanClock(notifyWait<null>,0.0%,71) TMC(notifyWait<null>,34.9%,99) MAIN(running<null>,58.8%,302) IDLE(ready<null>,0.0%,39) AIN(delaying<null>,6.0%,263), total 100.0%
+Last reset 02:02:15 ago, cause: software
+2022-01-30 23:13:09 [debug] Last software reset at 2021-05-30 19:40, reason: AssertionFailed, available RAM 157912, slot 2
+Software reset code 0x0120 HFSR 0x00000000 CFSR 0x00000000 ICSR 0x00000000 BFAR 0xe000ed38 SP 0x20004874 Task HEAT Freestk 146 ok
+2022-01-30 23:13:09 [debug] Stack: 00000544 0002eb3c 0002614f 42000400 00022387 00000000 00000020 2002f020 2000159c 00000003 0001d30f 00000000 2002f020 00000020 000157b1 00000000 00e7460e 00e7460e 41d5d9f0 a5a5a5a5 a5a5a5a5 a5a5a5a5 00024f9d a5a5a5a5 00000058 00000000 2002ee70
+2022-01-30 23:13:09 [debug] Driver 0: pos 0, 1124.0 steps/mm,standstill, SG min 0, mspos 4, reads 7323, writes 16 timeouts 0, steps req 0 done 0
+Driver 1: pos 0, 1660.0 steps/mm,standstill, SG min 0, mspos 4, reads 7323, writes 16 timeouts 0, steps req 0 done 0
+Driver 2: pos 0, 1660.0 steps/mm,standstill, SG min 0, mspos 4, reads 7324, writes 16 timeouts 0, steps req 0 done 0
+2022-01-30 23:13:09 [debug] Moves scheduled 0, completed 0, in progress 0, hiccups 0, step errors 0, maxPrep 0, maxOverdue 0, maxInc 0, mcErrs 0, gcmErrs 0
+Peak sync jitter 3/19, peak Rx sync delay 180, resyncs 0/0, no step interrupt scheduled
+VIN voltage: min 24.1, current 24.1, max 24.2
+V12 voltage: min 12.2, current 12.2, max 12.2
+MCU temperature: min 37.2C, current 37.7C, max 37.9C
+2022-01-30 23:13:09 [debug] Last sensors broadcast 0x0000000e found 3 226 ticks ago, 0 ordering errs, loop time 0
+CAN messages queued 144515, send timeouts 0, received 62580, lost 0, free buffers 37, min 37, error reg 20000
+dup 0, oos 0/0/0/0, bm 0, wbm 0, rxMotionDelay 0
+2022-01-30 23:13:09 [debug] === Filament sensors ===
+Interrupt 5726621 to 0us, poll 1 to 197us
+Driver 0: ok
+2022-01-30 23:13:09 [info] Event logging stopped
+power up + 00:00:00 [info] Event logging started at level debug
+power up + 00:00:00 [info] Running: Duet 3 MB6HC v0.6 or 1.0: 3.4.0beta7 (2021-12-16 12:22:39)
+power up + 00:00:00 [warn] Warning: Heater 0 predicted maximum temperature at full power is 209°C
+power up + 00:00:00 [warn] Warning: Heater 3 predicted maximum temperature at full power is 559°C
+power up + 00:00:00 [info] G10 P0 X-11.28 Y-4.73 Z-3.49 U0.00
+power up + 00:00:00 [info] G10 P1 X0.50 Y0.49 Z-0.10 U0.00
+power up + 00:00:00 [warn] Error: in file macro line 11: G10: Invalid tool number
+power up + 00:00:00 [info] G10 L2 P1 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P2 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P3 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P4 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P5 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P6 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P7 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P8 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P9 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] M568 P0 S0 R0[0x09][0x09][0x09]
+power up + 00:00:00 [info] M568 P1 S0 R0[0x09][0x09][0x09]
+power up + 00:00:00 [warn] Error: in file macro line 115: M568: Invalid tool number
+power up + 00:00:00 [warn] Warning: Driver 0.2 warning: phase A may be disconnected, phase B may be disconnected
+power up + 00:00:01 [debug] Homed U, setting active tool to T-1
+power up + 00:00:01 [debug] Done!
+power up + 00:00:01 [debug] RepRapFirmware for Duet 3 MB6HC is up and running.
+power up + 00:00:02 [warn] Ethernet running, IP address = 192.168.1.210
+power up + 00:00:03 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-30 23:13:25 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-30 23:13:35 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-30 23:25:19 [warn] Error: Cannot pause print, because no file is being printed!
+2022-01-30 23:25:19 [debug] === Diagnostics ===
+2022-01-30 23:25:19 [debug] RepRapFirmware for Duet 3 MB6HC version 3.4.0beta7 (2021-12-16 12:22:39) running on Duet 3 MB6HC v0.6 or 1.0 (standalone mode)
+2022-01-30 23:25:19 [debug] Board ID: 08DJM-956L2-G43S4-6JKDD-3SJ6L-TB62G
+2022-01-30 23:25:19 [debug] Used output buffers: 2 of 40 (16 max)
+2022-01-30 23:25:19 [debug] === RTOS ===
+2022-01-30 23:25:19 [debug] Static ram: 150664
+2022-01-30 23:25:19 [debug] Dynamic ram: 96900 of which 48 recycled
+2022-01-30 23:25:19 [debug] Never used RAM 100132, free system stack 194 words
+2022-01-30 23:25:19 [debug] Tasks:
+2022-01-30 23:25:19 [debug]  NETWORK(ready,26.7%,249)
+2022-01-30 23:25:19 [debug]  ETHERNET(notifyWait,0.1%,174)
+2022-01-30 23:25:19 [debug]  HEAT(notifyWait,0.0%,344)
+2022-01-30 23:25:19 [debug]  Move(notifyWait,0.0%,276)
+2022-01-30 23:25:19 [debug]  CanReceiv(notifyWait,0.0%,797)
+2022-01-30 23:25:19 [debug]  CanSender(notifyWait,0.0%,374)
+2022-01-30 23:25:19 [debug]  CanClock(delaying,0.0%,339)
+2022-01-30 23:25:19 [debug]  TMC(notifyWait,7.8%,58)
+2022-01-30 23:25:19 [debug]  MAIN(running,65.4%,925)
+2022-01-30 23:25:19 [debug]  IDLE(ready,0.0%,30)
+2022-01-30 23:25:19 [debug] , total 100.0%
+Owned mutexes:
+2022-01-30 23:25:19 [debug]  Trigger(MAIN)
+2022-01-30 23:25:19 [debug] === Platform ===
+2022-01-30 23:25:19 [debug] Last reset 00:11:58 ago, cause: power up
+2022-01-30 23:25:19 [debug] Last software reset at 2022-01-30 21:22, reason: User, GCodes spinning, available RAM 100132, slot 1
+2022-01-30 23:25:19 [debug] Software reset code 0x0003 HFSR 0x00000000 CFSR 0x00000000 ICSR 0x0044a000 BFAR 0x00000000 SP 0x00000000 Task MAIN Freestk 0 n/a
+2022-01-30 23:25:19 [debug] Error status: 0x00
+2022-01-30 23:25:19 [debug] Step timer max interval 164
+2022-01-30 23:25:19 [debug] MCU temperature: min 34.0, current 40.3, max 40.4
+2022-01-30 23:25:19 [debug] Supply voltage: min 31.9, current 31.9, max 31.9, under voltage events: 0, over voltage events: 0, power good: yes
+2022-01-30 23:25:19 [debug] 12V rail voltage: min 12.0, current 12.1, max 12.1, under voltage events: 0
+2022-01-30 23:25:19 [debug] Heap OK, handles allocated/used 99/2, heap memory allocated/used/recyclable 2048/74/42, gc cycles 0
+2022-01-30 23:25:19 [debug] Events: 1 queued, 1 completed
+2022-01-30 23:25:19 [debug] Driver 0: pos 0, standstill, SG min 0, mspos 4, reads 27494, writes 14 timeouts 0
+2022-01-30 23:25:19 [debug] Driver 1: pos 0, standstill, SG min 0, mspos 4, reads 27494, writes 14 timeouts 0
+2022-01-30 23:25:19 [debug] Driver 2: pos 0, standstill, SG min 0, mspos 736, reads 27490, writes 19 timeouts 0
+2022-01-30 23:25:19 [debug] Driver 3: pos 69, standstill, SG min 0, mspos 8, reads 27495, writes 14 timeouts 0
+2022-01-30 23:25:19 [debug] Driver 4: pos 0, standstill, SG min 0, mspos 8, reads 27496, writes 14 timeouts 0
+2022-01-30 23:25:19 [debug] Driver 5: pos 0, standstill, SG min 0, mspos 8, reads 27501, writes 14 timeouts 0
+2022-01-30 23:25:19 [debug] Date/time: 
+2022-01-30 23:25:19 [debug] 2022-01-30 23:25:19
+2022-01-30 23:25:19 [debug] Slowest loop: 5.50ms; fastest: 0.06ms
+2022-01-30 23:25:19 [debug] === Storage ===
+Free file entries: 8
+2022-01-30 23:25:19 [debug] SD card 0 detected, interface speed: 25.0MBytes/sec
+2022-01-30 23:25:19 [debug] SD card longest read time 3.3ms, write time 3.7ms, max retries 0
+2022-01-30 23:25:19 [debug] === Move ===
+DMs created 125, segments created 3, maxWait 672ms, bed compensation in use: none, comp offset 0.000
+2022-01-30 23:25:19 [debug] === MainDDARing ===
+Scheduled moves 3, completed 3, hiccups 0, stepErrors 0, LaErrors 0, Underruns [0, 0, 0], CDDA state -1
+2022-01-30 23:25:19 [debug] === AuxDDARing ===
+Scheduled moves 0, completed 0, hiccups 0, stepErrors 0, LaErrors 0, Underruns [0, 0, 0], CDDA state -1
+2022-01-30 23:25:19 [debug] === Heat ===
+2022-01-30 23:25:19 [debug] Bed heaters 0 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1, chamber heaters -1 -1 -1 -1, ordering errs 0
+2022-01-30 23:25:19 [debug] === GCodes ===
+2022-01-30 23:25:19 [debug] Segments left: 0
+2022-01-30 23:25:19 [debug] Movement lock held by null
+2022-01-30 23:25:19 [debug] HTTP is idle in state(s) 0
+2022-01-30 23:25:19 [debug] Telnet is idle in state(s) 0
+2022-01-30 23:25:19 [debug] File is idle in state(s) 0
+2022-01-30 23:25:19 [debug] USB is idle in state(s) 0
+2022-01-30 23:25:19 [debug] Aux is idle in state(s) 0
+2022-01-30 23:25:19 [debug] Trigger is ready with "M122 B0" in state(s) 0 0, running macro
+2022-01-30 23:25:19 [debug] Queue is idle in state(s) 0
+2022-01-30 23:25:19 [debug] LCD is idle in state(s) 0
+2022-01-30 23:25:19 [debug] SBC is idle in state(s) 0
+2022-01-30 23:25:19 [debug] Daemon is idle in state(s) 0
+2022-01-30 23:25:19 [debug] Aux2 is idle in state(s) 0
+2022-01-30 23:25:19 [debug] Autopause is idle in state(s) 0
+2022-01-30 23:25:19 [debug] Code queue is empty
+2022-01-30 23:25:19 [debug] === Filament sensors ===
+2022-01-30 23:25:19 [debug] Extruder 0 sensor: no filament
+2022-01-30 23:25:19 [debug] === CAN ===
+2022-01-30 23:25:19 [debug] Messages queued 6526, received 20547, lost 0, boc 0
+2022-01-30 23:25:19 [debug] Longest wait 1ms for reply type 6018, peak Tx sync delay 380, free buffers 49 (min 48), ts 3595/3594/0
+2022-01-30 23:25:19 [debug] Tx timeouts 0,0,0,0,0,0
+2022-01-30 23:25:19 [debug] === Network ===
+2022-01-30 23:25:19 [debug] Slowest loop: 9.07ms; fastest: 0.02ms
+2022-01-30 23:25:19 [debug] Responder states:
+2022-01-30 23:25:19 [debug]  HTTP(0)
+2022-01-30 23:25:19 [debug]  HTTP(0)
+2022-01-30 23:25:19 [debug]  HTTP(0)
+2022-01-30 23:25:19 [debug]  HTTP(0)
+2022-01-30 23:25:19 [debug]  HTTP(0)
+2022-01-30 23:25:19 [debug]  HTTP(0)
+2022-01-30 23:25:19 [debug]  FTP(0)
+2022-01-30 23:25:19 [debug]  Telnet(0), 0 sessions
+2022-01-30 23:25:19 [debug]  Telnet(0), 0 sessions
+2022-01-30 23:25:19 [debug] HTTP sessions: 1 of 8
+2022-01-30 23:25:19 [debug] - Ethernet -
+State: active
+2022-01-30 23:25:19 [debug] Error counts: 0 0 1 0 0
+Socket states:
+2022-01-30 23:25:19 [debug]  2
+2022-01-30 23:25:19 [debug]  2
+2022-01-30 23:25:19 [debug]  2
+2022-01-30 23:25:19 [debug]  2
+2022-01-30 23:25:19 [debug]  2
+2022-01-30 23:25:19 [debug]  0
+2022-01-30 23:25:19 [debug]  0
+2022-01-30 23:25:19 [debug]  0
+2022-01-30 23:25:19 [debug] Diagnostics for board 1:
+2022-01-30 23:25:19 [debug] Duet EXP3HC firmware version 3.4.0beta7 (2021-12-16 12:24:41)
+Bootloader ID: SAME5x bootloader version 2.2 (2021-01-16b1)
+2022-01-30 23:25:19 [debug] Never used RAM 158880, free system stack 4400 words
+Tasks: Move(notifyWait<null>,0.0%,160) HEAT(notifyWait<null>,0.0%,104) CanAsync(notifyWait<null>,0.0%,65) CanRecv(notifyWait<null>,0.0%,82) CanClock(notifyWait<null>,0.0%,71) TMC(notifyWait<null>,7.4%,99) MAIN(running<null>,91.2%,433) IDLE(ready<null>,0.0%,39) AIN(delaying<null>,1.3%,263), total 100.0%
+Last reset 00:11:59 ago, cause: power up
+2022-01-30 23:25:19 [debug] Last software reset at 2021-06-06 23:40, reason: deliberate HardFault zeroDiv, available RAM 159008, slot 1
+Software reset code 0x8060 HFSR 0x40000000 CFSR 0x02000000 ICSR 0x00430803 BFAR 0xe000ed38 SP 0x20003700 Task MAIN Freestk 804 ok
+2022-01-30 23:25:19 [debug] Stack: 00000001 00000000 00000000 00000004 20000aac 0001dd33 0001f220 41000000 c0100394 80a02024 3a36d584 41200000 00000000 11a80100 0000002c a300a5a5 20003bc8 00000000 00000000 00000000 20003bc8 0005b8bd 20003bc8 0005b8bd 000001d9 0001da41 41318189
+2022-01-30 23:25:19 [debug] Driver 0: pos 0, 320.0 steps/mm,standstill, SG min 0, mspos 4, reads 16867, writes 16 timeouts 0, steps req 0 done 0
+Driver 1: pos 0, 320.0 steps/mm,standstill, SG min 0, mspos 4, reads 16868, writes 16 timeouts 0, steps req 0 done 0
+Driver 2: pos 0, 80.0 steps/mm,standstill, SG min 0, mspos 8, reads 16874, writes 11 timeouts 0, steps req 0 done 0
+2022-01-30 23:25:19 [debug] Moves scheduled 0, completed 0, in progress 0, hiccups 0, step errors 0, maxPrep 0, maxOverdue 0, maxInc 0, mcErrs 0, gcmErrs 0
+Peak sync jitter -3/12, peak Rx sync delay 181, resyncs 0/0, no step interrupt scheduled
+VIN voltage: min 32.1, current 32.1, max 32.1
+V12 voltage: min 12.2, current 12.2, max 12.2
+MCU temperature: min 35.2C, current 35.9C, max 36.2C
+2022-01-30 23:25:19 [debug] Last sensors broadcast 0x00000000 found 0 140 ticks ago, 0 ordering errs, loop time 0
+CAN messages queued 5797, send timeouts 0, received 9365, lost 0, free buffers 37, min 37, error reg 20000
+dup 0, oos 0/0/0/0, bm 0, wbm 0, rxMotionDelay 0
+2022-01-30 23:25:19 [debug] Diagnostics for board 2:
+2022-01-30 23:25:19 [debug] Duet EXP3HC firmware version 3.4.0beta7 (2021-12-16 12:24:41)
+Bootloader ID: not available
+2022-01-30 23:25:19 [debug] Never used RAM 157624, free system stack 4400 words
+Tasks: Move(notifyWait<null>,0.0%,160) HEAT(notifyWait<null>,0.0%,93) CanAsync(notifyWait<null>,0.0%,69) CanRecv(notifyWait<null>,0.0%,82) CanClock(notifyWait<null>,0.0%,71) TMC(notifyWait<null>,7.7%,99) MAIN(running<null>,90.9%,345) IDLE(ready<null>,0.0%,39) AIN(delaying<null>,1.3%,263), total 100.0%
+Last reset 00:11:59 ago, cause: power up
+2022-01-30 23:25:19 [debug] Last software reset at 2021-05-30 19:40, reason: AssertionFailed, available RAM 157912, slot 2
+Software reset code 0x0120 HFSR 0x00000000 CFSR 0x00000000 ICSR 0x00000000 BFAR 0xe000ed38 SP 0x20004874 Task HEAT Freestk 146 ok
+2022-01-30 23:25:19 [debug] Stack: 00000544 0002eb3c 0002614f 42000400 00022387 00000000 00000020 2002f020 2000159c 00000003 0001d30f 00000000 2002f020 00000020 000157b1 00000000 00e7460e 00e7460e 41d5d9f0 a5a5a5a5 a5a5a5a5 a5a5a5a5 00024f9d a5a5a5a5 00000058 00000000 2002ee70
+2022-01-30 23:25:19 [debug] Driver 0: pos 0, 1124.0 steps/mm,standstill, SG min 0, mspos 4, reads 3012, writes 16 timeouts 0, steps req 0 done 0
+Driver 1: pos 0, 1660.0 steps/mm,standstill, SG min 0, mspos 4, reads 3012, writes 16 timeouts 0, steps req 0 done 0
+Driver 2: pos 0, 1660.0 steps/mm,standstill, SG min 0, mspos 4, reads 3013, writes 16 timeouts 0, steps req 0 done 0
+2022-01-30 23:25:19 [debug] Moves scheduled 0, completed 0, in progress 0, hiccups 0, step errors 0, maxPrep 0, maxOverdue 0, maxInc 0, mcErrs 0, gcmErrs 0
+Peak sync jitter 4/18, peak Rx sync delay 181, resyncs 0/0, no step interrupt scheduled
+VIN voltage: min 24.1, current 24.1, max 24.2
+V12 voltage: min 12.2, current 12.2, max 12.2
+MCU temperature: min 36.9C, current 37.5C, max 37.7C
+2022-01-30 23:25:19 [debug] Last sensors broadcast 0x0000000e found 3 107 ticks ago, 0 ordering errs, loop time 0
+CAN messages queued 14813, send timeouts 0, received 6525, lost 0, free buffers 37, min 37, error reg 20000
+dup 0, oos 0/0/0/0, bm 0, wbm 0, rxMotionDelay 0
+2022-01-30 23:25:19 [debug] === Filament sensors ===
+Interrupt 5726621 to 0us, poll 1 to 177us
+Driver 0: ok
+2022-01-30 23:25:19 [info] Event logging stopped
+power up + 00:00:00 [info] Event logging started at level debug
+power up + 00:00:00 [info] Running: Duet 3 MB6HC v0.6 or 1.0: 3.4.0beta7 (2021-12-16 12:22:39)
+power up + 00:00:00 [warn] Warning: Heater 0 predicted maximum temperature at full power is 209°C
+power up + 00:00:00 [warn] Warning: Heater 3 predicted maximum temperature at full power is 559°C
+power up + 00:00:00 [info] G10 P0 X-11.28 Y-4.73 Z-3.49 U0.00
+power up + 00:00:00 [info] G10 P1 X0.50 Y0.49 Z-0.10 U0.00
+power up + 00:00:00 [warn] Error: in file macro line 11: G10: Invalid tool number
+power up + 00:00:00 [info] G10 L2 P1 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P2 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P3 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P4 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P5 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P6 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P7 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P8 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P9 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] M568 P0 S0 R0[0x09][0x09][0x09]
+power up + 00:00:00 [info] M568 P1 S0 R0[0x09][0x09][0x09]
+power up + 00:00:00 [warn] Error: in file macro line 115: M568: Invalid tool number
+power up + 00:00:00 [warn] Warning: Driver 0.2 warning: phase A may be disconnected, phase B may be disconnected
+power up + 00:00:00 [debug] Homed U, setting active tool to T-1
+power up + 00:00:00 [debug] Done!
+power up + 00:00:00 [debug] RepRapFirmware for Duet 3 MB6HC is up and running.
+power up + 00:00:02 [warn] Ethernet running, IP address = 192.168.1.210
+power up + 00:00:03 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-31 15:49:34 [warn] Date and time set at power up + 00:00:03
+2022-01-31 15:50:26 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-31 15:50:37 [warn] HTTP client 192.168.1.2 login succeeded
+2022-01-31 15:50:38 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-31 15:56:06 [warn] Error: Cannot pause print, because no file is being printed!
+2022-01-31 15:56:06 [debug] === Diagnostics ===
+2022-01-31 15:56:06 [debug] RepRapFirmware for Duet 3 MB6HC version 3.4.0beta7 (2021-12-16 12:22:39) running on Duet 3 MB6HC v0.6 or 1.0 (standalone mode)
+2022-01-31 15:56:06 [debug] Board ID: 08DJM-956L2-G43S4-6JKDD-3SJ6L-TB62G
+2022-01-31 15:56:06 [debug] Used output buffers: 2 of 40 (26 max)
+2022-01-31 15:56:06 [debug] === RTOS ===
+2022-01-31 15:56:06 [debug] Static ram: 150664
+2022-01-31 15:56:06 [debug] Dynamic ram: 96900 of which 48 recycled
+2022-01-31 15:56:06 [debug] Never used RAM 100132, free system stack 196 words
+2022-01-31 15:56:06 [debug] Tasks:
+2022-01-31 15:56:06 [debug]  NETWORK(ready,26.9%,233)
+2022-01-31 15:56:06 [debug]  ETHERNET(notifyWait,0.1%,173)
+2022-01-31 15:56:06 [debug]  HEAT(notifyWait,0.0%,344)
+2022-01-31 15:56:06 [debug]  Move(notifyWait,0.0%,276)
+2022-01-31 15:56:06 [debug]  CanReceiv(notifyWait,0.0%,772)
+2022-01-31 15:56:06 [debug]  CanSender(notifyWait,0.0%,374)
+2022-01-31 15:56:06 [debug]  CanClock(delaying,0.0%,339)
+2022-01-31 15:56:06 [debug]  TMC(notifyWait,7.8%,58)
+2022-01-31 15:56:06 [debug]  MAIN(running,65.2%,925)
+2022-01-31 15:56:06 [debug]  IDLE(ready,0.0%,30)
+2022-01-31 15:56:06 [debug] , total 100.0%
+Owned mutexes:
+2022-01-31 15:56:06 [debug]  Trigger(MAIN)
+2022-01-31 15:56:06 [debug] === Platform ===
+2022-01-31 15:56:06 [debug] Last reset 00:05:43 ago, cause: software
+2022-01-31 15:56:06 [debug] Last software reset at 2022-01-31 15:49, reason: User, GCodes spinning, available RAM 100132, slot 2
+2022-01-31 15:56:06 [debug] Software reset code 0x0003 HFSR 0x00000000 CFSR 0x00000000 ICSR 0x0044a000 BFAR 0x00000000 SP 0x00000000 Task MAIN Freestk 0 n/a
+2022-01-31 15:56:06 [debug] Error status: 0x00
+2022-01-31 15:56:06 [debug] Step timer max interval 182
+2022-01-31 15:56:06 [debug] MCU temperature: min 39.1, current 39.3, max 39.6
+2022-01-31 15:56:06 [debug] Supply voltage: min 31.9, current 31.9, max 32.0, under voltage events: 0, over voltage events: 0, power good: yes
+2022-01-31 15:56:06 [debug] 12V rail voltage: min 12.0, current 12.0, max 12.1, under voltage events: 0
+2022-01-31 15:56:06 [debug] Heap OK, handles allocated/used 99/2, heap memory allocated/used/recyclable 2048/74/42, gc cycles 0
+2022-01-31 15:56:06 [debug] Events: 1 queued, 1 completed
+2022-01-31 15:56:06 [debug] Driver 0: pos 0, standstill, SG min 0, mspos 4, reads 22338, writes 14 timeouts 0
+2022-01-31 15:56:06 [debug] Driver 1: pos 0, standstill, SG min 0, mspos 4, reads 22338, writes 14 timeouts 0
+2022-01-31 15:56:06 [debug] Driver 2: pos 0, standstill, SG min 0, mspos 416, reads 22334, writes 19 timeouts 0
+2022-01-31 15:56:06 [debug] Driver 3: pos 69, standstill, SG min 0, mspos 8, reads 22340, writes 14 timeouts 0
+2022-01-31 15:56:06 [debug] Driver 4: pos 0, standstill, SG min 0, mspos 8, reads 22340, writes 14 timeouts 0
+2022-01-31 15:56:06 [debug] Driver 5: pos 0, standstill, SG min 0, mspos 8, reads 22345, writes 14 timeouts 0
+2022-01-31 15:56:06 [debug] Date/time: 
+2022-01-31 15:56:06 [debug] 2022-01-31 15:56:06
+2022-01-31 15:56:06 [debug] Slowest loop: 5.59ms; fastest: 0.06ms
+2022-01-31 15:56:06 [debug] === Storage ===
+Free file entries: 8
+2022-01-31 15:56:06 [debug] SD card 0 detected, interface speed: 25.0MBytes/sec
+2022-01-31 15:56:06 [debug] SD card longest read time 3.3ms, write time 3.7ms, max retries 0
+2022-01-31 15:56:06 [debug] === Move ===
+DMs created 125, segments created 3, maxWait 672ms, bed compensation in use: none, comp offset 0.000
+2022-01-31 15:56:06 [debug] === MainDDARing ===
+Scheduled moves 3, completed 3, hiccups 0, stepErrors 0, LaErrors 0, Underruns [0, 0, 0], CDDA state -1
+2022-01-31 15:56:06 [debug] === AuxDDARing ===
+Scheduled moves 0, completed 0, hiccups 0, stepErrors 0, LaErrors 0, Underruns [0, 0, 0], CDDA state -1
+2022-01-31 15:56:06 [debug] === Heat ===
+2022-01-31 15:56:06 [debug] Bed heaters 0 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1, chamber heaters -1 -1 -1 -1, ordering errs 0
+2022-01-31 15:56:06 [debug] === GCodes ===
+2022-01-31 15:56:06 [debug] Segments left: 0
+2022-01-31 15:56:06 [debug] Movement lock held by null
+2022-01-31 15:56:06 [debug] HTTP is idle in state(s) 0
+2022-01-31 15:56:06 [debug] Telnet is idle in state(s) 0
+2022-01-31 15:56:06 [debug] File is idle in state(s) 0
+2022-01-31 15:56:06 [debug] USB is idle in state(s) 0
+2022-01-31 15:56:06 [debug] Aux is idle in state(s) 0
+2022-01-31 15:56:06 [debug] Trigger is ready with "M122 B0" in state(s) 0 0, running macro
+2022-01-31 15:56:06 [debug] Queue is idle in state(s) 0
+2022-01-31 15:56:06 [debug] LCD is idle in state(s) 0
+2022-01-31 15:56:06 [debug] SBC is idle in state(s) 0
+2022-01-31 15:56:06 [debug] Daemon is idle in state(s) 0
+2022-01-31 15:56:06 [debug] Aux2 is idle in state(s) 0
+2022-01-31 15:56:06 [debug] Autopause is idle in state(s) 0
+2022-01-31 15:56:06 [debug] Code queue is empty
+2022-01-31 15:56:06 [debug] === Filament sensors ===
+2022-01-31 15:56:06 [debug] Extruder 0 sensor: no filament
+2022-01-31 15:56:06 [debug] === CAN ===
+2022-01-31 15:56:06 [debug] Messages queued 3147, received 9841, lost 0, boc 0
+2022-01-31 15:56:06 [debug] Longest wait 1ms for reply type 6018, peak Tx sync delay 372, free buffers 49 (min 48), ts 1717/1716/0
+2022-01-31 15:56:06 [debug] Tx timeouts 0,0,0,0,0,0
+2022-01-31 15:56:06 [debug] === Network ===
+2022-01-31 15:56:06 [debug] Slowest loop: 11.08ms; fastest: 0.02ms
+2022-01-31 15:56:06 [debug] Responder states:
+2022-01-31 15:56:06 [debug]  HTTP(0)
+2022-01-31 15:56:06 [debug]  HTTP(0)
+2022-01-31 15:56:06 [debug]  HTTP(0)
+2022-01-31 15:56:06 [debug]  HTTP(0)
+2022-01-31 15:56:06 [debug]  HTTP(0)
+2022-01-31 15:56:06 [debug]  HTTP(0)
+2022-01-31 15:56:06 [debug]  FTP(0)
+2022-01-31 15:56:06 [debug]  Telnet(0), 0 sessions
+2022-01-31 15:56:06 [debug]  Telnet(0), 0 sessions
+2022-01-31 15:56:06 [debug] HTTP sessions: 1 of 8
+2022-01-31 15:56:06 [debug] - Ethernet -
+State: active
+2022-01-31 15:56:06 [debug] Error counts: 0 0 1 0 0
+Socket states:
+2022-01-31 15:56:06 [debug]  2
+2022-01-31 15:56:06 [debug]  2
+2022-01-31 15:56:06 [debug]  2
+2022-01-31 15:56:06 [debug]  2
+2022-01-31 15:56:06 [debug]  2
+2022-01-31 15:56:06 [debug]  0
+2022-01-31 15:56:06 [debug]  0
+2022-01-31 15:56:06 [debug]  0
+2022-01-31 15:56:06 [debug] Diagnostics for board 1:
+2022-01-31 15:56:06 [debug] Duet EXP3HC firmware version 3.4.0beta7 (2021-12-16 12:24:41)
+Bootloader ID: SAME5x bootloader version 2.2 (2021-01-16b1)
+2022-01-31 15:56:06 [debug] Never used RAM 158880, free system stack 4380 words
+Tasks: Move(notifyWait<null>,0.0%,160) HEAT(notifyWait<null>,0.9%,68) CanAsync(notifyWait<null>,0.0%,65) CanRecv(notifyWait<null>,0.1%,82) CanClock(notifyWait<null>,0.0%,71) TMC(notifyWait<null>,206.8%,99) MAIN(running<null>,124.4%,437) IDLE(ready<null>,0.0%,39) AIN(delaying<null>,37.0%,263), total 369.2%
+Last reset 16:29:53 ago, cause: software
+2022-01-31 15:56:06 [debug] Last software reset at 2021-06-06 23:40, reason: deliberate HardFault zeroDiv, available RAM 159008, slot 1
+Software reset code 0x8060 HFSR 0x40000000 CFSR 0x02000000 ICSR 0x00430803 BFAR 0xe000ed38 SP 0x20003700 Task MAIN Freestk 804 ok
+2022-01-31 15:56:06 [debug] Stack: 00000001 00000000 00000000 00000004 20000aac 0001dd33 0001f220 41000000 c0100394 80a02024 3a36d584 41200000 00000000 11a80100 0000002c a300a5a5 20003bc8 00000000 00000000 00000000 20003bc8 0005b8bd 20003bc8 0005b8bd 000001d9 0001da41 41318189
+2022-01-31 15:56:06 [debug] Driver 0: pos 0, 320.0 steps/mm,standstill, SG min 0, mspos 4, reads 30761, writes 16 timeouts 0, steps req 0 done 0
+Driver 1: pos 0, 320.0 steps/mm,standstill, SG min 0, mspos 4, reads 30762, writes 16 timeouts 0, steps req 0 done 0
+Driver 2: pos 0, 80.0 steps/mm,standstill, SG min 0, mspos 8, reads 30768, writes 11 timeouts 0, steps req 0 done 0
+2022-01-31 15:56:06 [debug] Moves scheduled 0, completed 0, in progress 0, hiccups 0, step errors 0, maxPrep 0, maxOverdue 0, maxInc 0, mcErrs 0, gcmErrs 0
+Peak sync jitter -3/12, peak Rx sync delay 180, resyncs 0/0, no step interrupt scheduled
+VIN voltage: min 32.1, current 32.1, max 32.1
+V12 voltage: min 12.1, current 12.2, max 12.2
+MCU temperature: min 34.2C, current 35.0C, max 36.2C
+2022-01-31 15:56:06 [debug] Last sensors broadcast 0x00000000 found 0 192 ticks ago, 0 ordering errs, loop time 0
+CAN messages queued 711391, send timeouts 0, received 240689, lost 0, free buffers 37, min 37, error reg 20000
+dup 0, oos 0/0/0/0, bm 0, wbm 0, rxMotionDelay 0
+2022-01-31 15:56:06 [debug] Diagnostics for board 2:
+2022-01-31 15:56:06 [debug] Duet EXP3HC firmware version 3.4.0beta7 (2021-12-16 12:24:41)
+Bootloader ID: not available
+2022-01-31 15:56:06 [debug] Never used RAM 157624, free system stack 4382 words
+Tasks: Move(notifyWait<null>,0.0%,160) HEAT(notifyWait<null>,0.9%,70) CanAsync(notifyWait<null>,0.0%,69) CanRecv(notifyWait<null>,0.1%,82) CanClock(notifyWait<null>,0.0%,71) TMC(notifyWait<null>,206.7%,99) MAIN(running<null>,124.3%,345) IDLE(ready<null>,0.0%,39) AIN(delaying<null>,37.0%,263), total 369.0%
+Last reset 16:29:55 ago, cause: software
+2022-01-31 15:56:06 [debug] Last software reset at 2021-05-30 19:40, reason: AssertionFailed, available RAM 157912, slot 2
+Software reset code 0x0120 HFSR 0x00000000 CFSR 0x00000000 ICSR 0x00000000 BFAR 0xe000ed38 SP 0x20004874 Task HEAT Freestk 146 ok
+2022-01-31 15:56:06 [debug] Stack: 00000544 0002eb3c 0002614f 42000400 00022387 00000000 00000020 2002f020 2000159c 00000003 0001d30f 00000000 2002f020 00000020 000157b1 00000000 00e7460e 00e7460e 41d5d9f0 a5a5a5a5 a5a5a5a5 a5a5a5a5 00024f9d a5a5a5a5 00000058 00000000 2002ee70
+2022-01-31 15:56:06 [debug] Driver 0: pos 0, 1124.0 steps/mm,standstill, SG min 0, mspos 4, reads 52252, writes 16 timeouts 0, steps req 0 done 0
+Driver 1: pos 0, 1660.0 steps/mm,standstill, SG min 0, mspos 4, reads 52252, writes 16 timeouts 0, steps req 0 done 0
+Driver 2: pos 0, 1660.0 steps/mm,standstill, SG min 0, mspos 4, reads 52253, writes 16 timeouts 0, steps req 0 done 0
+2022-01-31 15:56:06 [debug] Moves scheduled 0, completed 0, in progress 0, hiccups 0, step errors 0, maxPrep 0, maxOverdue 0, maxInc 0, mcErrs 0, gcmErrs 0
+Peak sync jitter 3/15, peak Rx sync delay 182, resyncs 0/0, no step interrupt scheduled
+VIN voltage: min 24.1, current 24.1, max 24.2
+V12 voltage: min 12.2, current 12.2, max 12.2
+MCU temperature: min 35.6C, current 36.6C, max 37.7C
+2022-01-31 15:56:06 [debug] Last sensors broadcast 0x0000000e found 3 194 ticks ago, 0 ordering errs, loop time 0
+CAN messages queued 715734, send timeouts 0, received 239345, lost 0, free buffers 37, min 37, error reg 20000
+dup 0, oos 0/0/0/0, bm 0, wbm 0, rxMotionDelay 0
+2022-01-31 15:56:06 [debug] === Filament sensors ===
+Interrupt 5726621 to 0us, poll 1 to 148us
+Driver 0: ok
+2022-01-31 15:56:06 [info] Event logging stopped
+power up + 00:00:00 [info] Event logging started at level debug
+power up + 00:00:00 [info] Running: Duet 3 MB6HC v0.6 or 1.0: 3.4.0beta7 (2021-12-16 12:22:39)
+power up + 00:00:00 [warn] Warning: Heater 0 predicted maximum temperature at full power is 209°C
+power up + 00:00:00 [warn] Warning: Heater 3 predicted maximum temperature at full power is 559°C
+power up + 00:00:00 [info] G10 P0 X-11.28 Y-4.73 Z-3.49 U0.00
+power up + 00:00:00 [info] G10 P1 X0.50 Y0.49 Z-0.10 U0.00
+power up + 00:00:00 [warn] Error: in file macro line 11: G10: Invalid tool number
+power up + 00:00:00 [info] G10 L2 P1 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P2 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P3 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P4 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P5 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P6 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P7 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P8 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P9 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] M568 P0 S0 R0[0x09][0x09][0x09]
+power up + 00:00:00 [info] M568 P1 S0 R0[0x09][0x09][0x09]
+power up + 00:00:00 [warn] Error: in file macro line 115: M568: Invalid tool number
+power up + 00:00:00 [warn] Warning: Driver 0.2 warning: phase A may be disconnected, phase B may be disconnected
+power up + 00:00:00 [debug] Homed U, setting active tool to T-1
+power up + 00:00:00 [debug] Done!
+power up + 00:00:00 [debug] RepRapFirmware for Duet 3 MB6HC is up and running.
+power up + 00:00:02 [warn] Ethernet running, IP address = 192.168.1.210
+power up + 00:00:03 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-31 16:09:24 [warn] Date and time set at power up + 00:00:03
+2022-01-31 18:28:59 [warn] Error: Cannot pause print, because no file is being printed!
+2022-01-31 18:28:59 [debug] === Diagnostics ===
+2022-01-31 18:28:59 [debug] RepRapFirmware for Duet 3 MB6HC version 3.4.0beta7 (2021-12-16 12:22:39) running on Duet 3 MB6HC v0.6 or 1.0 (standalone mode)
+2022-01-31 18:28:59 [debug] Board ID: 08DJM-956L2-G43S4-6JKDD-3SJ6L-TB62G
+2022-01-31 18:28:59 [debug] Used output buffers: 2 of 40 (20 max)
+2022-01-31 18:28:59 [debug] === RTOS ===
+2022-01-31 18:28:59 [debug] Static ram: 150664
+2022-01-31 18:28:59 [debug] Dynamic ram: 96900 of which 48 recycled
+2022-01-31 18:28:59 [debug] Never used RAM 100132, free system stack 194 words
+2022-01-31 18:28:59 [debug] Tasks:
+2022-01-31 18:28:59 [debug]  NETWORK(ready,85.6%,223)
+2022-01-31 18:28:59 [debug]  ETHERNET(notifyWait,0.2%,171)
+2022-01-31 18:28:59 [debug]  HEAT(notifyWait,0.0%,344)
+2022-01-31 18:28:59 [debug]  Move(notifyWait,0.0%,276)
+2022-01-31 18:28:59 [debug]  CanReceiv(notifyWait,0.1%,772)
+2022-01-31 18:28:59 [debug]  CanSender(notifyWait,0.0%,374)
+2022-01-31 18:28:59 [debug]  CanClock(delaying,0.0%,339)
+2022-01-31 18:28:59 [debug]  TMC(notifyWait,25.0%,58)
+2022-01-31 18:28:59 [debug]  MAIN(running,209.0%,925)
+2022-01-31 18:28:59 [debug]  IDLE(ready,0.0%,30)
+2022-01-31 18:28:59 [debug] , total 320.0%
+Owned mutexes:
+2022-01-31 18:28:59 [debug]  Trigger(MAIN)
+2022-01-31 18:28:59 [debug] === Platform ===
+2022-01-31 18:28:59 [debug] Last reset 02:18:50 ago, cause: software
+2022-01-31 18:28:59 [debug] Last software reset at 2022-01-31 16:10, reason: User, GCodes spinning, available RAM 100132, slot 0
+2022-01-31 18:28:59 [debug] Software reset code 0x0003 HFSR 0x00000000 CFSR 0x00000000 ICSR 0x00400000 BFAR 0x00000000 SP 0x00000000 Task MAIN Freestk 0 n/a
+2022-01-31 18:28:59 [debug] Error status: 0x00
+2022-01-31 18:28:59 [debug] Step timer max interval 175
+2022-01-31 18:28:59 [debug] MCU temperature: min 38.9, current 39.6, max 39.7
+2022-01-31 18:28:59 [debug] Supply voltage: min 31.8, current 31.9, max 31.9, under voltage events: 0, over voltage events: 0, power good: yes
+2022-01-31 18:28:59 [debug] 12V rail voltage: min 12.0, current 12.1, max 12.1, under voltage events: 0
+2022-01-31 18:28:59 [debug] Heap OK, handles allocated/used 99/2, heap memory allocated/used/recyclable 2048/74/42, gc cycles 0
+2022-01-31 18:28:59 [debug] Events: 1 queued, 1 completed
+2022-01-31 18:28:59 [debug] Driver 0: pos 0, standstill, SG min 0, mspos 4, reads 57478, writes 14 timeouts 0
+2022-01-31 18:28:59 [debug] Driver 1: pos 0, standstill, SG min 0, mspos 4, reads 57479, writes 14 timeouts 0
+2022-01-31 18:28:59 [debug] Driver 2: pos 0, standstill, SG min 0, mspos 96, reads 57479, writes 19 timeouts 0
+2022-01-31 18:28:59 [debug] Driver 3: pos 69, standstill, SG min 0, mspos 8, reads 57484, writes 14 timeouts 0
+2022-01-31 18:28:59 [debug] Driver 4: pos 0, standstill, SG min 0, mspos 8, reads 57485, writes 14 timeouts 0
+2022-01-31 18:28:59 [debug] Driver 5: pos 0, standstill, SG min 0, mspos 8, reads 57485, writes 14 timeouts 0
+2022-01-31 18:28:59 [debug] Date/time: 
+2022-01-31 18:28:59 [debug] 2022-01-31 18:28:59
+2022-01-31 18:28:59 [debug] Slowest loop: 5.65ms; fastest: 0.06ms
+2022-01-31 18:28:59 [debug] === Storage ===
+Free file entries: 8
+2022-01-31 18:28:59 [debug] SD card 0 detected, interface speed: 25.0MBytes/sec
+2022-01-31 18:28:59 [debug] SD card longest read time 3.3ms, write time 3.6ms, max retries 0
+2022-01-31 18:28:59 [debug] === Move ===
+DMs created 125, segments created 3, maxWait 672ms, bed compensation in use: none, comp offset 0.000
+2022-01-31 18:28:59 [debug] === MainDDARing ===
+Scheduled moves 3, completed 3, hiccups 0, stepErrors 0, LaErrors 0, Underruns [0, 0, 0], CDDA state -1
+2022-01-31 18:28:59 [debug] === AuxDDARing ===
+Scheduled moves 0, completed 0, hiccups 0, stepErrors 0, LaErrors 0, Underruns [0, 0, 0], CDDA state -1
+2022-01-31 18:28:59 [debug] === Heat ===
+2022-01-31 18:28:59 [debug] Bed heaters 0 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1, chamber heaters -1 -1 -1 -1, ordering errs 0
+2022-01-31 18:28:59 [debug] === GCodes ===
+2022-01-31 18:28:59 [debug] Segments left: 0
+2022-01-31 18:28:59 [debug] Movement lock held by null
+2022-01-31 18:28:59 [debug] HTTP is idle in state(s) 0
+2022-01-31 18:28:59 [debug] Telnet is idle in state(s) 0
+2022-01-31 18:28:59 [debug] File is idle in state(s) 0
+2022-01-31 18:28:59 [debug] USB is idle in state(s) 0
+2022-01-31 18:28:59 [debug] Aux is idle in state(s) 0
+2022-01-31 18:28:59 [debug] Trigger is ready with "M122 B0" in state(s) 0 0, running macro
+2022-01-31 18:28:59 [debug] Queue is idle in state(s) 0
+2022-01-31 18:28:59 [debug] LCD is idle in state(s) 0
+2022-01-31 18:28:59 [debug] SBC is idle in state(s) 0
+2022-01-31 18:28:59 [debug] Daemon is idle in state(s) 0
+2022-01-31 18:28:59 [debug] Aux2 is idle in state(s) 0
+2022-01-31 18:28:59 [debug] Autopause is idle in state(s) 0
+2022-01-31 18:28:59 [debug] Code queue is empty
+2022-01-31 18:28:59 [debug] === Filament sensors ===
+2022-01-31 18:28:59 [debug] Extruder 0 sensor: no filament
+2022-01-31 18:28:59 [debug] === CAN ===
+2022-01-31 18:28:59 [debug] Messages queued 75028, received 237473, lost 0, boc 0
+2022-01-31 18:28:59 [debug] Longest wait 1ms for reply type 6018, peak Tx sync delay 387, free buffers 49 (min 48), ts 41651/41650/0
+2022-01-31 18:28:59 [debug] Tx timeouts 0,0,0,0,0,0
+2022-01-31 18:28:59 [debug] === Network ===
+2022-01-31 18:28:59 [debug] Slowest loop: 9.30ms; fastest: 0.02ms
+2022-01-31 18:28:59 [debug] Responder states:
+2022-01-31 18:28:59 [debug]  HTTP(0)
+2022-01-31 18:28:59 [debug]  HTTP(0)
+2022-01-31 18:28:59 [debug]  HTTP(0)
+2022-01-31 18:28:59 [debug]  HTTP(0)
+2022-01-31 18:28:59 [debug]  HTTP(0)
+2022-01-31 18:28:59 [debug]  HTTP(0)
+2022-01-31 18:28:59 [debug]  FTP(0)
+2022-01-31 18:28:59 [debug]  Telnet(0), 0 sessions
+2022-01-31 18:28:59 [debug]  Telnet(0), 0 sessions
+2022-01-31 18:28:59 [debug] HTTP sessions: 1 of 8
+2022-01-31 18:28:59 [debug] - Ethernet -
+State: active
+2022-01-31 18:28:59 [debug] Error counts: 0 0 1 0 0
+Socket states:
+2022-01-31 18:28:59 [debug]  2
+2022-01-31 18:28:59 [debug]  2
+2022-01-31 18:28:59 [debug]  2
+2022-01-31 18:28:59 [debug]  2
+2022-01-31 18:28:59 [debug]  2
+2022-01-31 18:28:59 [debug]  0
+2022-01-31 18:28:59 [debug]  0
+2022-01-31 18:28:59 [debug]  0
+2022-01-31 18:28:59 [debug] Diagnostics for board 1:
+2022-01-31 18:28:59 [debug] Duet EXP3HC firmware version 3.4.0beta7 (2021-12-16 12:24:41)
+Bootloader ID: SAME5x bootloader version 2.2 (2021-01-16b1)
+2022-01-31 18:28:59 [debug] Never used RAM 158880, free system stack 4382 words
+Tasks: Move(notifyWait<null>,0.0%,160) HEAT(notifyWait<null>,0.1%,88) CanAsync(notifyWait<null>,0.0%,65) CanRecv(notifyWait<null>,0.0%,82) CanClock(notifyWait<null>,0.0%,71) TMC(notifyWait<null>,19.7%,99) MAIN(running<null>,76.7%,414) IDLE(ready<null>,0.0%,39) AIN(delaying<null>,3.5%,263), total 100.0%
+Last reset 02:32:58 ago, cause: software
+2022-01-31 18:28:59 [debug] Last software reset at 2021-06-06 23:40, reason: deliberate HardFault zeroDiv, available RAM 159008, slot 1
+Software reset code 0x8060 HFSR 0x40000000 CFSR 0x02000000 ICSR 0x00430803 BFAR 0xe000ed38 SP 0x20003700 Task MAIN Freestk 804 ok
+2022-01-31 18:28:59 [debug] Stack: 00000001 00000000 00000000 00000004 20000aac 0001dd33 0001f220 41000000 c0100394 80a02024 3a36d584 41200000 00000000 11a80100 0000002c a300a5a5 20003bc8 00000000 00000000 00000000 20003bc8 0005b8bd 20003bc8 0005b8bd 000001d9 0001da41 41318189
+2022-01-31 18:28:59 [debug] Driver 0: pos 0, 320.0 steps/mm,standstill, SG min 0, mspos 4, reads 24301, writes 16 timeouts 0, steps req 0 done 0
+Driver 1: pos 0, 320.0 steps/mm,standstill, SG min 0, mspos 4, reads 24301, writes 16 timeouts 0, steps req 0 done 0
+Driver 2: pos 0, 80.0 steps/mm,standstill, SG min 0, mspos 8, reads 24307, writes 11 timeouts 0, steps req 0 done 0
+2022-01-31 18:28:59 [debug] Moves scheduled 0, completed 0, in progress 0, hiccups 0, step errors 0, maxPrep 0, maxOverdue 0, maxInc 0, mcErrs 0, gcmErrs 0
+Peak sync jitter -2/17, peak Rx sync delay 183, resyncs 0/0, no step interrupt scheduled
+VIN voltage: min 32.1, current 32.1, max 32.1
+V12 voltage: min 12.1, current 12.2, max 12.2
+MCU temperature: min 34.6C, current 35.2C, max 35.4C
+2022-01-31 18:28:59 [debug] Last sensors broadcast 0x00000000 found 0 204 ticks ago, 0 ordering errs, loop time 0
+CAN messages queued 76869, send timeouts 0, received 111705, lost 0, free buffers 37, min 37, error reg 20000
+dup 0, oos 0/0/0/0, bm 0, wbm 0, rxMotionDelay 0
+2022-01-31 18:28:59 [debug] Diagnostics for board 2:
+2022-01-31 18:28:59 [debug] Duet EXP3HC firmware version 3.4.0beta7 (2021-12-16 12:24:41)
+Bootloader ID: not available
+2022-01-31 18:28:59 [debug] Never used RAM 157624, free system stack 4392 words
+Tasks: Move(notifyWait<null>,0.0%,160) HEAT(notifyWait<null>,0.1%,70) CanAsync(notifyWait<null>,0.0%,69) CanRecv(notifyWait<null>,0.0%,82) CanClock(notifyWait<null>,0.0%,71) TMC(notifyWait<null>,20.4%,99) MAIN(running<null>,75.9%,302) IDLE(ready<null>,0.0%,39) AIN(delaying<null>,3.6%,263), total 100.0%
+Last reset 02:32:59 ago, cause: software
+2022-01-31 18:28:59 [debug] Last software reset at 2021-05-30 19:40, reason: AssertionFailed, available RAM 157912, slot 2
+Software reset code 0x0120 HFSR 0x00000000 CFSR 0x00000000 ICSR 0x00000000 BFAR 0xe000ed38 SP 0x20004874 Task HEAT Freestk 146 ok
+2022-01-31 18:28:59 [debug] Stack: 00000544 0002eb3c 0002614f 42000400 00022387 00000000 00000020 2002f020 2000159c 00000003 0001d30f 00000000 2002f020 00000020 000157b1 00000000 00e7460e 00e7460e 41d5d9f0 a5a5a5a5 a5a5a5a5 a5a5a5a5 00024f9d a5a5a5a5 00000058 00000000 2002ee70
+2022-01-31 18:28:59 [debug] Driver 0: pos 0, 1124.0 steps/mm,standstill, SG min 0, mspos 4, reads 63472, writes 16 timeouts 0, steps req 0 done 0
+Driver 1: pos 0, 1660.0 steps/mm,standstill, SG min 0, mspos 4, reads 63472, writes 16 timeouts 0, steps req 0 done 0
+Driver 2: pos 0, 1660.0 steps/mm,standstill, SG min 0, mspos 4, reads 63473, writes 16 timeouts 0, steps req 0 done 0
+2022-01-31 18:28:59 [debug] Moves scheduled 0, completed 0, in progress 0, hiccups 0, step errors 0, maxPrep 0, maxOverdue 0, maxInc 0, mcErrs 0, gcmErrs 0
+Peak sync jitter 3/23, peak Rx sync delay 183, resyncs 0/0, no step interrupt scheduled
+VIN voltage: min 24.1, current 24.1, max 24.2
+V12 voltage: min 12.2, current 12.2, max 12.2
+MCU temperature: min 36.0C, current 37.1C, max 37.1C
+2022-01-31 18:28:59 [debug] Last sensors broadcast 0x0000000e found 3 18 ticks ago, 0 ordering errs, loop time 0
+CAN messages queued 181036, send timeouts 0, received 78419, lost 0, free buffers 37, min 37, error reg 20000
+dup 0, oos 0/0/0/0, bm 0, wbm 0, rxMotionDelay 0
+2022-01-31 18:28:59 [debug] === Filament sensors ===
+Interrupt 5726621 to 0us, poll 1 to 170us
+Driver 0: ok
+2022-01-31 18:28:59 [info] Event logging stopped
+power up + 00:00:00 [info] Event logging started at level debug
+power up + 00:00:00 [info] Running: Duet 3 MB6HC v0.6 or 1.0: 3.4.0beta7 (2021-12-16 12:22:39)
+power up + 00:00:00 [warn] Warning: Heater 0 predicted maximum temperature at full power is 209°C
+power up + 00:00:00 [warn] Warning: Heater 3 predicted maximum temperature at full power is 559°C
+power up + 00:00:00 [info] G10 P0 X-11.28 Y-4.73 Z-3.49 U0.00
+power up + 00:00:00 [info] G10 P1 X0.50 Y0.49 Z-0.10 U0.00
+power up + 00:00:00 [warn] Error: in file macro line 11: G10: Invalid tool number
+power up + 00:00:00 [info] G10 L2 P1 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P2 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P3 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P4 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P5 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P6 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P7 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P8 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P9 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] M568 P0 S0 R0[0x09][0x09][0x09]
+power up + 00:00:00 [info] M568 P1 S0 R0[0x09][0x09][0x09]
+power up + 00:00:00 [warn] Error: in file macro line 115: M568: Invalid tool number
+power up + 00:00:00 [warn] Warning: Driver 0.2 warning: phase A may be disconnected, phase B may be disconnected
+power up + 00:00:00 [debug] Homed U, setting active tool to T-1
+power up + 00:00:00 [debug] Done!
+power up + 00:00:00 [debug] RepRapFirmware for Duet 3 MB6HC is up and running.
+power up + 00:00:02 [warn] Ethernet running, IP address = 192.168.1.210
+power up + 00:00:03 [warn] HTTP client 192.168.1.126 login succeeded
+2022-01-31 22:13:28 [warn] Date and time set at power up + 00:00:03
+2022-01-31 22:21:29 [warn] Error: Cannot pause print, because no file is being printed!
+2022-01-31 22:21:29 [debug] === Diagnostics ===
+2022-01-31 22:21:29 [debug] RepRapFirmware for Duet 3 MB6HC version 3.4.0beta7 (2021-12-16 12:22:39) running on Duet 3 MB6HC v0.6 or 1.0 (standalone mode)
+2022-01-31 22:21:29 [debug] Board ID: 08DJM-956L2-G43S4-6JKDD-3SJ6L-TB62G
+2022-01-31 22:21:29 [debug] Used output buffers: 2 of 40 (16 max)
+2022-01-31 22:21:29 [debug] === RTOS ===
+2022-01-31 22:21:29 [debug] Static ram: 150664
+2022-01-31 22:21:29 [debug] Dynamic ram: 96900 of which 48 recycled
+2022-01-31 22:21:29 [debug] Never used RAM 100132, free system stack 196 words
+2022-01-31 22:21:29 [debug] Tasks:
+2022-01-31 22:21:29 [debug]  NETWORK(ready,26.7%,229)
+2022-01-31 22:21:29 [debug]  ETHERNET(notifyWait,0.1%,174)
+2022-01-31 22:21:29 [debug]  HEAT(notifyWait,0.0%,344)
+2022-01-31 22:21:29 [debug]  Move(notifyWait,0.0%,276)
+2022-01-31 22:21:29 [debug]  CanReceiv(notifyWait,0.0%,772)
+2022-01-31 22:21:29 [debug]  CanSender(notifyWait,0.0%,374)
+2022-01-31 22:21:29 [debug]  CanClock(delaying,0.0%,339)
+2022-01-31 22:21:29 [debug]  TMC(notifyWait,7.8%,58)
+2022-01-31 22:21:29 [debug]  MAIN(running,65.3%,925)
+2022-01-31 22:21:29 [debug]  IDLE(ready,0.0%,30)
+2022-01-31 22:21:29 [debug] , total 100.0%
+Owned mutexes:
+2022-01-31 22:21:29 [debug]  Trigger(MAIN)
+2022-01-31 22:21:29 [debug] === Platform ===
+2022-01-31 22:21:29 [debug] Last reset 00:08:04 ago, cause: software
+2022-01-31 22:21:29 [debug] Last software reset at 2022-01-31 22:14, reason: User, GCodes spinning, available RAM 100132, slot 1
+2022-01-31 22:21:29 [debug] Software reset code 0x0003 HFSR 0x00000000 CFSR 0x00000000 ICSR 0x0044a000 BFAR 0x00000000 SP 0x00000000 Task MAIN Freestk 0 n/a
+2022-01-31 22:21:29 [debug] Error status: 0x00
+2022-01-31 22:21:29 [debug] Step timer max interval 129
+2022-01-31 22:21:29 [debug] MCU temperature: min 39.7, current 39.8, max 40.2
+2022-01-31 22:21:29 [debug] Supply voltage: min 31.9, current 31.9, max 32.0, under voltage events: 0, over voltage events: 0, power good: yes
+2022-01-31 22:21:29 [debug] 12V rail voltage: min 12.0, current 12.1, max 12.1, under voltage events: 0
+2022-01-31 22:21:29 [debug] Heap OK, handles allocated/used 99/2, heap memory allocated/used/recyclable 2048/74/42, gc cycles 0
+2022-01-31 22:21:29 [debug] Events: 1 queued, 1 completed
+2022-01-31 22:21:29 [debug] Driver 0: pos 0, standstill, SG min 0, mspos 4, reads 26021, writes 14 timeouts 0
+2022-01-31 22:21:29 [debug] Driver 1: pos 0, standstill, SG min 0, mspos 4, reads 26022, writes 14 timeouts 0
+2022-01-31 22:21:29 [debug] Driver 2: pos 0, standstill, SG min 0, mspos 800, reads 26017, writes 19 timeouts 0
+2022-01-31 22:21:29 [debug] Driver 3: pos 69, standstill, SG min 0, mspos 8, reads 26028, writes 14 timeouts 0
+2022-01-31 22:21:29 [debug] Driver 4: pos 0, standstill, SG min 0, mspos 8, reads 26028, writes 14 timeouts 0
+2022-01-31 22:21:29 [debug] Driver 5: pos 0, standstill, SG min 0, mspos 8, reads 26029, writes 14 timeouts 0
+2022-01-31 22:21:29 [debug] Date/time: 
+2022-01-31 22:21:29 [debug] 2022-01-31 22:21:29
+2022-01-31 22:21:29 [debug] Slowest loop: 5.48ms; fastest: 0.06ms
+2022-01-31 22:21:29 [debug] === Storage ===
+Free file entries: 8
+2022-01-31 22:21:29 [debug] SD card 0 detected, interface speed: 25.0MBytes/sec
+2022-01-31 22:21:29 [debug] SD card longest read time 3.3ms, write time 5.4ms, max retries 0
+2022-01-31 22:21:29 [debug] === Move ===
+DMs created 125, segments created 3, maxWait 672ms, bed compensation in use: none, comp offset 0.000
+2022-01-31 22:21:29 [debug] === MainDDARing ===
+Scheduled moves 3, completed 3, hiccups 0, stepErrors 0, LaErrors 0, Underruns [0, 0, 0], CDDA state -1
+2022-01-31 22:21:29 [debug] === AuxDDARing ===
+Scheduled moves 0, completed 0, hiccups 0, stepErrors 0, LaErrors 0, Underruns [0, 0, 0], CDDA state -1
+2022-01-31 22:21:29 [debug] === Heat ===
+2022-01-31 22:21:29 [debug] Bed heaters 0 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1, chamber heaters -1 -1 -1 -1, ordering errs 0
+2022-01-31 22:21:29 [debug] === GCodes ===
+2022-01-31 22:21:29 [debug] Segments left: 0
+2022-01-31 22:21:29 [debug] Movement lock held by null
+2022-01-31 22:21:29 [debug] HTTP is idle in state(s) 0
+2022-01-31 22:21:29 [debug] Telnet is idle in state(s) 0
+2022-01-31 22:21:29 [debug] File is idle in state(s) 0
+2022-01-31 22:21:29 [debug] USB is idle in state(s) 0
+2022-01-31 22:21:29 [debug] Aux is idle in state(s) 0
+2022-01-31 22:21:29 [debug] Trigger is ready with "M122 B0" in state(s) 0 0, running macro
+2022-01-31 22:21:29 [debug] Queue is idle in state(s) 0
+2022-01-31 22:21:29 [debug] LCD is idle in state(s) 0
+2022-01-31 22:21:29 [debug] SBC is idle in state(s) 0
+2022-01-31 22:21:29 [debug] Daemon is idle in state(s) 0
+2022-01-31 22:21:29 [debug] Aux2 is idle in state(s) 0
+2022-01-31 22:21:29 [debug] Autopause is idle in state(s) 0
+2022-01-31 22:21:29 [debug] Code queue is empty
+2022-01-31 22:21:29 [debug] === Filament sensors ===
+2022-01-31 22:21:29 [debug] Extruder 0 sensor: no filament
+2022-01-31 22:21:29 [debug] === CAN ===
+2022-01-31 22:21:29 [debug] Messages queued 4418, received 13869, lost 0, boc 0
+2022-01-31 22:21:29 [debug] Longest wait 1ms for reply type 6018, peak Tx sync delay 387, free buffers 49 (min 48), ts 2423/2422/0
+2022-01-31 22:21:29 [debug] Tx timeouts 0,0,0,0,0,0
+2022-01-31 22:21:29 [debug] === Network ===
+2022-01-31 22:21:29 [debug] Slowest loop: 8.37ms; fastest: 0.02ms
+2022-01-31 22:21:29 [debug] Responder states:
+2022-01-31 22:21:29 [debug]  HTTP(0)
+2022-01-31 22:21:29 [debug]  HTTP(0)
+2022-01-31 22:21:29 [debug]  HTTP(0)
+2022-01-31 22:21:29 [debug]  HTTP(0)
+2022-01-31 22:21:29 [debug]  HTTP(0)
+2022-01-31 22:21:29 [debug]  HTTP(0)
+2022-01-31 22:21:29 [debug]  FTP(0)
+2022-01-31 22:21:29 [debug]  Telnet(0), 0 sessions
+2022-01-31 22:21:29 [debug]  Telnet(0), 0 sessions
+2022-01-31 22:21:29 [debug] HTTP sessions: 1 of 8
+2022-01-31 22:21:29 [debug] - Ethernet -
+State: active
+2022-01-31 22:21:29 [debug] Error counts: 0 0 1 0 0
+Socket states:
+2022-01-31 22:21:29 [debug]  2
+2022-01-31 22:21:29 [debug]  2
+2022-01-31 22:21:29 [debug]  2
+2022-01-31 22:21:29 [debug]  2
+2022-01-31 22:21:29 [debug]  2
+2022-01-31 22:21:29 [debug]  0
+2022-01-31 22:21:29 [debug]  0
+2022-01-31 22:21:29 [debug]  0
+2022-01-31 22:21:29 [debug] Diagnostics for board 1:
+2022-01-31 22:21:29 [debug] Duet EXP3HC firmware version 3.4.0beta7 (2021-12-16 12:24:41)
+Bootloader ID: SAME5x bootloader version 2.2 (2021-01-16b1)
+2022-01-31 22:21:29 [debug] Never used RAM 158880, free system stack 4392 words
+Tasks: Move(notifyWait<null>,0.0%,160) HEAT(notifyWait<null>,0.2%,70) CanAsync(notifyWait<null>,0.0%,65) CanRecv(notifyWait<null>,0.0%,82) CanClock(notifyWait<null>,0.0%,71) TMC(notifyWait<null>,40.7%,99) MAIN(running<null>,51.8%,451) IDLE(ready<null>,0.0%,39) AIN(delaying<null>,7.3%,263), total 100.0%
+Last reset 03:53:18 ago, cause: software
+2022-01-31 22:21:29 [debug] Last software reset at 2021-06-06 23:40, reason: deliberate HardFault zeroDiv, available RAM 159008, slot 1
+Software reset code 0x8060 HFSR 0x40000000 CFSR 0x02000000 ICSR 0x00430803 BFAR 0xe000ed38 SP 0x20003700 Task MAIN Freestk 804 ok
+2022-01-31 22:21:29 [debug] Stack: 00000001 00000000 00000000 00000004 20000aac 0001dd33 0001f220 41000000 c0100394 80a02024 3a36d584 41200000 00000000 11a80100 0000002c a300a5a5 20003bc8 00000000 00000000 00000000 20003bc8 0005b8bd 20003bc8 0005b8bd 000001d9 0001da41 41318189
+2022-01-31 22:21:29 [debug] Driver 0: pos 0, 320.0 steps/mm,standstill, SG min 0, mspos 4, reads 30504, writes 16 timeouts 0, steps req 0 done 0
+Driver 1: pos 0, 320.0 steps/mm,standstill, SG min 0, mspos 4, reads 30505, writes 16 timeouts 0, steps req 0 done 0
+Driver 2: pos 0, 80.0 steps/mm,standstill, SG min 0, mspos 8, reads 30510, writes 11 timeouts 0, steps req 0 done 0
+2022-01-31 22:21:29 [debug] Moves scheduled 0, completed 0, in progress 0, hiccups 0, step errors 0, maxPrep 0, maxOverdue 0, maxInc 0, mcErrs 0, gcmErrs 0
+Peak sync jitter -1/13, peak Rx sync delay 180, resyncs 0/0, no step interrupt scheduled
+VIN voltage: min 32.1, current 32.1, max 32.1
+V12 voltage: min 12.1, current 12.2, max 12.2
+MCU temperature: min 35.0C, current 35.6C, max 35.6C
+2022-01-31 22:21:29 [debug] Last sensors broadcast 0x00000000 found 0 193 ticks ago, 0 ordering errs, loop time 0
+CAN messages queued 166092, send timeouts 0, received 60376, lost 0, free buffers 37, min 37, error reg 20000
+dup 0, oos 0/0/0/0, bm 0, wbm 0, rxMotionDelay 0
+2022-01-31 22:21:29 [debug] Diagnostics for board 2:
+2022-01-31 22:21:29 [debug] Duet EXP3HC firmware version 3.4.0beta7 (2021-12-16 12:24:41)
+Bootloader ID: not available
+2022-01-31 22:21:29 [debug] Never used RAM 157624, free system stack 4396 words
+Tasks: Move(notifyWait<null>,0.0%,160) HEAT(notifyWait<null>,0.2%,70) CanAsync(notifyWait<null>,0.0%,69) CanRecv(notifyWait<null>,0.0%,82) CanClock(notifyWait<null>,0.0%,71) TMC(notifyWait<null>,40.8%,99) MAIN(running<null>,51.7%,326) IDLE(ready<null>,0.0%,39) AIN(delaying<null>,7.3%,263), total 100.0%
+Last reset 03:53:19 ago, cause: software
+2022-01-31 22:21:29 [debug] Last software reset at 2021-05-30 19:40, reason: AssertionFailed, available RAM 157912, slot 2
+Software reset code 0x0120 HFSR 0x00000000 CFSR 0x00000000 ICSR 0x00000000 BFAR 0xe000ed38 SP 0x20004874 Task HEAT Freestk 146 ok
+2022-01-31 22:21:29 [debug] Stack: 00000544 0002eb3c 0002614f 42000400 00022387 00000000 00000020 2002f020 2000159c 00000003 0001d30f 00000000 2002f020 00000020 000157b1 00000000 00e7460e 00e7460e 41d5d9f0 a5a5a5a5 a5a5a5a5 a5a5a5a5 00024f9d a5a5a5a5 00000058 00000000 2002ee70
+2022-01-31 22:21:29 [debug] Driver 0: pos 0, 1124.0 steps/mm,standstill, SG min 0, mspos 4, reads 28104, writes 16 timeouts 0, steps req 0 done 0
+Driver 1: pos 0, 1660.0 steps/mm,standstill, SG min 0, mspos 4, reads 28104, writes 16 timeouts 0, steps req 0 done 0
+Driver 2: pos 0, 1660.0 steps/mm,standstill, SG min 0, mspos 4, reads 28105, writes 16 timeouts 0, steps req 0 done 0
+2022-01-31 22:21:29 [debug] Moves scheduled 0, completed 0, in progress 0, hiccups 0, step errors 0, maxPrep 0, maxOverdue 0, maxInc 0, mcErrs 0, gcmErrs 0
+Peak sync jitter 3/22, peak Rx sync delay 181, resyncs 0/0, no step interrupt scheduled
+VIN voltage: min 24.1, current 24.1, max 24.2
+V12 voltage: min 12.2, current 12.2, max 12.2
+MCU temperature: min 36.2C, current 37.1C, max 37.2C
+2022-01-31 22:21:29 [debug] Last sensors broadcast 0x0000000e found 3 144 ticks ago, 0 ordering errs, loop time 0
+CAN messages queued 172185, send timeouts 0, received 58473, lost 0, free buffers 37, min 37, error reg 20000
+dup 0, oos 0/0/0/0, bm 0, wbm 0, rxMotionDelay 0
+2022-01-31 22:21:29 [debug] === Filament sensors ===
+Interrupt 5726621 to 0us, poll 1 to 164us
+Driver 0: ok
+2022-01-31 22:21:29 [info] Event logging stopped
+power up + 00:00:00 [info] Event logging started at level debug
+power up + 00:00:00 [info] Running: Duet 3 MB6HC v0.6 or 1.0: 3.4.0beta7 (2021-12-16 12:22:39)
+power up + 00:00:00 [warn] Warning: Heater 0 predicted maximum temperature at full power is 209°C
+power up + 00:00:00 [warn] Warning: Heater 3 predicted maximum temperature at full power is 559°C
+power up + 00:00:00 [info] G10 P0 X-11.28 Y-4.73 Z-3.49 U0.00
+power up + 00:00:00 [info] G10 P1 X0.50 Y0.49 Z-0.10 U0.00
+power up + 00:00:00 [warn] Error: in file macro line 11: G10: Invalid tool number
+power up + 00:00:00 [info] G10 L2 P1 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P2 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P3 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P4 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P5 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P6 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P7 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P8 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P9 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] M568 P0 S0 R0[0x09][0x09][0x09]
+power up + 00:00:00 [info] M568 P1 S0 R0[0x09][0x09][0x09]
+power up + 00:00:00 [warn] Error: in file macro line 115: M568: Invalid tool number
+power up + 00:00:00 [warn] Warning: Driver 0.2 warning: phase A may be disconnected, phase B may be disconnected
+power up + 00:00:00 [debug] Homed U, setting active tool to T-1
+power up + 00:00:00 [debug] Done!
+power up + 00:00:00 [debug] RepRapFirmware for Duet 3 MB6HC is up and running.
+power up + 00:00:02 [warn] Ethernet running, IP address = 192.168.1.210
+power up + 00:00:03 [warn] HTTP client 192.168.1.126 login succeeded
+2022-02-01 06:09:30 [warn] Date and time set at power up + 00:00:03
+2022-02-01 06:09:41 [warn] HTTP client 192.168.1.126 login succeeded
+2022-02-01 08:14:13 [warn] HTTP client 192.168.1.126 login succeeded
+2022-02-01 13:37:21 [warn] Error: Cannot pause print, because no file is being printed!
+2022-02-01 13:37:21 [debug] === Diagnostics ===
+2022-02-01 13:37:21 [debug] RepRapFirmware for Duet 3 MB6HC version 3.4.0beta7 (2021-12-16 12:22:39) running on Duet 3 MB6HC v0.6 or 1.0 (standalone mode)
+2022-02-01 13:37:21 [debug] Board ID: 08DJM-956L2-G43S4-6JKDD-3SJ6L-TB62G
+2022-02-01 13:37:21 [debug] Used output buffers: 2 of 40 (16 max)
+2022-02-01 13:37:21 [debug] === RTOS ===
+2022-02-01 13:37:21 [debug] Static ram: 150664
+2022-02-01 13:37:21 [debug] Dynamic ram: 96900 of which 48 recycled
+2022-02-01 13:37:21 [debug] Never used RAM 100132, free system stack 196 words
+2022-02-01 13:37:21 [debug] Tasks:
+2022-02-01 13:37:21 [debug]  NETWORK(ready,36.9%,229)
+2022-02-01 13:37:21 [debug]  ETHERNET(notifyWait,0.3%,166)
+2022-02-01 13:37:21 [debug]  HEAT(notifyWait,0.1%,344)
+2022-02-01 13:37:21 [debug]  Move(notifyWait,0.0%,276)
+2022-02-01 13:37:21 [debug]  CanReceiv(notifyWait,0.2%,772)
+2022-02-01 13:37:21 [debug]  CanSender(notifyWait,0.0%,374)
+2022-02-01 13:37:21 [debug]  CanClock(delaying,0.0%,339)
+2022-02-01 13:37:21 [debug]  TMC(notifyWait,53.0%,58)
+2022-02-01 13:37:21 [debug]  MAIN(running,9.4%,925)
+2022-02-01 13:37:21 [debug]  IDLE(ready,0.0%,30)
+2022-02-01 13:37:21 [debug] , total 100.0%
+Owned mutexes:
+2022-02-01 13:37:21 [debug]  Trigger(MAIN)
+2022-02-01 13:37:21 [debug] === Platform ===
+2022-02-01 13:37:21 [debug] Last reset 07:27:55 ago, cause: software
+2022-02-01 13:37:21 [debug] Last software reset at 2022-02-01 06:09, reason: User, GCodes spinning, available RAM 100132, slot 2
+2022-02-01 13:37:21 [debug] Software reset code 0x0003 HFSR 0x00000000 CFSR 0x00000000 ICSR 0x00400000 BFAR 0x00000000 SP 0x00000000 Task MAIN Freestk 0 n/a
+2022-02-01 13:37:21 [debug] Error status: 0x00
+2022-02-01 13:37:21 [debug] Step timer max interval 197
+2022-02-01 13:37:21 [debug] MCU temperature: min 38.4, current 39.2, max 39.4
+2022-02-01 13:37:21 [debug] Supply voltage: min 31.9, current 31.9, max 32.0, under voltage events: 0, over voltage events: 0, power good: yes
+2022-02-01 13:37:21 [debug] 12V rail voltage: min 12.0, current 12.0, max 12.1, under voltage events: 0
+2022-02-01 13:37:21 [debug] Heap OK, handles allocated/used 99/2, heap memory allocated/used/recyclable 2048/74/42, gc cycles 0
+2022-02-01 13:37:21 [debug] Events: 1 queued, 1 completed
+2022-02-01 13:37:21 [debug] Driver 0: pos 0, standstill, SG min 0, mspos 4, reads 47186, writes 14 timeouts 0
+2022-02-01 13:37:21 [debug] Driver 1: pos 0, standstill, SG min 0, mspos 4, reads 47186, writes 14 timeouts 0
+2022-02-01 13:37:21 [debug] Driver 2: pos 0, standstill, SG min 0, mspos 480, reads 47182, writes 19 timeouts 0
+2022-02-01 13:37:21 [debug] Driver 3: pos 69, standstill, SG min 0, mspos 8, reads 47187, writes 14 timeouts 0
+2022-02-01 13:37:21 [debug] Driver 4: pos 0, standstill, SG min 0, mspos 8, reads 47193, writes 14 timeouts 0
+2022-02-01 13:37:21 [debug] Driver 5: pos 0, standstill, SG min 0, mspos 8, reads 47193, writes 14 timeouts 0
+2022-02-01 13:37:21 [debug] Date/time: 
+2022-02-01 13:37:21 [debug] 2022-02-01 13:37:21
+2022-02-01 13:37:21 [debug] Slowest loop: 5.58ms; fastest: 0.06ms
+2022-02-01 13:37:21 [debug] === Storage ===
+Free file entries: 8
+2022-02-01 13:37:21 [debug] SD card 0 detected, interface speed: 25.0MBytes/sec
+2022-02-01 13:37:21 [debug] SD card longest read time 3.4ms, write time 3.7ms, max retries 0
+2022-02-01 13:37:21 [debug] === Move ===
+DMs created 125, segments created 3, maxWait 672ms, bed compensation in use: none, comp offset 0.000
+2022-02-01 13:37:21 [debug] === MainDDARing ===
+Scheduled moves 3, completed 3, hiccups 0, stepErrors 0, LaErrors 0, Underruns [0, 0, 0], CDDA state -1
+2022-02-01 13:37:21 [debug] === AuxDDARing ===
+Scheduled moves 0, completed 0, hiccups 0, stepErrors 0, LaErrors 0, Underruns [0, 0, 0], CDDA state -1
+2022-02-01 13:37:21 [debug] === Heat ===
+2022-02-01 13:37:21 [debug] Bed heaters 0 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1, chamber heaters -1 -1 -1 -1, ordering errs 0
+2022-02-01 13:37:21 [debug] === GCodes ===
+2022-02-01 13:37:21 [debug] Segments left: 0
+2022-02-01 13:37:21 [debug] Movement lock held by null
+2022-02-01 13:37:21 [debug] HTTP is idle in state(s) 0
+2022-02-01 13:37:21 [debug] Telnet is idle in state(s) 0
+2022-02-01 13:37:21 [debug] File is idle in state(s) 0
+2022-02-01 13:37:21 [debug] USB is idle in state(s) 0
+2022-02-01 13:37:21 [debug] Aux is idle in state(s) 0
+2022-02-01 13:37:21 [debug] Trigger is ready with "M122 B0" in state(s) 0 0, running macro
+2022-02-01 13:37:21 [debug] Queue is idle in state(s) 0
+2022-02-01 13:37:21 [debug] LCD is idle in state(s) 0
+2022-02-01 13:37:21 [debug] SBC is idle in state(s) 0
+2022-02-01 13:37:21 [debug] Daemon is idle in state(s) 0
+2022-02-01 13:37:21 [debug] Aux2 is idle in state(s) 0
+2022-02-01 13:37:21 [debug] Autopause is idle in state(s) 0
+2022-02-01 13:37:21 [debug] Code queue is empty
+2022-02-01 13:37:21 [debug] === Filament sensors ===
+2022-02-01 13:37:21 [debug] Extruder 0 sensor: no filament
+2022-02-01 13:37:21 [debug] === CAN ===
+2022-02-01 13:37:21 [debug] Messages queued 241933, received 766030, lost 0, boc 0
+2022-02-01 13:37:21 [debug] Longest wait 1ms for reply type 6018, peak Tx sync delay 388, free buffers 49 (min 48), ts 134376/134375/0
+2022-02-01 13:37:21 [debug] Tx timeouts 0,0,0,0,0,0
+2022-02-01 13:37:21 [debug] === Network ===
+2022-02-01 13:37:21 [debug] Slowest loop: 8.91ms; fastest: 0.02ms
+2022-02-01 13:37:21 [debug] Responder states:
+2022-02-01 13:37:21 [debug]  HTTP(0)
+2022-02-01 13:37:21 [debug]  HTTP(0)
+2022-02-01 13:37:21 [debug]  HTTP(0)
+2022-02-01 13:37:21 [debug]  HTTP(0)
+2022-02-01 13:37:21 [debug]  HTTP(0)
+2022-02-01 13:37:21 [debug]  HTTP(0)
+2022-02-01 13:37:21 [debug]  FTP(0)
+2022-02-01 13:37:21 [debug]  Telnet(0), 0 sessions
+2022-02-01 13:37:21 [debug]  Telnet(0), 0 sessions
+2022-02-01 13:37:21 [debug] HTTP sessions: 1 of 8
+2022-02-01 13:37:21 [debug] - Ethernet -
+State: active
+2022-02-01 13:37:21 [debug] Error counts: 0 0 1 0 0
+Socket states:
+2022-02-01 13:37:21 [debug]  2
+2022-02-01 13:37:21 [debug]  2
+2022-02-01 13:37:21 [debug]  2
+2022-02-01 13:37:21 [debug]  2
+2022-02-01 13:37:21 [debug]  2
+2022-02-01 13:37:21 [debug]  0
+2022-02-01 13:37:21 [debug]  0
+2022-02-01 13:37:21 [debug]  0
+2022-02-01 13:37:21 [debug] Diagnostics for board 1:
+2022-02-01 13:37:21 [debug] Duet EXP3HC firmware version 3.4.0beta7 (2021-12-16 12:24:41)
+Bootloader ID: SAME5x bootloader version 2.2 (2021-01-16b1)
+2022-02-01 13:37:21 [debug] Never used RAM 158880, free system stack 4380 words
+Tasks: Move(notifyWait<null>,0.0%,152) HEAT(notifyWait<null>,0.4%,70) CanAsync(notifyWait<null>,0.0%,65) CanRecv(notifyWait<null>,0.1%,82) CanClock(notifyWait<null>,0.1%,71) TMC(notifyWait<null>,119.2%,99) MAIN(running<null>,126.6%,450) IDLE(ready<null>,0.0%,39) AIN(delaying<null>,21.2%,263), total 267.7%
+Last reset 15:15:54 ago, cause: software
+2022-02-01 13:37:21 [debug] Last software reset at 2021-06-06 23:40, reason: deliberate HardFault zeroDiv, available RAM 159008, slot 1
+Software reset code 0x8060 HFSR 0x40000000 CFSR 0x02000000 ICSR 0x00430803 BFAR 0xe000ed38 SP 0x20003700 Task MAIN Freestk 804 ok
+2022-02-01 13:37:21 [debug] Stack: 00000001 00000000 00000000 00000004 20000aac 0001dd33 0001f220 41000000 c0100394 80a02024 3a36d584 41200000 00000000 11a80100 0000002c a300a5a5 20003bc8 00000000 00000000 00000000 20003bc8 0005b8bd 20003bc8 0005b8bd 000001d9 0001da41 41318189
+2022-02-01 13:37:21 [debug] Driver 0: pos 0, 320.0 steps/mm,standstill, SG min 0, mspos 4, reads 55680, writes 16 timeouts 0, steps req 0 done 0
+Driver 1: pos 0, 320.0 steps/mm,standstill, SG min 0, mspos 4, reads 55680, writes 16 timeouts 0, steps req 0 done 0
+Driver 2: pos 0, 80.0 steps/mm,standstill, SG min 0, mspos 8, reads 55686, writes 11 timeouts 0, steps req 0 done 0
+2022-02-01 13:37:21 [debug] Moves scheduled 0, completed 0, in progress 0, hiccups 0, step errors 0, maxPrep 0, maxOverdue 0, maxInc 0, mcErrs 0, gcmErrs 0
+Peak sync jitter -3/17, peak Rx sync delay 183, resyncs 0/0, no step interrupt scheduled
+VIN voltage: min 32.1, current 32.1, max 32.1
+V12 voltage: min 12.1, current 12.2, max 12.2
+MCU temperature: min 34.4C, current 34.8C, max 35.6C
+2022-02-01 13:37:21 [debug] Last sensors broadcast 0x00000000 found 0 178 ticks ago, 0 ordering errs, loop time 0
+CAN messages queued 551990, send timeouts 0, received 461717, lost 0, free buffers 37, min 37, error reg 20000
+dup 0, oos 0/0/0/0, bm 0, wbm 0, rxMotionDelay 0
+2022-02-01 13:37:21 [debug] Diagnostics for board 2:
+2022-02-01 13:37:21 [debug] Duet EXP3HC firmware version 3.4.0beta7 (2021-12-16 12:24:41)
+Bootloader ID: not available
+2022-02-01 13:37:21 [debug] Never used RAM 157624, free system stack 4380 words
+Tasks: Move(notifyWait<null>,0.0%,160) HEAT(notifyWait<null>,0.6%,68) CanAsync(notifyWait<null>,0.0%,69) CanRecv(notifyWait<null>,0.1%,82) CanClock(notifyWait<null>,0.1%,71) TMC(notifyWait<null>,121.4%,99) MAIN(running<null>,124.0%,302) IDLE(ready<null>,0.0%,39) AIN(delaying<null>,21.4%,263), total 267.6%
+Last reset 15:15:55 ago, cause: software
+2022-02-01 13:37:21 [debug] Last software reset at 2021-05-30 19:40, reason: AssertionFailed, available RAM 157912, slot 2
+Software reset code 0x0120 HFSR 0x00000000 CFSR 0x00000000 ICSR 0x00000000 BFAR 0xe000ed38 SP 0x20004874 Task HEAT Freestk 146 ok
+2022-02-01 13:37:21 [debug] Stack: 00000544 0002eb3c 0002614f 42000400 00022387 00000000 00000020 2002f020 2000159c 00000003 0001d30f 00000000 2002f020 00000020 000157b1 00000000 00e7460e 00e7460e 41d5d9f0 a5a5a5a5 a5a5a5a5 a5a5a5a5 00024f9d a5a5a5a5 00000058 00000000 2002ee70
+2022-02-01 13:37:21 [debug] Driver 0: pos 0, 1124.0 steps/mm,standstill, SG min 0, mspos 4, reads 24779, writes 16 timeouts 0, steps req 0 done 0
+Driver 1: pos 0, 1660.0 steps/mm,standstill, SG min 0, mspos 4, reads 24780, writes 16 timeouts 0, steps req 0 done 0
+Driver 2: pos 0, 1660.0 steps/mm,standstill, SG min 0, mspos 4, reads 24781, writes 16 timeouts 0, steps req 0 done 0
+2022-02-01 13:37:21 [debug] Moves scheduled 0, completed 0, in progress 0, hiccups 0, step errors 0, maxPrep 0, maxOverdue 0, maxInc 0, mcErrs 0, gcmErrs 0
+Peak sync jitter 2/22, peak Rx sync delay 185, resyncs 0/0, no step interrupt scheduled
+VIN voltage: min 24.1, current 24.1, max 24.2
+V12 voltage: min 12.2, current 12.2, max 12.2
+MCU temperature: min 36.0C, current 36.4C, max 37.2C
+2022-02-01 13:37:21 [debug] Last sensors broadcast 0x0000000e found 3 50 ticks ago, 0 ordering errs, loop time 0
+CAN messages queued 887995, send timeouts 0, received 354243, lost 0, free buffers 37, min 37, error reg 20000
+dup 0, oos 0/0/0/0, bm 0, wbm 0, rxMotionDelay 0
+2022-02-01 13:37:21 [debug] === Filament sensors ===
+Interrupt 5726621 to 0us, poll 1 to 170us
+Driver 0: ok
+2022-02-01 13:37:21 [info] Event logging stopped
+power up + 00:00:00 [info] Event logging started at level debug
+power up + 00:00:00 [info] Running: Duet 3 MB6HC v0.6 or 1.0: 3.4.0beta7 (2021-12-16 12:22:39)
+power up + 00:00:00 [warn] Warning: Heater 0 predicted maximum temperature at full power is 209°C
+power up + 00:00:00 [warn] Warning: Heater 3 predicted maximum temperature at full power is 559°C
+power up + 00:00:00 [info] G10 P0 X-11.28 Y-4.73 Z-3.49 U0.00
+power up + 00:00:00 [info] G10 P1 X0.50 Y0.49 Z-0.10 U0.00
+power up + 00:00:00 [warn] Error: in file macro line 11: G10: Invalid tool number
+power up + 00:00:00 [info] G10 L2 P1 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P2 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P3 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P4 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P5 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P6 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P7 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P8 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P9 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] M568 P0 S0 R0[0x09][0x09][0x09]
+power up + 00:00:00 [info] M568 P1 S0 R0[0x09][0x09][0x09]
+power up + 00:00:00 [warn] Error: in file macro line 115: M568: Invalid tool number
+power up + 00:00:00 [warn] Warning: Driver 0.2 warning: phase A may be disconnected, phase B may be disconnected
+power up + 00:00:00 [debug] Homed U, setting active tool to T-1
+power up + 00:00:00 [debug] Done!
+power up + 00:00:00 [debug] RepRapFirmware for Duet 3 MB6HC is up and running.
+power up + 00:00:02 [warn] Ethernet running, IP address = 192.168.1.210
+power up + 00:00:03 [warn] HTTP client 192.168.1.126 login succeeded
+2022-02-02 22:30:41 [warn] Date and time set at power up + 00:00:03
+2022-02-02 22:30:41 [warn] HTTP client 192.168.1.126 login succeeded
+2022-02-02 22:30:44 [warn] HTTP client 192.168.1.126 disconnected
