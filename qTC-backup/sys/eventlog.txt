@@ -47429,3 +47429,5 @@ power up + 00:00:03 [warn] HTTP client 192.168.1.126 login succeeded
 2022-02-02 22:30:41 [warn] Date and time set at power up + 00:00:03
 2022-02-02 22:30:41 [warn] HTTP client 192.168.1.126 login succeeded
 2022-02-02 22:30:44 [warn] HTTP client 192.168.1.126 disconnected
+2022-02-02 22:30:57 [warn] HTTP client 192.168.1.126 login succeeded
+2022-02-02 23:21:53 [warn] HTTP client 192.168.1.126 login succeeded
