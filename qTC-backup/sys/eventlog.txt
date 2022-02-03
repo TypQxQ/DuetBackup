@@ -47431,3 +47431,32 @@ power up + 00:00:03 [warn] HTTP client 192.168.1.126 login succeeded
 2022-02-02 22:30:44 [warn] HTTP client 192.168.1.126 disconnected
 2022-02-02 22:30:57 [warn] HTTP client 192.168.1.126 login succeeded
 2022-02-02 23:21:53 [warn] HTTP client 192.168.1.126 login succeeded
+2022-02-02 23:26:49 [warn] Warning: 12V under-voltage event (9.5V)
+power up + 00:00:00 [info] Event logging started at level debug
+power up + 00:00:00 [info] Running: Duet 3 MB6HC v0.6 or 1.0: 3.4.0beta7 (2021-12-16 12:22:39)
+power up + 00:00:00 [warn] Warning: Heater 0 predicted maximum temperature at full power is 209°C
+power up + 00:00:00 [warn] Warning: Heater 3 predicted maximum temperature at full power is 559°C
+power up + 00:00:00 [info] G10 P0 X-11.28 Y-4.73 Z-3.49 U0.00
+power up + 00:00:00 [info] G10 P1 X0.50 Y0.49 Z-0.10 U0.00
+power up + 00:00:00 [warn] Error: in file macro line 11: G10: Invalid tool number
+power up + 00:00:00 [info] G10 L2 P1 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P2 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P3 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P4 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P5 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P6 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P7 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P8 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] G10 L2 P9 X0.00 Y0.00 Z0.00 U0.00
+power up + 00:00:00 [info] M568 P0 S0 R0[0x09][0x09][0x09]
+power up + 00:00:00 [info] M568 P1 S0 R0[0x09][0x09][0x09]
+power up + 00:00:00 [warn] Error: in file macro line 115: M568: Invalid tool number
+power up + 00:00:00 [warn] Warning: Driver 0.2 warning: phase A may be disconnected, phase B may be disconnected
+power up + 00:00:01 [debug] Homed U, setting active tool to T-1
+power up + 00:00:01 [debug] Done!
+power up + 00:00:01 [debug] RepRapFirmware for Duet 3 MB6HC is up and running.
+power up + 00:00:02 [warn] Ethernet running, IP address = 192.168.1.210
+power up + 00:00:13 [warn] HTTP client 192.168.1.126 login succeeded
+2022-02-03 15:55:55 [warn] Date and time set at power up + 00:00:13
+2022-02-03 15:55:57 [warn] HTTP client 192.168.1.126 login succeeded
+2022-02-03 18:02:40 [warn] HTTP client 192.168.1.126 login succeeded
