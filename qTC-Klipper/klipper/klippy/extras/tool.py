@@ -231,7 +231,10 @@ class Tool:
         self.pickup_gcode_template.run_gcode_from_command(context)   # Park the current tool.
 
         if self.fan is not None:
-            self.gcode.run_script_from_command("SET_FAN_SPEED FAN=%s SPEED=%d" % self.fan, self.printer.lookup_object('toollock').get_saved_fan_speed() )
+            self.gcode.run_script_from_command(
+                "SET_FAN_SPEED FAN=%s SPEED=%d" % 
+                self.fan, 
+                self.printer.lookup_object('toollock').get_saved_fan_speed() )
 
     def Dropoff(self):
         # Deselect Virtual tool if this is virtual.

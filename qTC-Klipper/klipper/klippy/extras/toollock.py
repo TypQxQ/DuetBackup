@@ -10,12 +10,9 @@ class ToolLock:
     def __init__(self, config):
         self.printer = config.get_printer()
         self.name = config.get_name()
-        self.printer.add_object("ToolLock", self)
-
+        #self.printer.add_object("ToolLock", self)
         self.saved_fan_speed = 0          # Saved partcooling fan speed when deselecting a tool with a fan.
-#        self.lock_state = False           # State of the lock. This will be updated from a saved parameter in delayed_gcode INIT_PRINTER at restart.
         self.tool_current = -1            # -2 Unknown tool locked, -1 No tool locked, 0-48 Tool locked, 49 Z-Probe (because this is highest Tn in RRF).
-#        self.next_tool = None
         self.init_printer_to_last_tool = config.getboolean(
             'init_printer_to_last_tool', True)
         self.purge_on_toolchange = config.getboolean(
@@ -54,7 +51,7 @@ class ToolLock:
     cmd_TOOL_LOCK_help = "Save the current tool to file to load at printer startup."
     def cmd_TOOL_LOCK(self, gcmd = None):
         self.gcode.respond_info("TOOL_LOCK running. ")# + gcmd.get_raw_command_parameters())
-        if self.tool_current != -1:
+        if int(self.tool_current) != -1:
             self.gcode.respond_info("TOOL_LOCK is already locked with tool " + str(self.tool_current) + ".")
         else:
             self.tool_lock_gcode_template.run_gcode_from_command()
@@ -117,9 +114,6 @@ class ToolLock:
 
     def get_saved_fan_speed(self):
         return self.saved_fan_speed
-
-    #def get_next_tool(self):
-    #    return self.next_tool
 
     def get_status(self, eventtime= None):
         status = {
