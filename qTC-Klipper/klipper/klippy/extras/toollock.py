@@ -55,11 +55,8 @@ class ToolLock:
             self.gcode.respond_info("TOOL_LOCK is already locked with tool " + str(self.tool_current) + ".")
         else:
             self.tool_lock_gcode_template.run_gcode_from_command()
-            
-            self.gcode.run_script(self.tool_lock_gcode_template.render())
             self.SaveCurrentTool(-2)
             self.gcode.respond_info("Locked")
-        return ""
 
     cmd_T_1_help = "Deselect all tools"
     def cmd_T_1(self, gcmd = None):
