@@ -38,9 +38,11 @@ class ToolLock:
         self.gcode.register_command("TOOL_LOCK", self.cmd_TOOL_LOCK, desc=self.cmd_TOOL_LOCK_help)
         self.gcode.register_command("TOOL_UNLOCK", self.cmd_TOOL_UNLOCK, desc=self.cmd_TOOL_UNLOCK_help)
         self.gcode.register_command("T_1", self.cmd_T_1, desc=self.cmd_T_1_help)
+        self.gcode.register_command("SET_AND_SAVE_FAN_SPEED", self.cmd_SET_AND_SAVE_FAN_SPEED, desc=self.cmd_SET_AND_SAVE_FAN_SPEED_help)
+
         self.gcode.register_mux_command("TEST_PY", "EXTRUDER", None,
                                     self.cmd_test_py)
-
+        
         self.printer.register_event_handler("klippy:ready", self.Initialize_Tool_Lock)
 
 
@@ -105,7 +107,32 @@ class ToolLock:
             self.cmd_TOOL_LOCK()
             self.tool_current = t
         return ""
-        
+
+    cmd_SET_AND_SAVE_FAN_SPEED_help = "Save the fan speed to be recovered at ToolChange."
+    def cmd_SET_AND_SAVE_FAN_SPEED(self, gcmd):
+        fanspeed = gcmd.get_float('S', 1, minval=0, maxval=255)
+        tool_id = gcmd.get_int('P', self.tool_current, minval=0)
+
+        # If value is >1 asume it is given in 0-255 and convert to percentage.
+        if fanspeed > 1:
+            fanspeed=fanspeed / 255.0
+
+        self.SetAndSaveFanSpeed(tool_id, fanspeed)
+
+    def SetAndSaveFanSpeed(self, tool_id, fanspeed):
+        self.gcode.respond_info("ToolLock.SetAndSaveFanSpeed: Change fan speed for T%d to %d." % tool_id, fanspeed)
+        tool = self.printer.lookup_object("tool " + str(tool_id))
+
+        if tool.fan is none:
+            self.gcode.respond_info("ToolLock.SetAndSaveFanSpeed: Tool %d has no fan." % tool_id)
+        else:
+            self.saved_fan_speed = fanspeed
+            self.gcode.run_script_from_command(
+                "SET_FAN_SPEED FAN=%s SPEED=%d" % 
+                tool.fan, 
+                fanspeed)
+
+       
     def get_tool_current(self):
         return self.tool_current
 

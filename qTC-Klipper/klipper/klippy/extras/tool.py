@@ -226,10 +226,17 @@ class Tool:
         self.printer.lookup_object('toollock').SaveCurrentTool(self.id)
 
     def Pickup(self):
+        # Check if homed
+        if self.printer.homed_axes != 'xyz':
+            gcmd.respond_info("Tool.Pickup: XYZ axis must be homed first. You can fakehome Z if needed.")
+            return ""
+
+        # Run the gcode for pickup.
         context = self.pickup_gcode_template.create_template_context()
         context['myself'] = self.get_status()
-        self.pickup_gcode_template.run_gcode_from_command(context)   # Park the current tool.
+        self.pickup_gcode_template.run_gcode_from_command(context)
 
+        # Restore fan if has a fan.
         if self.fan is not None:
             self.gcode.run_script_from_command(
                 "SET_FAN_SPEED FAN=%s SPEED=%d" % 
