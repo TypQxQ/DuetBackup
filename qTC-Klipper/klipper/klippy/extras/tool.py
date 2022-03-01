@@ -5,75 +5,38 @@
 # This file may be distributed under the terms of the GNU GPLv3 license.
 import logging
 
-class DummyTool:
-    def __init__(self):
-        self.extruder = None
-
-    def get_is_virtual(self):
-        return None
-
-    def get_physical_parent_id(self):
-        return -1           # -1 is treated as not having a physical paretn.
-
-    def get_extruder(self):
-        return None
-
-    def get_fan(self):
-        return None
-
-    def get_wipe_type(self):
-        return None
-
-    def get_meltzonelength(self):
-        return 0
-
-    def get_pickup_gcode(self):
-        return None
-
-    def get_dropoff_gcode(self):
-        return None
-
-    def get_zone(self):
-        return None         # [X, Y] to do a fast approach for when parked. Requred on Physical tool
-
-    def get_park(self):
-        return None         # [X, Y] to do a slow approach for when parked. Requred on Physical tool
-
-    def get_offset(self):
-        return None         # Nozzle offset to probe. Requred on Physical tool
-
-
-    def get_status(self, eventtime= None):
-        status = {
-            "is_virtual": None,
-            "physical_parent_id": None,
-            "extruder": None,
-            "fan": None,
-            "meltzonelength": 0,
-            "wipe_type": None,
-            "zone": None,
-            "park": None,
-            "offset": None,
-        }
-        return status
-
-
 class Tool:
-    def __init__(self):
-        self.extruder = None
-    
-    def __init__(self, config):
-        self.printer = config.get_printer()
-        self.name = config.get_name().split()[-1]
-        self.id = str(config.get_name()).split(' ')[1]
-        gcode_macro = self.printer.load_object(config, 'gcode_macro')
+    def __init__(self, config = None):
+        # If called without config then createa a dummy object.
+        if config is None:
+            self.name = None
+            self.is_virtual = None
+            self.physical_parent_id = None
+            self.extruder = None
+            self.fan = None
+            self.meltzonelength = 0
+            self.wipe_type = None
+            self.zone = None
+            self.park = None
+            self.offset = None
+            self.pickup_gcode = None
+            self.dropoff_gcode = None
+            return None
 
-        if not unicode(self.id, 'utf-8').isnumeric():
+        # And from here we create the real object.
+        self.printer = config.get_printer()
+        self.gcode = config.get_printer().lookup_object('gcode')
+        gcode_macro = self.printer.load_object(config, 'gcode_macro')
+        self.toollock = self.printer.lookup_object('toollock')
+
+        self.name = config.get_name().split()[-1]
+
+        if not unicode(self.name, 'utf-8').isnumeric():
             raise config.error(
                     "Name of section '%s' contains illegal characters. Use only integer tool number."
                     % (config.get_name()))
         else:
-            self.id = int(self.id)
+            self.name = int(self.name)
 
         # ToolType, defaults to 0. Check if tooltype is defined.
         self.toolgroup = 'toolgroup ' + str(config.getint('tool_group'))
@@ -85,11 +48,11 @@ class Tool:
                     % (config.get_name()))
 
         self.is_virtual = config.getboolean('is_virtual', 
-                                            self.toolgroup.get_is_virtual())
+                                            self.toolgroup.get_status()["is_virtual"])
 
-        # Tool used as a Physical parent for all toos of this group. Only used if the tool i virtual.
+        # Tool used as a Physical parent for all tools of this group. Only used if the tool i virtual.
         self.physical_parent_id = config.getint('physical_parent', 
-                                             self.toolgroup.get_physical_parent_id())
+                                                self.toolgroup.get_status()["physical_parent_id"])
         if self.physical_parent_id is None:
             self.physical_parent_id = -1
 
@@ -99,27 +62,30 @@ class Tool:
                     "Section Tool '%s' cannot be virtual without a valid physical_parent."
                     % (config.get_name()))
 
-        # Initialize physical parent as a dummy object.
-        self.pp = DummyTool()
-
-        if int(self.physical_parent_id) == int(self.id):
+        
+        if int(self.physical_parent_id) == int(self.name):
             self.physical_parent_id = -1;
-        elif self.physical_parent_id >= 0:
-            self.pp = self.printer.lookup_object("tool " + str(self.physical_parent_id))
 
-        self.extruder = config.get('extruder', self.pp.get_extruder())      # Name of extruder connected to this tool. Defaults to "none".
-        self.fan = config.get('fan', self.pp.get_fan())                     # Name of general fan configuration connected to this tool as a part fan. Defaults to "none".
+        if self.physical_parent_id >= 0:
+            pp = self.printer.lookup_object("tool " + str(self.physical_parent_id))
+        else:
+            pp = Tool()     # Initialize physical parent as a dummy object.
+
+        pp_status = pp.get_status()
+
+        self.extruder = config.get('extruder', pp_status['extruder'])      # Name of extruder connected to this tool. Defaults to None.
+        self.fan = config.get('fan', pp_status['fan'])                     # Name of general fan configuration connected to this tool as a part fan. Defaults to "none".
         self.meltzonelength = config.get('meltzonelength', 
-                                         self.pp.get_meltzonelength())      # Length of the meltzone for retracting and inserting filament on toolchange. 18mm for e3d Revo
+                                         pp_status['meltzonelength'])      # Length of the meltzone for retracting and inserting filament on toolchange. 18mm for e3d Revo
 
 
-        self.wipe_type = config.get('wipe_type', self.pp.get_wipe_type())   # -1 = none, 1= Only load filament, 2= Wipe in front of carriage, 3= Pebble wiper, 4= First Silicone, then pebble. Defaults to None.
+        self.wipe_type = config.get('wipe_type', pp_status['wipe_type'])   # -1 = none, 1= Only load filament, 2= Wipe in front of carriage, 3= Pebble wiper, 4= First Silicone, then pebble. Defaults to None.
         if self.wipe_type is None:
-            self.wipe_type = self.toolgroup.get_wipe_type()                 # Toolgroup initializes as -1 while the other as None.
+            self.wipe_type = self.toolgroup.get_status()["wipe_type"]      # Toolgroup initializes as -1 while all other as None.
 
-        self.zone = config.get('zone', self.pp.get_zone())                  # Name of general fan configuration connected to this tool as a part fan. Defaults to "none".
-        self.park = config.get('park', self.pp.get_park())                  # Name of general fan configuration connected to this tool as a part fan. Defaults to "none".
-        self.offset = config.get('offset', self.pp.get_offset())            # Name of general fan configuration connected to this tool as a part fan. Defaults to "none".
+        self.zone = config.get('zone', pp_status['zone'])                  # Name of general fan configuration connected to this tool as a part fan. Defaults to "none".
+        self.park = config.get('park', pp_status['park'])                  # Name of general fan configuration connected to this tool as a part fan. Defaults to "none".
+        self.offset = config.get('offset', pp_status['offset'])            # Name of general fan configuration connected to this tool as a part fan. Defaults to "none".
 
         if self.zone is None or self.park is None or self.offset is None:
             raise config.error(
@@ -143,41 +109,37 @@ class Tool:
 
 
         # Get the pickup_gcode parameter from the parent and if none then from the toolgroup. If none is defined in parent and toolgroup then it returns empty.
-        temp_pickup_gcode = self.pp.get_pickup_gcode()
+        temp_pickup_gcode = pp.get_pickup_gcode()
         if temp_pickup_gcode is None:
-            temp_pickup_gcode = self.pp.get_pickup_gcode()
+            temp_pickup_gcode =  self.toolgroup.get_pickup_gcode()
         # Get the pickup_gcode parameter the tool and use the one from the toolgroup as default.
         self.pickup_gcode_template = gcode_macro.load_template(config, 'pickup_gcode', temp_pickup_gcode)
 
-        temp_dropoff_gcode = self.pp.get_dropoff_gcode()
+        temp_dropoff_gcode = pp.get_dropoff_gcode()
         if temp_dropoff_gcode is None:
-            temp_dropoff_gcode = self.pp.get_dropoff_gcode()
-        #self.dropoff_gcode_template = self.toolgroup.get_dropoff_gcode()
+            temp_dropoff_gcode = self.toolgroup.get_dropoff_gcode()
         self.dropoff_gcode_template = gcode_macro.load_template(config, 'dropoff_gcode', temp_dropoff_gcode)
 
         # Register commands
-        self.gcode = config.get_printer().lookup_object('gcode')
-        self.gcode.register_command("T" + str(self.id), self.cmd_SelectTool, desc=self.cmd_SelectTool_help)
+        self.gcode.register_command("T" + str(self.name), self.cmd_SelectTool, desc=self.cmd_SelectTool_help)
 
 
     cmd_SelectTool_help = "Select Tool"
     def cmd_SelectTool(self, gcmd):
-        gcmd.respond_info("T" + str(self.id) + " Selected.") # + self.get_status()['state'])
-        tl = self.printer.lookup_object('toollock')
-        gcmd.respond_info("Current Tool is T" + str(tl.get_tool_current()) + " Selected.") # + self.get_status()['state'])
+        gcmd.respond_info("T" + str(self.name) + " Selected.") # + self.get_status()['state'])
+        gcmd.respond_info("Current Tool is T" + str(self.toollock.get_tool_current()) + " Selected.") # + self.get_status()['state'])
         gcmd.respond_info("is_virtual is " + str(self.is_virtual) + ".") # + self.get_status()['state'])
-        gcmd.respond_info("Parent extruder ." + str(self.pp.get_extruder()) + ".") # + self.get_status()['state'])
 
-        current_tool_id = int(tl.get_tool_current())
+        current_tool_id = int(self.toollock.get_tool_current())
 
-        if current_tool_id == self.id:              # If trying to select the already selected tool:
+        if current_tool_id == self.name:              # If trying to select the already selected tool:
             return ""                                   # Exit
 
         if current_tool_id < -1:
             raise self.printer.command_error("TOOL_PICKUP: Unknown tool already mounted Can't park it before selecting new tool.")
 
         if self.extruder is not None:               # If the new tool to be selected has an extruder.
-#            self.gcode.run_script_from_command("M568 P%d A2" % int(self.id))
+#            self.gcode.run_script_from_command("M568 P%d A2" % int(self.name))
             pass
 
         if current_tool_id >= 0:                    # If there is a current tool already selected and it's a dropable.
@@ -189,7 +151,7 @@ class Tool:
         # Now we asume tool has been deselected if needed be.
 
         if not self.is_virtual:
-            gcmd.respond_info("cmd_SelectTool: T" + str(self.id) + "- Not Virtual - Pickup")
+            gcmd.respond_info("cmd_SelectTool: T" + str(self.name) + "- Not Virtual - Pickup")
             self.Pickup()
             #    SUB_TOOL_PICKUP_START {rawparams}                                    # Start Pickup tool
             #    SUB_TOOL_PICKUP_WIPE {rawparams}                                     # Wipe tool
@@ -197,14 +159,14 @@ class Tool:
             #    SUB_TOOL_PICKUP_DEPRESURIZE_HOTEND                                   # Depresurize tool
         else:
             if current_tool_id >= 0:                 # If still has a selected tool: (This tool is a virtual tool with same physical tool as the last)
-                gcmd.respond_info("cmd_SelectTool: T" + str(self.id) + "- Virtual - Tool is not Dropped - ")
+                gcmd.respond_info("cmd_SelectTool: T" + str(self.name) + "- Virtual - Tool is not Dropped - ")
                 if self.physical_parent_id >= 0 and self.physical_parent_id == self.printer.lookup_object('tool ' + str(current_tool_id)).get_physical_parent_id():
-                    gcmd.respond_info("cmd_SelectTool: T" + str(self.id) + "- Virtual - Same physical tool - Pickup")
+                    gcmd.respond_info("cmd_SelectTool: T" + str(self.name) + "- Virtual - Same physical tool - Pickup")
                     self.printer.lookup_object('tool ' + str(current_tool_id)).UnloadVirtual()
                     self.LoadVirtual()
                     return ""
                 else:
-                    gcmd.respond_info("cmd_SelectTool: T" + str(self.id) + "- Virtual - Not Same physical tool")
+                    gcmd.respond_info("cmd_SelectTool: T" + str(self.name) + "- Virtual - Not Same physical tool")
                     self.Pickup()
                     #          SUB_TOOL_PICKUP_START T={tool_id}                                        # Pickup the physical tool for the virtual ERCF tool.
                     #                                                                             # Run ERCF code
@@ -213,7 +175,7 @@ class Tool:
                     #          SUB_TOOL_PICKUP_END {rawparams}                                    # End Pickup tool code
                     #          SUB_TOOL_PICKUP_DEPRESURIZE_HOTEND                                 # Depresurize tool
             else:
-                gcmd.respond_info("cmd_SelectTool: T" + str(self.id) + "- Virtual - Tool is droped")
+                gcmd.respond_info("cmd_SelectTool: T" + str(self.name) + "- Virtual - Tool is droped")
                 self.Pickup()
                       #        SUB_TOOL_PICKUP_START T={tool_id}                                        # Pickup the physical tool for the virtual ERCF tool.
                       #                                                                           # Run ERCF code
@@ -222,14 +184,20 @@ class Tool:
                       #        SUB_TOOL_PICKUP_END {rawparams}                                    # End Pickup tool code
                       #        SUB_TOOL_PICKUP_DEPRESURIZE_HOTEND                                 # Depresurize tool
 
-        self.gcode.run_script_from_command("M117 T%d Loaded" % int(self.id))
-        self.printer.lookup_object('toollock').SaveCurrentTool(self.id)
+        self.gcode.run_script_from_command("M117 T%d Loaded" % int(self.name))
+        self.toollock.SaveCurrentTool(self.name)
 
     def Pickup(self):
         # Check if homed
         if self.printer.homed_axes != 'xyz':
             gcmd.respond_info("Tool.Pickup: XYZ axis must be homed first. You can fakehome Z if needed.")
             return ""
+
+        # If has an extruder then activate that extruder.
+        if self.extruder is not None:
+            self.gcode.run_script_from_command(
+                "ACTIVATE_EXTRUDER extruder=%s" % 
+                self.extruder)
 
         # Run the gcode for pickup.
         context = self.pickup_gcode_template.create_template_context()
@@ -241,38 +209,57 @@ class Tool:
             self.gcode.run_script_from_command(
                 "SET_FAN_SPEED FAN=%s SPEED=%d" % 
                 self.fan, 
-                self.printer.lookup_object('toollock').get_saved_fan_speed() )
+                self.toollock.get_saved_fan_speed() )
+
+        self.toollock.SaveCurrentTool(self.name)
+
 
     def Dropoff(self):
-        # Deselect Virtual tool if this is virtual.
-        self.dropoff_gcode_template.run_gcode_from_command()   # Park the current tool.
+        # Check if homed
+        if self.printer.homed_axes != 'xyz':
+            gcmd.respond_info("Tool.Pickup: XYZ axis must be homed first. You can fakehome Z if needed.")
+            return ""
+
+        # Save fan if has a fan.
+        if self.fan is not None:
+            fanspeed = self.printer.lookup_object('fan_generic extruder_partfan').get_status(eventtime)["speed"]
+            self.toollock.SaveFanSpeed(fanspeed)
+            self.gcode.run_script_from_command(
+                "SET_FAN_SPEED FAN=%s SPEED=0" % 
+                self.fan)
+
+        # Run the gcode for dropoff.
+        context = self.dropoff_gcode_template.create_template_context()
+        context['myself'] = self.get_status()
+        self.dropoff_gcode_template.run_gcode_from_command(context)
+        self.toollock.SaveCurrentTool(-1)   # Dropoff successfull
 
     def LoadVirtual(self):
-        gcmd.respond_info("LoadVirtual: Virtual tools not implemented yet. T%d." % self.id )
-        self.printer.lookup_object('toollock').SaveCurrentTool(self.id)
+        gcmd.respond_info("LoadVirtual: Virtual tools not implemented yet. T%d." % self.name )
+        self.toollock.SaveCurrentTool(self.name)
 
     def UnloadVirtual(self):
-        gcmd.respond_info("UnloadVirtual: Virtual tools not implemented yet. T%d." % self.id )
+        gcmd.respond_info("UnloadVirtual: Virtual tools not implemented yet. T%d." % self.name )
 
 
 
-    def get_is_virtual(self):
-        return self.is_virtual
+    #def get_is_virtual(self):
+    #    return self.is_virtual
 
-    def get_physical_parent_id(self):
-        return self.physical_parent_id
+    #def get_physical_parent_id(self):
+    #    return self.physical_parent_id
 
-    def get_extruder(self):
-        return self.extruder
+    #def get_extruder(self):
+    #    return self.extruder
 
-    def get_fan(self):
-        return self.fan
+    #def get_fan(self):
+    #    return self.fan
 
-    def get_wipe_type(self):
-        return self.wipe_type
+    #def get_wipe_type(self):
+    #    return self.wipe_type
 
-    def get_meltzonelength(self):
-        return self.meltzonelength
+    #def get_meltzonelength(self):
+    #    return self.meltzonelength
 
     def get_pickup_gcode(self):
         return self.pickup_gcode
@@ -280,21 +267,21 @@ class Tool:
     def get_dropoff_gcode(self):
         return self.dropoff_gcode
 
-    def get_zone(self):
-        return self.zone         # [X, Y] to do a fast approach for when parked. Requred on Physical tool
+    #def get_zone(self):
+    #    return self.zone         # [X, Y] to do a fast approach for when parked. Requred on Physical tool
 
-    def get_park(self):
-        return self.park         # [X, Y] to do a slow approach for when parked. Requred on Physical tool
+    #def get_park(self):
+    #    return self.park         # [X, Y] to do a slow approach for when parked. Requred on Physical tool
 
-    def get_offset(self):
-        return self.offset         # Nozzle offset to probe. Requred on Physical tool
+    #def get_offset(self):
+    #    return self.offset         # Nozzle offset to probe. Requred on Physical tool
 
 
 
 
     def get_status(self, eventtime= None):
         status = {
-            "id": self.id,
+#            "id": self.id,
             "name": self.name,
             "is_virtual": self.is_virtual,
             "physical_parent_id": self.physical_parent_id,

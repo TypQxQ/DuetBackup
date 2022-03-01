@@ -9,18 +9,18 @@ import logging
 class ToolLock:
     def __init__(self, config):
         self.printer = config.get_printer()
-        self.name = config.get_name()
+        self.reactor = self.printer.get_reactor()
         #self.printer.add_object("ToolLock", self)
         self.saved_fan_speed = 0          # Saved partcooling fan speed when deselecting a tool with a fan.
-        self.tool_current = -1            # -2 Unknown tool locked, -1 No tool locked, 0-48 Tool locked, 49 Z-Probe (because this is highest Tn in RRF).
+        self.tool_current = -2            # -2 Unknown tool locked, -1 No tool locked, 0 and up are tools.
         self.init_printer_to_last_tool = config.getboolean(
             'init_printer_to_last_tool', True)
         self.purge_on_toolchange = config.getboolean(
             'purge_on_toolchange', True)
-        self.tool_move_direction = config.getchoice(
-            'tool_move_direction', {'X': 'X', 'Y': 'Y'})
-        self.safe_max_direction = config.getint(
-            'safe_max_direction')        # Maximum safe print position in tool_move_direction
+        #self.tool_move_direction = config.getchoice(
+        #    'tool_move_direction', {'X': 'X', 'Y': 'Y'})
+        #self.safe_max_direction = config.getint(
+        #    'safe_max_direction')        # Maximum safe print position in tool_move_direction
 
         # G-Code macros
         gcode_macro = self.printer.load_object(config, 'gcode_macro')
@@ -48,7 +48,9 @@ class ToolLock:
 
 
     def cmd_test_py(self, gcmd):
-        gcmd.respond_info(str(self.tool_lock_gcode_template.render()))
+        eventtime = self.reactor.monotonic()
+        fanspeed = self.printer.lookup_object('fan_generic extruder_partfan').get_status(eventtime)["speed"]
+        gcmd.respond_info("Fanspeed:" + str(fanspeed))
         
     cmd_TOOL_LOCK_help = "Save the current tool to file to load at printer startup."
     def cmd_TOOL_LOCK(self, gcmd = None):
@@ -126,12 +128,14 @@ class ToolLock:
         if tool.fan is none:
             self.gcode.respond_info("ToolLock.SetAndSaveFanSpeed: Tool %d has no fan." % tool_id)
         else:
-            self.saved_fan_speed = fanspeed
+            SaveFanSpeed(fanspeed)
             self.gcode.run_script_from_command(
                 "SET_FAN_SPEED FAN=%s SPEED=%d" % 
                 tool.fan, 
                 fanspeed)
 
+    def SaveFanSpeed(self, fanspeed):
+        self.saved_fan_speed = float(fanspeed)
        
     def get_tool_current(self):
         return self.tool_current
@@ -139,11 +143,14 @@ class ToolLock:
     def get_saved_fan_speed(self):
         return self.saved_fan_speed
 
+    def get_purge_on_toolchange(self):
+        return self.purge_on_toolchange
+
     def get_status(self, eventtime= None):
         status = {
             "tool_current": self.tool_current,
-            "saved_fan_speed": self.saved_fan_speed#,
-#            "next_tool": self.next_tool 
+            "saved_fan_speed": self.saved_fan_speed,
+            "purge_on_toolchange": self.purge_on_toolchange 
         }
         return status
 
