@@ -116,6 +116,10 @@ class ToolLock:
 
         self.SetAndSaveFanSpeed(tool_id, fanspeed)
 
+    #
+    # Implement Fan Scale. Inspired by https://github.com/jschuh/klipper-macros/blob/main/fans.cfg
+    # Can change fan scale for diffrent materials or tools from slicer. Maybe max and min too?
+    #    
     def SetAndSaveFanSpeed(self, tool_id, fanspeed):
         self.gcode.respond_info("ToolLock.SetAndSaveFanSpeed: Change fan speed for T%d to %d." % tool_id, fanspeed)
         tool = self.printer.lookup_object("tool " + str(tool_id))

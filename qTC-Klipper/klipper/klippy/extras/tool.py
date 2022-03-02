@@ -127,6 +127,9 @@ class Tool:
             temp_dropoff_gcode = self.toolgroup.get_dropoff_gcode()
         self.dropoff_gcode_template = gcode_macro.load_template(config, 'dropoff_gcode', temp_dropoff_gcode)
 
+        self.timer_idle_to_standby = StandbyToolTempTimer(self.printer, self.name, 1)
+        self.timer_idle_to_powerdown_time = StandbyToolTempTimer(self.printer, self.name, 0)
+
         # Register commands
         self.gcode.register_command("T" + str(self.name), self.cmd_SelectTool, desc=self.cmd_SelectTool_help)
 
@@ -219,16 +222,17 @@ class Tool:
                 self.extruder)
 
         # Run the gcode for pickup.
-        context = self.pickup_gcode_template.create_template_context()
-        context['myself'] = self.get_status()
-        self.pickup_gcode_template.run_gcode_from_command(context)
+        try:
+            context = self.pickup_gcode_template.create_template_context()
+            context['myself'] = self.get_status()
+            self.pickup_gcode_template.run_gcode_from_command(context)
+        except Exception:
+            logging.exception("Pickup gcode: Script running error")
 
         # Restore fan if has a fan.
         if self.fan is not None:
             self.gcode.run_script_from_command(
-                "SET_FAN_SPEED FAN=%s SPEED=%d" % 
-                self.fan, 
-                self.toollock.get_saved_fan_speed() )
+                "SET_FAN_SPEED FAN=" + self.fan + " SPEED=" + str(self.toollock.get_saved_fan_speed()) )
 
         self.toollock.SaveCurrentTool(self.name)
 
@@ -247,9 +251,13 @@ class Tool:
                 "SET_FAN_SPEED FAN=%s SPEED=0" % 
                 self.fan)
         # Run the gcode for dropoff.
-        context = self.dropoff_gcode_template.create_template_context()
-        context['myself'] = self.get_status()
-        self.dropoff_gcode_template.run_gcode_from_command(context)
+        try:
+            context = self.dropoff_gcode_template.create_template_context()
+            context['myself'] = self.get_status()
+            self.dropoff_gcode_template.run_gcode_from_command(context)
+        except Exception:
+            logging.exception("Dropoff gcode: Script running error")
+
         self.toollock.SaveCurrentTool(-1)   # Dropoff successfull
 
     def LoadVirtual(self):
@@ -287,7 +295,7 @@ class Tool:
             elif chng_state == 1:                                                                       # Else If Standby
                 curtime = self.printer.get_reactor().monotonic()
                 if int(self.heater_state) == 1 or int(self.heater_standby_temp) > int(heater.get_status(curtime)["temperature"]):
-                    self._set_Tool_Standby_Timers(0.1, shtdwn_timeout)                                  # Run standby timer and start shutdown timer.
+                    self._set_Tool_Standby_Timers(0.1, self.idle_to_powerdown_time)                                  # Run standby timer and start shutdown timer.
                 else:                                                                                   # Else (Standby temperature is lower than the current temperature)
                     self._set_Tool_Standby_Timers(self.idle_to_standby_time, self.idle_to_powerdown_time)       # Start the standby and shutdown temperature timers.
 
@@ -329,11 +337,67 @@ class Tool:
         }
         return status
 
-class DelayedToolTemp:
-    def __init__(self):
-        self.reactor = self.printer.get_reactor()
-        self.name = config.get_name().split()[1]
+    # Based on DelayedGcode.
+class StandbyToolTempTimer:
+    def __init__(self, printer, tool_id, temp_type):
+        self.printer = printer
+        self.tool_id = tool_id
+        self.duration = 0.
+        self.temp_type = temp_type      # 0= Time to shutdown, 1= Time to standby.
 
+        self.reactor = self.printer.get_reactor()
+        self.gcode = self.printer.lookup_object('gcode')
+        self.timer_handler = None
+        self.inside_timer = self.repeat = False
+        self.printer.register_event_handler("klippy:ready", self._handle_ready)
+    def _handle_ready(self):
+        self.timer_handler = self.reactor.register_timer(
+            self._standby_tool_temp_timer_event, self.reactor.NEVER)
+    def _standby_tool_temp_timer_event(self, eventtime):
+        self.inside_timer = True
+        try:
+            tool = self.printer.lookup_object(tool_id)
+            temperature = 0
+            if self.temp_type == 1:
+                temperature = tool.get_status()["heater_standby_temp"]
+            heater = self.printer.lookup_object(self.tool.extruder).get_heater()
+            heater.set_temp(temperature)
+        except Exception:
+            logging.exception("Failed to set Standby temp for tool T" + self.tool_id + ".")
+        nextwake = self.reactor.NEVER
+        if self.repeat:
+            nextwake = eventtime + self.duration
+        self.inside_timer = self.repeat = False
+        return nextwake
+    def set_timer(self, duration):
+        self.duration = float(duration)
+        if self.inside_timer:
+            self.repeat = (self.duration != 0.)
+        else:
+            waketime = self.reactor.NEVER
+            if self.duration:
+                waketime = self.reactor.monotonic() + self.duration
+            self.reactor.update_timer(self.timer_handler, waketime)
+    def get_status(self, eventtime= None):
+        status = {
+            "tool": self.tool,
+            "temp_type": self.temp_type,
+            "duration": self.duration
+        }
+        return status
+
+    # Todo: 
+    # Inspired by https://github.com/jschuh/klipper-macros/blob/main/layers.cfg
+class MeanLayerTime:
+    def __init__(self, printer):
+        # Run before toolchange to set time like in StandbyToolTimer.
+        # Save time for last 5 (except for first) layers
+        # Provide a mean layer time.
+        # Have Tool have a min and max 2standby time.
+        # If mean time for 3 layers is higher than max, then set min time.
+        # Reset time if layer time is higher than max time. Pause or anything else that has happened.
+        # Function to reset layer times.
+        pass
 
 
 def load_config_prefix(config):
