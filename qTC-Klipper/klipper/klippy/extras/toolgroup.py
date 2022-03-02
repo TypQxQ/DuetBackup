@@ -1,4 +1,4 @@
-# Tool support
+# Toolgroup support
 #
 # Copyright (C) 2022  Andrei Ignat <andrei@ignat.se>
 #

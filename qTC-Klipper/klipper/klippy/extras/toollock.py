@@ -1,4 +1,4 @@
-# Tool support
+# Toollock and general Tool support
 #
 # Copyright (C) 2022  Andrei Ignat <andrei@ignat.se>
 #
@@ -31,7 +31,8 @@ class ToolLock:
         self.gcode.register_command("T_1", self.cmd_T_1, desc=self.cmd_T_1_help)
         self.gcode.register_command("SET_AND_SAVE_FAN_SPEED", self.cmd_SET_AND_SAVE_FAN_SPEED, desc=self.cmd_SET_AND_SAVE_FAN_SPEED_help)
         self.gcode.register_command("TEMPERATURE_WAIT_WITH_TOLERANCE", self.cmd_TEMPERATURE_WAIT_WITH_TOLERANCE, desc=self.cmd_TEMPERATURE_WAIT_WITH_TOLERANCE_help)
-        
+        self.gcode.register_command("SET_TOOL_TEMPERATURE", self.cmd_SET_TOOL_TEMPERATURE, desc=self.cmd_SET_TOOL_TEMPERATURE_help)
+
         self.gcode.register_mux_command("TEST_PY", "EXTRUDER", None,
                                     self.cmd_test_py)
         
@@ -128,62 +129,114 @@ class ToolLock:
                 tool.fan, 
                 fanspeed)
 
-    cmd_TEMPERATURE_WAIT_WITH_TOLERANCE_help = "Waits for all temperatures, or a specified (P) tool or (H) heater's temperature within (S) tolerance."
-#  Pnnn Hnnn Snnn
+    cmd_TEMPERATURE_WAIT_WITH_TOLERANCE_help = "Waits for all temperatures, or a specified (TOOL) tool or (HEATER) heater's temperature within (TOLERANCE) tolerance."
 #  Waits for all temperatures, or a specified tool or heater's temperature.
 #  This command can be used without any additional parameters.
 #  Without parameters it waits for bed and current extruder.
 #  Only one of either P or H may be used.
 #
-#  Pnnn Tool number.
-#  Hnnn Heater number. 0="heater_bed", 1="extruder", 2="extruder1", etc.
-#  Snnn Tolerance in degC. Defaults to 1*C. Wait will wait until heater is between set temperature +/- tolerance.
-
+#  TOOL=nnn Tool number.
+#  HEATER=nnn Heater number. 0="heater_bed", 1="extruder", 2="extruder1", etc.
+#  TOLERANCE=nnn Tolerance in degC. Defaults to 1*C. Wait will wait until heater is between set temperature +/- tolerance.
     def cmd_TEMPERATURE_WAIT_WITH_TOLERANCE(self, gcmd):
-        heater_name = ""
-        tool_id = gcmd.get_int('P', None, minval=0)
-        heater_id = gcmd.get_int('H', None, minval=0)
-        tolerance = gcmd.get_int('S', 1, minval=0, maxval=50)
+        curtime = self.printer.get_reactor().monotonic()
+        heater_name = None
+        tool_id = gcmd.get_int('TOOL', None, minval=0)
+        heater_id = gcmd.get_int('HEATER', None, minval=0)
+        tolerance = gcmd.get_int('TOLERANCE', 1, minval=0, maxval=50)
 
         if tool_id is not None and heater_id is not None:
             self.gcode.respond_info("cmd_TEMPERATURE_WAIT_WITH_TOLERANCE: Can't use both P and H parameter at the same time.")
             return None
         elif tool_id is None and heater_id is None:
             tool_id = self.tool_current
-            heater_id = self.printer.lookup_object("tool " + str(self.tool_current)).get_status()["extruder"]
-        else:
+            if int(self.tool_current) >= 0:
+                heater_name = self.printer.lookup_object("tool " + str(self.tool_current)).get_status()["extruder"]
+            #wait for bed
+            self._Temperature_wait_with_tolerance(curtime, "heater_bed", tolerance)
+
+        else:                                               # Only heater or tool is specified
             if tool_id is not None:
-                heater_id = self.printer.lookup_object("tool " + str(tool_id)).get_status()["extruder"]
+                heater_name = self.printer.lookup_object(   # Set the heater_name to the extruder of the tool.
+                    "tool " + str(tool_id)).get_status(curtime)["extruder"]
+            elif heater_id == 0:                            # Else If 0, then heater_bed.
+                heater_name = "heater_bed"                      # Set heater_name to "heater_bed".
 
-        
-            if heater_id = 0:                                   # If 0, then heater_bed.
-                heater_name = "heater_bed" %}                       # Set heater_name to "heater_bed".
-
-            elif heater_id = 1:                                 # If h is 1 then use for first extruder.
-                heater_name = "extruder" %}                         # Set heater_name to first extruder which has no number.
-            else:
+            elif heater_id == 1:                            # Else If h is 1 then use for first extruder.
+                heater_name = "extruder"                        # Set heater_name to first extruder which has no number.
+            else:                                           # Else is another heater number.
                 heater_name = "extruder" + str(heater_id - 1)   # Because bed is heater_number 0 extruders will be numbered one less than H parameter.
-
-  # Wait for both bed and current extruder if no parameters passed.
-  {% else %}
-    SUB_M116001 HEATER={"heater_bed"} TOLERANCE={tolerance}  # Wait for "heater_bed" with tolerance.
-    {% set heater_name = printer.toolhead.extruder %}                 # Set heater_name to active heater.
-  {% endif %}
-
-  SUB_M116001 HEATER={heater_name} TOLERANCE={tolerance}     # Wait for heater_name with tolerance.
-
-  RESPOND MSG="M116: Wait for tool heatup complete."
+        if heater_name is not None:
+            self._Temperature_wait_with_tolerance(curtime, heater_name, tolerance)
 
 
+    def _Temperature_wait_with_tolerance(self, curtime, heater_name, tolerance):
+        target_temp = int(self.printer.lookup_object(       # Get the heaters target temperature.
+                    heater_name).get_status(curtime)["target"]
+                          )
+        
+        if target_temp > 40:                                # Only wait if set temperature is over 40*C
+            self.gcode.respond_info("Wait for heater " + heater_name + " to reach " + str(target_temp) + " with a tolerance of " + str(tolerance) + ".")
+            self.gcode.run_script_from_command(
+                "TEMPERATURE_WAIT SENSOR=" + heater_name + 
+                " MINIMUM=" + str(target_temp - tolerance) + 
+                "MAXIMUM=" + str(target_temp + tolerance) )
+            self.gcode.respond_info("Wait for heater " + heater_name + " complete.")
+        #else:
+        #    self.gcode.respond_info("Not waiting for heater " + heater_name + " to reach " + str(target_temp) + " with a tolerance of " + str(tolerance) + ".")
 
 
-   def cmd_test_py(self, gcmd):
+    cmd_SET_TOOL_TEMPERATURE_help = "Waits for all temperatures, or a specified (TOOL) tool or (HEATER) heater's temperature within (TOLERANCE) tolerance."
+#  Set tool temperature.
+#  TOOL= Tool number, optional. If this parameter is not provided, the current tool is used.
+#  STDB_TMP= Standby temperature(s), optional
+#  ACTV_TMP= Active temperature(s), optional
+#  CHNG_STATE = Change Heater State, optional: 0 = off, 1 = standby temperature(s), 2 = active temperature(s).
+#  STDB_TIMEOUT = Time in seconds to wait between changing heater state to standby and setting heater target temperature to standby temperature when standby temperature is lower than tool temperature.
+#      Use for example 0.1 to change immediately to standby temperature.
+#  SHTDWN_TIMEOUT = Time in seconds to wait from docking tool to shutting off the heater, optional.
+#      Use for example 86400 to wait 24h if you want to disable shutdown timer.
+    def cmd_SET_TOOL_TEMPERATURE(self, gcmd):
+        curtime = self.printer.get_reactor().monotonic()
+        tool_id = gcmd.get_int('TOOL', self.tool_current, minval=0)
+        stdb_tmp = gcmd.get_int('STDB_TMP', None, minval=0)
+        actv_tmp = gcmd.get_int('ACTV_TMP', None, minval=0)
+        chng_state = gcmd.get_int('CHNG_STATE', None, minval=0, maxval=2)
+        stdb_timeout = gcmd.get_float('STDB_TIMEOUT', None, minval=0)
+        shtdwn_timeout = gcmd.get_float('SHTDWN_TIMEOUT', None, minval=0)
+
+        if tool_id < 0:
+            raise self.printer.command_error("cmd_SET_TOOL_TEMPERATURE: Tool " + str(tool_id) + " is not valid.")
+            return None
+
+        if self.printer.lookup_object("tool " + str(tool_id)).get_status()["extruder"] is None:
+            #self.gcode.respond_info("cmd_SET_TOOL_TEMPERATURE: T%d tool has no extruder" % tool_id
+            raise self.printer.command_error("cmd_SET_TOOL_TEMPERATURE: T%d tool has no extruder" % tool_id)
+
+        tool = self.printer.lookup_object("tool " + str(tool_id))
+        set_heater_cmd = {}
+
+        if stdb_tmp is not None:
+            set_heater_cmd["heater_standby_temp"] = stdb_tmp
+        if actv_tmp is not None:
+            set_heater_cmd["heater_active_temp"] = actv_tmp
+        if stdb_timeout is not None:
+            set_heater_cmd["heater_standby_temp"] = stdb_timeout
+        if shtdwn_timeout is not None:
+            set_heater_cmd["idle_to_powerdown_time"] = shtdwn_timeout
+        if chng_state is not None:
+            tool.set_heater(heater_state= chng_state)
+        if len(set_heater_cmd) > 0:
+            tool.set_heater(**set_heater_cmd)
+
+
+    def cmd_test_py(self, gcmd):
         curtime = self.printer.get_reactor().monotonic()
         toolhead = self.printer.lookup_object('toolhead')
         homed = toolhead.get_status(curtime)['homed_axes']
         gcmd.respond_info("homed:" + str(homed))
         
-     def SaveFanSpeed(self, fanspeed):
+    def SaveFanSpeed(self, fanspeed):
         self.saved_fan_speed = float(fanspeed)
        
     def get_tool_current(self):
@@ -205,4 +258,3 @@ class ToolLock:
 
 def load_config(config):
     return ToolLock(config)
-

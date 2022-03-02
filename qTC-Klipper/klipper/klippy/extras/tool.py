@@ -21,6 +21,12 @@ class Tool:
             self.offset = None
             self.pickup_gcode = None
             self.dropoff_gcode = None
+            self.heater_state = None
+            self.heater_active_temp = None
+            self.heater_standby_temp = None
+            self.placeholder_standby_temp = None
+            self.idle_to_standby_time = None
+            self.idle_to_powerdown_time = None
             return None
 
         # And from here we create the real object.
@@ -129,13 +135,13 @@ class Tool:
     def cmd_SelectTool(self, gcmd):
         current_tool_id = int(self.toollock.get_tool_current())
 
-        gcmd.respond_info("T" + str(self.name) + " Selected.") # + self.get_status()['state'])
-        gcmd.respond_info("Current Tool is T" + str(current_tool_id) + ".") # + self.get_status()['state'])
-        gcmd.respond_info("This tool is_virtual is " + str(self.is_virtual) + ".") # + self.get_status()['state'])
+        gcmd.respond_info("T" + str(self.name) + " Selected.")
+        gcmd.respond_info("Current Tool is T" + str(current_tool_id) + ".")
+        gcmd.respond_info("This tool is_virtual is " + str(self.is_virtual) + ".")
 
 
         if current_tool_id == self.name:              # If trying to select the already selected tool:
-            return ""                                   # Exit
+            return None                                   # Exit
 
         if current_tool_id < -1:
             raise self.printer.command_error("TOOL_PICKUP: Unknown tool already mounted Can't park it before selecting new tool.")
@@ -204,7 +210,7 @@ class Tool:
         # Check if homed
         if not self.toollock.PrinterIsHomed():
             raise self.printer.command_error("Tool.Pickup: XYZ axis must be homed first. You can fakehome Z if needed.")
-            return ""
+            return None
 
         # If has an extruder then activate that extruder.
         if self.extruder is not None:
@@ -231,7 +237,7 @@ class Tool:
         # Check if homed
         if not self.toollock.PrinterIsHomed():
             gcmd.respond_info("Tool.Pickup: XYZ axis must be homed first. You can fakehome Z if needed.")
-            return ""
+            return None
 
         # Save fan if has a fan.
         if self.fan is not None:
@@ -240,7 +246,6 @@ class Tool:
             self.gcode.run_script_from_command(
                 "SET_FAN_SPEED FAN=%s SPEED=0" % 
                 self.fan)
-
         # Run the gcode for dropoff.
         context = self.dropoff_gcode_template.create_template_context()
         context['myself'] = self.get_status()
@@ -254,6 +259,46 @@ class Tool:
     def UnloadVirtual(self):
         gcmd.respond_info("UnloadVirtual: Virtual tools not implemented yet. T%d." % self.name )
 
+    def set_heater(self, **kwargs):
+        heater = self.printer.lookup_object(self.extruder).get_heater()
+
+        for i in kwargs:
+            if i == "heater_active_temp":
+                self.heater_active_temp = kwargs[i]
+                if int(self.heater_state) == 2:
+                    heater.set_temp(self.heater_active_temp)
+            elif i == "heater_standby_temp":
+                self.heater_standby_temp = kwargs[i]
+            elif i == "idle_to_standby_time":
+                self.idle_to_standby_time = kwargs[i]
+            elif i == "idle_to_powerdown_time":
+                self.idle_to_powerdown_time = kwargs[i]
+            elif i == "heater_state":
+                self.heater_state = kwargs[i]
+
+        # Change Active mode:
+        if "heater_state" in kwargs:
+            chng_state = kwargs["heater_state"]
+            if chng_state == 0:                                                                         # If Change to Shutdown
+                self._set_Tool_Standby_Timers(0, 0.1)                                            # Disable standy temperature and run shutdown timer.
+            elif chng_state == 2:
+                self._set_Tool_Standby_Timers(0, 0)                                            # Disable standy temperature and standby to shutdown timer.
+                heater.set_temp(self.heater_active_temp)
+            elif chng_state == 1:                                                                       # Else If Standby
+                curtime = self.printer.get_reactor().monotonic()
+                if int(self.heater_state) == 1 or int(self.heater_standby_temp) > int(heater.get_status(curtime)["temperature"]):
+                    self._set_Tool_Standby_Timers(0.1, shtdwn_timeout)                                  # Run standby timer and start shutdown timer.
+                else:                                                                                   # Else (Standby temperature is lower than the current temperature)
+                    self._set_Tool_Standby_Timers(self.idle_to_standby_time, self.idle_to_powerdown_time)       # Start the standby and shutdown temperature timers.
+
+    def _set_Tool_Standby_Timers(self, stdb_timeout, shtdwn_timeout):
+        self.gcode.run_script_from_command(                                                         # Start the standby and shutdown temperature timers.
+                    "UPDATE_DELAYED_GCODE ID=T" + str(self.name) + 
+                    "_standby DURATION=" + str(stdb_timeout))
+
+        self.gcode.run_script_from_command(                                                         # Start the standby and shutdown temperature timers.
+                    "UPDATE_DELAYED_GCODE ID=T" + str(self.name) + 
+                    "_powerdown DURATION=" + str(shtdwn_timeout))
 
 
     def get_pickup_gcode(self):
@@ -274,9 +319,22 @@ class Tool:
             "meltzonelength": self.meltzonelength,
             "zone": str(self.zone).split(','),
             "park": str(self.park).split(','),
-            "offset": str(self.offset).split(',')
+            "offset": str(self.offset).split(','),
+            "heater_state": self.heater_state,
+            "heater_active_temp": self.heater_active_temp,
+            "heater_standby_temp": self.heater_standby_temp,
+            "placeholder_standby_temp": self.placeholder_standby_temp,
+            "idle_to_standby_time": self.idle_to_standby_time,
+            "idle_to_powerdown_time": self.idle_to_powerdown_time
         }
         return status
+
+class DelayedToolTemp:
+    def __init__(self):
+        self.reactor = self.printer.get_reactor()
+        self.name = config.get_name().split()[1]
+
+
 
 def load_config_prefix(config):
     return Tool(config)
