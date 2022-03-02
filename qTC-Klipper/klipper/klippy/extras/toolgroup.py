@@ -6,8 +6,6 @@
 import logging
 
 class ToolGroup:
-    #Physical     = 1 # Physical tool 
-    #Virtual      = 2 # Virtual tool that has a Physical tool parent. If tool is parent tool it can be the same as virtual. Requred on virtual tool and on physical tool holding virtual tools.
     def __init__(self, config):
         self.printer = config.get_printer()
         self.name = config.get_name().split(' ')[1]
@@ -27,15 +25,6 @@ class ToolGroup:
         self.dropoff_gcode = config.get('dropoff_gcode', '')
         self.wipe_type = config.get('wipe_type', None)                      # 0 = none, 1= Only load filament, 2= Wipe in front of carriage, 3= Pebble wiper, 4= First Silicone, then pebble. Defaults to 0.
 
-
-    #def get_is_virtual(self):
-    #    return self.is_virtual
-
-    #def get_physical_parent_id(self):
-    #    return self.physical_parent_id
-
-    #def get_wipe_type(self):
-    #    return self.wipe_type
 
     def get_pickup_gcode(self):
         return self.pickup_gcode

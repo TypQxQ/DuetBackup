@@ -50,9 +50,10 @@ class Tool:
         self.is_virtual = config.getboolean('is_virtual', 
                                             self.toolgroup.get_status()["is_virtual"])
 
-        # Tool used as a Physical parent for all tools of this group. Only used if the tool i virtual.
+        # Parent tool is used as a Physical parent for all tools of this group. Only used if the tool i virtual.
         self.physical_parent_id = config.getint('physical_parent', 
                                                 self.toolgroup.get_status()["physical_parent_id"])
+
         if self.physical_parent_id is None:
             self.physical_parent_id = -1
 
@@ -126,11 +127,12 @@ class Tool:
 
     cmd_SelectTool_help = "Select Tool"
     def cmd_SelectTool(self, gcmd):
-        gcmd.respond_info("T" + str(self.name) + " Selected.") # + self.get_status()['state'])
-        gcmd.respond_info("Current Tool is T" + str(self.toollock.get_tool_current()) + " Selected.") # + self.get_status()['state'])
-        gcmd.respond_info("is_virtual is " + str(self.is_virtual) + ".") # + self.get_status()['state'])
-
         current_tool_id = int(self.toollock.get_tool_current())
+
+        gcmd.respond_info("T" + str(self.name) + " Selected.") # + self.get_status()['state'])
+        gcmd.respond_info("Current Tool is T" + str(current_tool_id) + ".") # + self.get_status()['state'])
+        gcmd.respond_info("This tool is_virtual is " + str(self.is_virtual) + ".") # + self.get_status()['state'])
+
 
         if current_tool_id == self.name:              # If trying to select the already selected tool:
             return ""                                   # Exit
@@ -143,9 +145,18 @@ class Tool:
             pass
 
         if current_tool_id >= 0:                    # If there is a current tool already selected and it's a dropable.
+            current_tool = self.printer.lookup_object('tool ' + str(current_tool_id))
                                                         # If the next tool is not another virtual tool on the same physical tool.
-            if int(self.physical_parent_id) !=  int( self.printer.lookup_object('tool ' + str(current_tool_id)).get_physical_parent_id()):
-                self.Dropoff()
+            
+            gcmd.respond_info("self.physical_parent_id:" + str(self.physical_parent_id) + ".")
+            gcmd.respond_info("current_tool.get_status()['physical_parent_id']:" + str(current_tool.get_status()["physical_parent_id"]) + ".")
+
+            if int(self.physical_parent_id ==  -1 or
+                        self.physical_parent_id) !=  int( 
+                        current_tool.get_status()["physical_parent_id"]
+                        ):
+                gcmd.respond_info("Will Dropoff():")
+                current_tool.Dropoff()
                 current_tool_id = -1
 
         # Now we asume tool has been deselected if needed be.
@@ -159,15 +170,17 @@ class Tool:
             #    SUB_TOOL_PICKUP_DEPRESURIZE_HOTEND                                   # Depresurize tool
         else:
             if current_tool_id >= 0:                 # If still has a selected tool: (This tool is a virtual tool with same physical tool as the last)
+                current_tool = self.printer.lookup_object('tool ' + str(current_tool_id))
                 gcmd.respond_info("cmd_SelectTool: T" + str(self.name) + "- Virtual - Tool is not Dropped - ")
-                if self.physical_parent_id >= 0 and self.physical_parent_id == self.printer.lookup_object('tool ' + str(current_tool_id)).get_physical_parent_id():
+                if self.physical_parent_id >= 0 and self.physical_parent_id == current_tool.get_status()["physical_parent_id"]:
                     gcmd.respond_info("cmd_SelectTool: T" + str(self.name) + "- Virtual - Same physical tool - Pickup")
-                    self.printer.lookup_object('tool ' + str(current_tool_id)).UnloadVirtual()
+                    current_tool.UnloadVirtual()
                     self.LoadVirtual()
                     return ""
                 else:
                     gcmd.respond_info("cmd_SelectTool: T" + str(self.name) + "- Virtual - Not Same physical tool")
-                    self.Pickup()
+                    # Shouldn't reach this?
+                    #self.Pickup()
                     #          SUB_TOOL_PICKUP_START T={tool_id}                                        # Pickup the physical tool for the virtual ERCF tool.
                     #                                                                             # Run ERCF code
                     #          RESPOND MSG="ERCF not implemented yet. Changing to ERCF with diffrent physical tool. From {current_tool_id} to {tool_id} with physical tool {tool.ercf_physical_tool|string}."
@@ -189,8 +202,8 @@ class Tool:
 
     def Pickup(self):
         # Check if homed
-        if self.printer.homed_axes != 'xyz':
-            gcmd.respond_info("Tool.Pickup: XYZ axis must be homed first. You can fakehome Z if needed.")
+        if not self.toollock.PrinterIsHomed():
+            raise self.printer.command_error("Tool.Pickup: XYZ axis must be homed first. You can fakehome Z if needed.")
             return ""
 
         # If has an extruder then activate that extruder.
@@ -216,7 +229,7 @@ class Tool:
 
     def Dropoff(self):
         # Check if homed
-        if self.printer.homed_axes != 'xyz':
+        if not self.toollock.PrinterIsHomed():
             gcmd.respond_info("Tool.Pickup: XYZ axis must be homed first. You can fakehome Z if needed.")
             return ""
 
@@ -243,45 +256,15 @@ class Tool:
 
 
 
-    #def get_is_virtual(self):
-    #    return self.is_virtual
-
-    #def get_physical_parent_id(self):
-    #    return self.physical_parent_id
-
-    #def get_extruder(self):
-    #    return self.extruder
-
-    #def get_fan(self):
-    #    return self.fan
-
-    #def get_wipe_type(self):
-    #    return self.wipe_type
-
-    #def get_meltzonelength(self):
-    #    return self.meltzonelength
-
     def get_pickup_gcode(self):
         return self.pickup_gcode
 
     def get_dropoff_gcode(self):
         return self.dropoff_gcode
 
-    #def get_zone(self):
-    #    return self.zone         # [X, Y] to do a fast approach for when parked. Requred on Physical tool
-
-    #def get_park(self):
-    #    return self.park         # [X, Y] to do a slow approach for when parked. Requred on Physical tool
-
-    #def get_offset(self):
-    #    return self.offset         # Nozzle offset to probe. Requred on Physical tool
-
-
-
 
     def get_status(self, eventtime= None):
         status = {
-#            "id": self.id,
             "name": self.name,
             "is_virtual": self.is_virtual,
             "physical_parent_id": self.physical_parent_id,
