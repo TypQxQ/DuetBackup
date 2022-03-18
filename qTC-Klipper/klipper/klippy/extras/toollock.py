@@ -14,7 +14,7 @@ class ToolLock:
         gcode_macro = self.printer.load_object(config, 'gcode_macro')
 
         self.saved_fan_speed = 0          # Saved partcooling fan speed when deselecting a tool with a fan.
-        self.tool_current = -2            # -2 Unknown tool locked, -1 No tool locked, 0 and up are tools.
+        self.tool_current = "-2"          # -2 Unknown tool locked, -1 No tool locked, 0 and up are tools.
         self.init_printer_to_last_tool = config.getboolean(
             'init_printer_to_last_tool', True)
         self.purge_on_toolchange = config.getboolean(
@@ -38,45 +38,60 @@ class ToolLock:
         
         self.printer.register_event_handler("klippy:ready", self.Initialize_Tool_Lock)
 
-    cmd_TOOL_LOCK_help = "Save the current tool to file to load at printer startup."
+    cmd_TOOL_LOCK_help = "Lock the ToolLock."
     def cmd_TOOL_LOCK(self, gcmd = None):
-        self.gcode.respond_info("TOOL_LOCK running. ")# + gcmd.get_raw_command_parameters())
-        if int(self.tool_current) != -1:
-            self.gcode.respond_info("TOOL_LOCK is already locked with tool " + str(self.tool_current) + ".")
+        self.ToolLock()
+
+    def ToolLock(self, ignore_locked = False):
+        self.gcode.respond_info("TOOL_LOCK running. ")
+        if not ignore_locked and int(self.tool_current) != -1:
+            self.gcode.respond_info("TOOL_LOCK is already locked with tool " + self.tool_current + ".")
         else:
             self.tool_lock_gcode_template.run_gcode_from_command()
             self.SaveCurrentTool(-2)
             self.gcode.respond_info("Locked")
 
+
+
     cmd_T_1_help = "Deselect all tools"
     def cmd_T_1(self, gcmd = None):
         self.gcode.respond_info("T_1 running. ")# + gcmd.get_raw_command_parameters())
-        if self.tool_current != -1:
-            self.printer.lookup_object('tool ' + str(self.tool_current)).Dropoff()
-        return ""
+        if self.tool_current == "-2":
+            raise self.printer.command_error("cmd_T_1: Unknown tool already mounted Can't park unknown tool.")
+        if self.tool_current != "-1":
+            self.printer.lookup_object('tool ' + self.tool_current).Dropoff()
 
     cmd_TOOL_UNLOCK_help = "Save the current tool to file to load at printer startup."
     def cmd_TOOL_UNLOCK(self, gcmd = None):
         self.gcode.respond_info("TOOL_UNLOCK running. ")
         self.tool_unlock_gcode_template.run_gcode_from_command()
         self.SaveCurrentTool(-1)
-        return ""
+        self.gcode.run_script_from_command("M117 ToolLock Unlocked.")
 
-    def PrinterIsHomed(self):
+
+    def PrinterIsHomedForToolchange(self, lazy_home_when_parking =0):
         curtime = self.printer.get_reactor().monotonic()
         toolhead = self.printer.lookup_object('toolhead')
-        homed = toolhead.get_status(curtime)['homed_axes']
-        if not all(axis in homed for axis in ['x','y','z']):
-            return False
-        else:
+        homed = toolhead.get_status(curtime)['homed_axes'].lower()
+        if all(axis in homed for axis in ['x','y','z']):
             return True
+        elif lazy_home_when_parking == 0 and not all(axis in homed for axis in ['x','y','z']):
+            return False
+        elif lazy_home_when_parking == 1 and 'z' not in homed:
+            return False
+
+        axes_to_home = ""
+        for axis in ['x', 'y', 'z']:
+            if axis not in homed: 
+                axes_to_home += axis
+        self.gcode.run_script_from_command("G28 " + axes_to_home.upper())
+        return True
 
     def SaveCurrentTool(self, t):
         self.tool_current = str(t)
         save_variables = self.printer.lookup_object('save_variables')
         save_variables.cmd_SAVE_VARIABLE(self.gcode.create_gcode_command(
             "SAVE_VARIABLE", "SAVE_VARIABLE", {"VARIABLE": "tool_current", 'VALUE': t}))
-        return ""
 
     cmd_SAVE_CURRENT_TOOL_help = "Save the current tool to file to load at printer startup."
     def cmd_SAVE_CURRENT_TOOL(self, gcmd):
@@ -86,29 +101,32 @@ class ToolLock:
 
     def Initialize_Tool_Lock(self):
         if not self.init_printer_to_last_tool:
-            return ""
+            return None
 
         self.gcode.respond_info("Initialize_Tool_Lock running.")
         save_variables = self.printer.lookup_object('save_variables')
         try:
             self.tool_current = save_variables.allVariables["tool_current"]
         except:
-            self.tool_current = -1
+            self.tool_current = "-1"
             save_variables.cmd_SAVE_VARIABLE(self.gcode.create_gcode_command(
                 "SAVE_VARIABLE", "SAVE_VARIABLE", {"VARIABLE": "tool_current", 'VALUE': self.tool_current }))
 
-        if self.tool_current == -1:
+        if self.tool_current == "-1":
             self.cmd_TOOL_UNLOCK()
+            self.gcode.run_script_from_command("M117 ToolLock initialized unlocked")
+
         else:
             t = self.tool_current
-            self.cmd_TOOL_LOCK()
+            self.ToolLock(True)
             self.tool_current = t
-        return ""
+            self.gcode.run_script_from_command("M117 ToolLock initialized with T%s." % self.tool_current) 
+
 
     cmd_SET_AND_SAVE_FAN_SPEED_help = "Save the fan speed to be recovered at ToolChange."
     def cmd_SET_AND_SAVE_FAN_SPEED(self, gcmd):
         fanspeed = gcmd.get_float('S', 1, minval=0, maxval=255)
-        tool_id = gcmd.get_int('P', self.tool_current, minval=0)
+        tool_id = gcmd.get_int('P', int(self.tool_current), minval=0)
 
         # If value is >1 asume it is given in 0-255 and convert to percentage.
         if fanspeed > 1:
@@ -117,11 +135,12 @@ class ToolLock:
         self.SetAndSaveFanSpeed(tool_id, fanspeed)
 
     #
+    # Todo: 
     # Implement Fan Scale. Inspired by https://github.com/jschuh/klipper-macros/blob/main/fans.cfg
     # Can change fan scale for diffrent materials or tools from slicer. Maybe max and min too?
     #    
     def SetAndSaveFanSpeed(self, tool_id, fanspeed):
-        self.gcode.respond_info("ToolLock.SetAndSaveFanSpeed: Change fan speed for T%d to %d." % tool_id, fanspeed)
+        self.gcode.respond_info("ToolLock.SetAndSaveFanSpeed: Change fan speed for T%d to %d." % (tool_id, fanspeed))
         tool = self.printer.lookup_object("tool " + str(tool_id))
 
         if tool.fan is none:
@@ -130,8 +149,8 @@ class ToolLock:
             SaveFanSpeed(fanspeed)
             self.gcode.run_script_from_command(
                 "SET_FAN_SPEED FAN=%s SPEED=%d" % 
-                tool.fan, 
-                fanspeed)
+                (tool.fan, 
+                fanspeed))
 
     cmd_TEMPERATURE_WAIT_WITH_TOLERANCE_help = "Waits for all temperatures, or a specified (TOOL) tool or (HEATER) heater's temperature within (TOLERANCE) tolerance."
 #  Waits for all temperatures, or a specified tool or heater's temperature.
@@ -155,7 +174,7 @@ class ToolLock:
         elif tool_id is None and heater_id is None:
             tool_id = self.tool_current
             if int(self.tool_current) >= 0:
-                heater_name = self.printer.lookup_object("tool " + str(self.tool_current)).get_status()["extruder"]
+                heater_name = self.printer.lookup_object("tool " + self.tool_current).get_status()["extruder"]
             #wait for bed
             self._Temperature_wait_with_tolerance(curtime, "heater_bed", tolerance)
 
@@ -210,12 +229,12 @@ class ToolLock:
         shtdwn_timeout = gcmd.get_float('SHTDWN_TIMEOUT', None, minval=0)
 
         if tool_id < 0:
-            raise self.printer.command_error("cmd_SET_TOOL_TEMPERATURE: Tool " + str(tool_id) + " is not valid.")
+            self.gcode.respond_info("cmd_SET_TOOL_TEMPERATURE: Tool " + str(tool_id) + " is not valid.")
             return None
 
         if self.printer.lookup_object("tool " + str(tool_id)).get_status()["extruder"] is None:
-            #self.gcode.respond_info("cmd_SET_TOOL_TEMPERATURE: T%d tool has no extruder" % tool_id
-            raise self.printer.command_error("cmd_SET_TOOL_TEMPERATURE: T%d tool has no extruder" % tool_id)
+            self.gcode.respond_info("cmd_SET_TOOL_TEMPERATURE: T%d has no extruder! Nothing to do." % tool_id )
+            return None
 
         tool = self.printer.lookup_object("tool " + str(tool_id))
         set_heater_cmd = {}
