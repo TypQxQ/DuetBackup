@@ -30,6 +30,20 @@ class Tool:
         self.idle_to_standby_time = 30      # Time in seconds from being parked to setting temperature to standby the temperature above. Use 0.1 to change imediatley to standby temperature. Requred on Physical tool
         self.idle_to_powerdown_time = 600   # Time in seconds from being parked to setting temperature to 0. Use something like 86400 to wait 24h if you want to disable. Requred on Physical tool.
 
+        # Under Development:
+
+        # Tool specific input shaper parameters. Initiated as Klipper standard.
+        self.shaper_freq_x = 0
+        self.shaper_freq_y = 0
+        self.shaper_type_x = "mzv"
+        self.shaper_type_y = "mzv"
+        self.shaper_damping_ratio_x = 0.1
+        self.shaper_damping_ratio_y = 0.1
+
+        HeatMultiplyerAtFullFanSpeed = 1    # Multiplier to be aplied to hotend temperature when fan is at maximum. Will be multiplied with fan speed. Ex. 1.1 at 205*C and fan speed of 40% will set temperature to 213*C
+
+
+
         # If called without config then just return a dummy object.
         if config is None:
             return None
@@ -109,6 +123,14 @@ class Tool:
         self.offset = config.get('offset', pp_status['offset'])
         if not isinstance(self.offset, list):
             self.offset = str(self.offset).split(',')
+
+        # Tool specific input shaper parameters. Initiated with Klipper standard values where not specified.
+        self.shaper_freq_x = config.get('shaper_freq_x', pp_status['shaper_freq_x'])                     
+        self.shaper_freq_y = config.get('shaper_freq_y', pp_status['shaper_freq_y'])                     
+        self.shaper_type_x = config.get('shaper_type_x', pp_status['shaper_type_x'])                     
+        self.shaper_type_y = config.get('shaper_type_y', pp_status['shaper_type_y'])                     
+        self.shaper_damping_ratio_x = config.get('shaper_damping_ratio_x', pp_status['shaper_damping_ratio_x'])                     
+        self.shaper_damping_ratio_y = config.get('shaper_damping_ratio_y', pp_status['shaper_damping_ratio_y'])                     
 
         ##### Standby settings #####
         if self.extruder is not None:
@@ -232,6 +254,18 @@ class Tool:
             self.gcode.run_script_from_command(
                 "SET_FAN_SPEED FAN=" + self.fan + " SPEED=" + str(self.toollock.get_saved_fan_speed()) )
 
+        # Set Tool specific input shaper.
+        if self.shaper_freq_x != 0 or self.shaper_freq_y != 0:
+            cmd = ("SET_INPUT_SHAPER" +
+                " SHAPER_FREQ_X=" + str(self.shaper_freq_x) +
+                " SHAPER_FREQ_Y=" + str(self.shaper_freq_y) +
+                " DAMPING_RATIO_X=" + str(self.shaper_damping_ratio_x) +
+                " DAMPING_RATIO_Y=" + str(self.shaper_damping_ratio_y) +
+                " SHAPER_TYPE_X=" + str(self.shaper_type_x) +
+                " SHAPER_TYPE_Y=" + str(self.shaper_type_y) )
+            self.gcode.respond_info("Pickup: " + cmd)
+            self.gcode.run_script_from_command(cmd)
+
         self.toollock.SaveCurrentTool(self.name)
         self.gcode.run_script_from_command("M117 T%d picked up." % (self.name))
 
@@ -243,13 +277,11 @@ class Tool:
             self.gcode.respond_info("Tool.Dropoff: Printer not homed and Lazy homing option is: " + self.lazy_home_when_parking)
             return None
 
-        # Save fan if has a fan. Is not actually needed as it is run with every M106 command
-        #if self.fan is not None:
-        #    fanspeed = self.printer.lookup_object('fan_generic extruder_partfan').get_status(eventtime)["speed"]
-        #    self.toollock.SaveFanSpeed(fanspeed)
-        #    self.gcode.run_script_from_command(
-        #        "SET_FAN_SPEED FAN=%s SPEED=0" % 
-        #        self.fan)
+        # Turn off fan if has a fan.
+        if self.fan is not None:
+            self.gcode.run_script_from_command(
+                "SET_FAN_SPEED FAN=" + self.fan + " SPEED=0" )
+
         # Run the gcode for dropoff.
         try:
             context = self.dropoff_gcode_template.create_template_context()
@@ -303,12 +335,12 @@ class Tool:
                 heater.set_temp(self.heater_active_temp)
             elif chng_state == 1:                                                                       # Else If Standby
                 curtime = self.printer.get_reactor().monotonic()
-                if int(self.heater_state) == 1 or int(self.heater_standby_temp) > int(heater.get_status(curtime)["temperature"]):
-                    self.gcode.respond_info("set_heater: T%d standbytemp:%d;heater_state:%d; current_temp:%d." % (self.name, int(self.heater_state), int(self.heater_standby_temp), int(heater.get_status(curtime)["temperature"])))
-                    self.timer_idle_to_standby.set_timer(0.1)
+                if int(self.heater_state) == 2 and int(self.heater_standby_temp) < int(heater.get_status(curtime)["temperature"]):
+                    self.timer_idle_to_standby.set_timer(self.idle_to_standby_time)
                     self.timer_idle_to_powerdown.set_timer(self.idle_to_powerdown_time)
                 else:                                                                                   # Else (Standby temperature is lower than the current temperature)
-                    self.timer_idle_to_standby.set_timer(self.idle_to_standby_time)
+                    self.gcode.respond_info("set_heater: T%d standbytemp:%d;heater_state:%d; current_temp:%d." % (self.name, int(self.heater_state), int(self.heater_standby_temp), int(heater.get_status(curtime)["temperature"])))
+                    self.timer_idle_to_standby.set_timer(0.1)
                     self.timer_idle_to_powerdown.set_timer(self.idle_to_powerdown_time)
             self.heater_state = kwargs["heater_state"]
             self.gcode.respond_info("set_heater: T%d heater_state now set to:%d." % (int(self.name), int(self.heater_state)))
@@ -342,7 +374,13 @@ class Tool:
             "heater_active_temp": self.heater_active_temp,
             "heater_standby_temp": self.heater_standby_temp,
             "idle_to_standby_time": self.idle_to_standby_time,
-            "idle_to_powerdown_time": self.idle_to_powerdown_time
+            "idle_to_powerdown_time": self.idle_to_powerdown_time,
+            "shaper_freq_x": self.shaper_freq_x,
+            "shaper_freq_y": self.shaper_freq_y,
+            "shaper_type_x": self.shaper_type_x,
+            "shaper_type_y": self.shaper_type_y,
+            "shaper_damping_ratio_x": self.shaper_damping_ratio_x,
+            "shaper_damping_ratio_y": self.shaper_damping_ratio_y
         }
         return status
 
