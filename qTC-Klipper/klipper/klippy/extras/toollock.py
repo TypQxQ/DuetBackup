@@ -13,31 +13,33 @@ class ToolLock:
         self.gcode = config.get_printer().lookup_object('gcode')
         gcode_macro = self.printer.load_object(config, 'gcode_macro')
 
+        self.global_offset = [0, 0, 0]    # Global offset to apply to all tools
         self.saved_fan_speed = 0          # Saved partcooling fan speed when deselecting a tool with a fan.
         self.tool_current = "-2"          # -2 Unknown tool locked, -1 No tool locked, 0 and up are tools.
         self.init_printer_to_last_tool = config.getboolean(
             'init_printer_to_last_tool', True)
         self.purge_on_toolchange = config.getboolean(
             'purge_on_toolchange', True)
+        self.saved_position = None
+        self.restore_position_on_toolchange = 0   # 0: Don't restore; 1: Restore XY; 2: Restore XYZ
 
         # G-Code macros
         self.tool_lock_gcode_template = gcode_macro.load_template(config, 'tool_lock_gcode', '')
         self.tool_unlock_gcode_template = gcode_macro.load_template(config, 'tool_unlock_gcode', '')
 
         # Register commands
-        self.gcode.register_command("SAVE_CURRENT_TOOL", self.cmd_SAVE_CURRENT_TOOL, desc=self.cmd_SAVE_CURRENT_TOOL_help)
-        self.gcode.register_command("TOOL_LOCK", self.cmd_TOOL_LOCK, desc=self.cmd_TOOL_LOCK_help)
-        self.gcode.register_command("TOOL_UNLOCK", self.cmd_TOOL_UNLOCK, desc=self.cmd_TOOL_UNLOCK_help)
-        self.gcode.register_command("T_1", self.cmd_T_1, desc=self.cmd_T_1_help)
-        self.gcode.register_command("SET_AND_SAVE_FAN_SPEED", self.cmd_SET_AND_SAVE_FAN_SPEED, desc=self.cmd_SET_AND_SAVE_FAN_SPEED_help)
-        self.gcode.register_command("TEMPERATURE_WAIT_WITH_TOLERANCE", self.cmd_TEMPERATURE_WAIT_WITH_TOLERANCE, desc=self.cmd_TEMPERATURE_WAIT_WITH_TOLERANCE_help)
-        self.gcode.register_command("SET_TOOL_TEMPERATURE", self.cmd_SET_TOOL_TEMPERATURE, desc=self.cmd_SET_TOOL_TEMPERATURE_help)
+        handlers = [
+            'SAVE_CURRENT_TOOL', 'TOOL_LOCK', 'TOOL_UNLOCK',
+            'T_1', 'SET_AND_SAVE_FAN_SPEED', 'TEMPERATURE_WAIT_WITH_TOLERANCE', 
+            'SET_TOOL_TEMPERATURE', 'SET_GLOBAL_OFFSET', 'SET_TOOL_OFFSET',
+            'SET_PURGE_ON_TOOLCHANGE', 'SAVE_POSITION', 'RESTORE_POSITION']
+        for cmd in handlers:
+            func = getattr(self, 'cmd_' + cmd)
+            desc = getattr(self, 'cmd_' + cmd + '_help', None)
+            self.gcode.register_command(cmd, func, False, desc)
 
-        self.gcode.register_mux_command("TEST_PY", "EXTRUDER", None,
-                                    self.cmd_test_py)
-        
         self.printer.register_event_handler("klippy:ready", self.Initialize_Tool_Lock)
-
+        
     cmd_TOOL_LOCK_help = "Lock the ToolLock."
     def cmd_TOOL_LOCK(self, gcmd = None):
         self.ToolLock()
@@ -51,8 +53,6 @@ class ToolLock:
             self.SaveCurrentTool("-2")
             self.gcode.respond_info("Locked")
 
-
-
     cmd_T_1_help = "Deselect all tools"
     def cmd_T_1(self, gcmd = None):
         self.gcode.respond_info("T_1 running. ")# + gcmd.get_raw_command_parameters())
@@ -61,7 +61,7 @@ class ToolLock:
         if self.tool_current != "-1":
             self.printer.lookup_object('tool ' + str(self.tool_current)).Dropoff()
 
-    cmd_TOOL_UNLOCK_help = "Save the current tool to file to load at printer startup."
+    cmd_TOOL_UNLOCK_help = "Unlock the ToolLock."
     def cmd_TOOL_UNLOCK(self, gcmd = None):
         self.gcode.respond_info("TOOL_UNLOCK running. ")
         self.tool_unlock_gcode_template.run_gcode_from_command()
@@ -121,7 +121,6 @@ class ToolLock:
             self.ToolLock(True)
             self.SaveCurrentTool(str(t))
             self.gcode.run_script_from_command("M117 ToolLock initialized with T%s." % self.tool_current) 
-
 
     cmd_SET_AND_SAVE_FAN_SPEED_help = "Save the fan speed to be recovered at ToolChange."
     def cmd_SET_AND_SAVE_FAN_SPEED(self, gcmd):
@@ -258,30 +257,116 @@ class ToolLock:
         if len(set_heater_cmd) > 0:
             tool.set_heater(**set_heater_cmd)
 
+    cmd_SET_TOOL_OFFSET_help = "Set an individual tool offset"
+    def cmd_SET_TOOL_OFFSET(self, gcmd):
+        tool_id = gcmd.get_int('TOOL', self.tool_current, minval=0)
+        x_pos = gcmd.get_float('X', None)
+        x_adjust = gcmd.get_float('X_ADJUST', None)
+        y_pos = gcmd.get_float('Y', None)
+        y_adjust = gcmd.get_float('Y_ADJUST', None)
+        z_pos = gcmd.get_float('Z', None)
+        z_adjust = gcmd.get_float('Z_ADJUST', None)
 
-    def cmd_test_py(self, gcmd):
-        curtime = self.printer.get_reactor().monotonic()
-        toolhead = self.printer.lookup_object('toolhead')
-        homed = toolhead.get_status(curtime)['homed_axes']
-        gcmd.respond_info("homed:" + str(homed))
-        
+        if tool_id < 0:
+            self.gcode.respond_info("cmd_SET_TOOL_TEMPERATURE: Tool " + str(tool_id) + " is not valid.")
+            return None
+
+        tool = self.printer.lookup_object("tool " + str(tool_id))
+        set_offset_cmd = {}
+
+        if x_pos is not None:
+            set_offset_cmd["x_pos"] = x_pos
+        elif x_adjust is not None:
+            set_offset_cmd["x_adjust"] = x_adjust
+        if y_pos is not None:
+            set_offset_cmd["y_pos"] = y_pos
+        elif y_adjust is not None:
+            set_offset_cmd["y_adjust"] = y_adjust
+        if z_pos is not None:
+            set_offset_cmd["z_pos"] = z_pos
+        elif z_adjust is not None:
+            set_offset_cmd["z_adjust"] = z_adjust
+        if len(set_offset_cmd) > 0:
+            tool.set_offset(**set_offset_cmd)
+
+    cmd_SET_GLOBAL_OFFSET_help = "Set the global tool offset"
+    def cmd_SET_GLOBAL_OFFSET(self, gcmd):
+        x_pos = gcmd.get_float('X', None)
+        x_adjust = gcmd.get_float('X_ADJUST', None)
+        y_pos = gcmd.get_float('Y', None)
+        y_adjust = gcmd.get_float('Y_ADJUST', None)
+        z_pos = gcmd.get_float('Z', None)
+        z_adjust = gcmd.get_float('Z_ADJUST', None)
+
+        if x_pos is not None:
+            self.global_offset[0] = float(x_pos)
+        elif x_adjust is not None:
+            self.global_offset[0] = float(self.global_offset[0]) + float(x_adjust)
+        if y_pos is not None:
+            self.global_offset[1] = float(y_pos)
+        elif y_adjust is not None:
+            self.global_offset[1] = float(self.global_offset[1]) + float(y_adjust)
+        if z_pos is not None:
+            self.global_offset[2] = float(z_pos)
+        elif z_adjust is not None:
+            self.global_offset[2] = float(self.global_offset[2]) + float(z_adjust)
+
+        self.gcode.respond_info("Global offset now set to: %f, %f, %f." % (float(self.global_offset[0]), float(self.global_offset[1]), float(self.global_offset[2])))
+
+    cmd_SET_PURGE_ON_TOOLCHANGE_help = "Set the global variable if the tool should be purged or primed with filament at toolchange."
+    def cmd_SET_PURGE_ON_TOOLCHANGE(self, gcmd = None):
+        value = str(gcmd.get('VALUE')).upper()
+        # self.gcode.respond_info("SET_PURGE_ON_TOOLCHANGE running: " + str(value))
+        if value == 'FALSE' or value == '0':
+            self.purge_on_toolchange = False
+        else:
+            self.purge_on_toolchange = True
+        # self.gcode.respond_info("SET_PURGE_ON_TOOLCHANGE running: " + str(self.purge_on_toolchange))
+
     def SaveFanSpeed(self, fanspeed):
         self.saved_fan_speed = float(fanspeed)
        
-    def get_tool_current(self):
-        return self.tool_current
+    def Set_restore_position_on_toolchange(self, value):
+        self.restore_position_on_toolchange = value
 
-    def get_saved_fan_speed(self):
-        return self.saved_fan_speed
+    cmd_SAVE_POSITION_help = "Save the current G-Code position."
+    def cmd_SAVE_POSITION(self, gcmd):
+        self.SavePosition()
 
-    def get_purge_on_toolchange(self):
-        return self.purge_on_toolchange
+    def SavePosition(self):
+        gcode_move = self.printer.lookup_object('gcode_move')
+        self.saved_position = gcode_move._get_gcode_position()
+
+    cmd_RESTORE_POSITION_help = "Restore a previously saved G-Code position if it was specified in the toolchange command, T1 RESTORE_POSITION=1"
+    def cmd_RESTORE_POSITION(self, gcmd):
+        self.gcode.respond_info("cmd_RESTORE_POSITION running: " + str(self.restore_position_on_toolchange))
+
+        if self.restore_position_on_toolchange == 0:
+            return
+
+        if self.saved_position is None:
+            raise gcmd.error("No saved g-code position.")
+
+        try:
+            p = self.saved_position
+            if self.restore_position_on_toolchange == 1:
+                v=str("G1 X%.3f Y%.3f" % (p[0], p[1]))
+            elif self.restore_position_on_toolchange == 2:
+                v=str("G1 X%.3f Y%.3f Z%.3f" % (p[0], p[1], p[2]))
+            # Restore position
+            self.gcode.respond_info("cmd_RESTORE_POSITION running: " + v)
+            self.gcode.run_script_from_command(v)
+        except:
+            raise gcmd.error("Could not restore position.")
+
 
     def get_status(self, eventtime= None):
         status = {
+            "global_offset": self.global_offset,
             "tool_current": self.tool_current,
             "saved_fan_speed": self.saved_fan_speed,
-            "purge_on_toolchange": self.purge_on_toolchange 
+            "purge_on_toolchange": self.purge_on_toolchange,
+            "restore_position_on_toolchange": self.restore_position_on_toolchange
         }
         return status
 

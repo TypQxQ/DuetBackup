@@ -17,9 +17,9 @@ class Tool:
         self.meltzonelength = None          # Length of the meltzone for retracting and inserting filament on toolchange. 18mm for e3d Revo
         self.lazy_home_when_parking = None  # (default: 0 - disabled) - When set to 1, will home unhomed XY axes if needed and will not move any axis if already homed and parked. 2 Will also home Z if not homed.
                                             # Wipe. -1 = none, 1= Only load filament, 2= Wipe in front of carriage, 3= Pebble wiper, 4= First Silicone, then pebble. Defaults to None.
-        self.zone = None                    # Name of general fan configuration connected to this tool as a part fan. Defaults to "none".
-        self.park = None                    # Name of general fan configuration connected to this tool as a part fan. Defaults to "none".
-        self.offset = None                  # Name of general fan configuration connected to this tool as a part fan. Defaults to "none".
+        self.zone = None                    # Position of the parking zone in the format X, Y  
+        self.park = None                    # Position to move to when fully parking the tool in the dock in the format X, Y
+        self.offset = None                  # Offset of the nozzle in the format X, Y, Z
 
         self.pickup_gcode = None            # The plain gcode string is to load for virtual tool having this tool as parent.
         self.dropoff_gcode = None           # The plain gcode string is to load for virtual tool having this tool as parent.
@@ -30,8 +30,6 @@ class Tool:
         self.idle_to_standby_time = 30      # Time in seconds from being parked to setting temperature to standby the temperature above. Use 0.1 to change imediatley to standby temperature. Requred on Physical tool
         self.idle_to_powerdown_time = 600   # Time in seconds from being parked to setting temperature to 0. Use something like 86400 to wait 24h if you want to disable. Requred on Physical tool.
 
-        # Under Development:
-
         # Tool specific input shaper parameters. Initiated as Klipper standard.
         self.shaper_freq_x = 0
         self.shaper_freq_y = 0
@@ -40,9 +38,8 @@ class Tool:
         self.shaper_damping_ratio_x = 0.1
         self.shaper_damping_ratio_y = 0.1
 
+        # Under Development:
         HeatMultiplyerAtFullFanSpeed = 1    # Multiplier to be aplied to hotend temperature when fan is at maximum. Will be multiplied with fan speed. Ex. 1.1 at 205*C and fan speed of 40% will set temperature to 213*C
-
-
 
         # If called without config then just return a dummy object.
         if config is None:
@@ -169,12 +166,11 @@ class Tool:
 
     cmd_SelectTool_help = "Select Tool"
     def cmd_SelectTool(self, gcmd):
-        current_tool_id = int(self.toollock.get_tool_current())
+        current_tool_id = int(self.toollock.get_status()['tool_current']) # int(self.toollock.get_tool_current())
 
         self.gcode.respond_info("T" + str(self.name) + " Selected.")
         self.gcode.respond_info("Current Tool is T" + str(current_tool_id) + ".")
         self.gcode.respond_info("This tool is_virtual is " + str(self.is_virtual) + ".")
-
 
         if current_tool_id == self.name:              # If trying to select the already selected tool:
             return None                                   # Exit
@@ -182,10 +178,21 @@ class Tool:
         if current_tool_id < -1:
             raise self.printer.command_error("TOOL_PICKUP: Unknown tool already mounted Can't park it before selecting new tool.")
 
-        if self.extruder is not None:               # If the new tool to be selected has an extruder.
-#            self.gcode.run_script_from_command("M568 P%d A2" % (int(self.name)))
-            pass
+        if self.extruder is not None:               # If the new tool to be selected has an extruder prepare warmup before actual tool change so all unload commands will be done while heating up.
+            self.gcode.run_script_from_command("M568 P%d A2" % (int(self.name)))
+            #pass
 
+        # Check if we have a passed GCODE parameter for Restore Position, if not then set it to false.
+        param = gcmd.get('RESTORE_POSITION', 0)
+        param = int(str(param)[-1])
+
+        self.toollock.Set_restore_position_on_toolchange(param)
+        self.gcode.respond_info("RESTORE_POSITION: " + str(param))
+        if param != 0:
+            self.toollock.SavePosition()
+            self.gcode.respond_info("RESTORE_POSITION: saved")
+
+        # Drop any tools already mounted.
         if current_tool_id >= 0:                    # If there is a current tool already selected and it's a dropable.
             current_tool = self.printer.lookup_object('tool ' + str(current_tool_id))
                                                         # If the next tool is not another virtual tool on the same physical tool.
@@ -244,6 +251,7 @@ class Tool:
         try:
             context = self.pickup_gcode_template.create_template_context()
             context['myself'] = self.get_status()
+            context['toollock'] = self.toollock.get_status()
 #            self.gcode.respond_info(self.pickup_gcode_template.render(context))
             self.pickup_gcode_template.run_gcode_from_command(context)
         except Exception:
@@ -252,7 +260,7 @@ class Tool:
         # Restore fan if has a fan.
         if self.fan is not None:
             self.gcode.run_script_from_command(
-                "SET_FAN_SPEED FAN=" + self.fan + " SPEED=" + str(self.toollock.get_saved_fan_speed()) )
+                "SET_FAN_SPEED FAN=" + self.fan + " SPEED=" + str(self.toollock.get_status()['saved_fan_speed'])) #  self.toollock.get_saved_fan_speed()) )
 
         # Set Tool specific input shaper.
         if self.shaper_freq_x != 0 or self.shaper_freq_y != 0:
@@ -266,26 +274,26 @@ class Tool:
             self.gcode.respond_info("Pickup: " + cmd)
             self.gcode.run_script_from_command(cmd)
 
+        # Save current picked up tool and print on screen.
         self.toollock.SaveCurrentTool(self.name)
         self.gcode.run_script_from_command("M117 T%d picked up." % (self.name))
-
-
 
     def Dropoff(self):
         # Check if homed
         if not self.toollock.PrinterIsHomedForToolchange():
-            self.gcode.respond_info("Tool.Dropoff: Printer not homed and Lazy homing option is: " + self.lazy_home_when_parking)
+            self.gcode.respond_info("Tool.Dropoff: Printer not homed and Lazy homing option is: " + str(self.lazy_home_when_parking))
             return None
 
         # Turn off fan if has a fan.
         if self.fan is not None:
             self.gcode.run_script_from_command(
                 "SET_FAN_SPEED FAN=" + self.fan + " SPEED=0" )
-
+            
         # Run the gcode for dropoff.
         try:
             context = self.dropoff_gcode_template.create_template_context()
             context['myself'] = self.get_status()
+            context['toollock'] = self.toollock.get_status()
             self.dropoff_gcode_template.run_gcode_from_command(context)
         except Exception:
             logging.exception("Dropoff gcode: Script running error")
@@ -298,6 +306,23 @@ class Tool:
 
     def UnloadVirtual(self):
         self.gcode.respond_info("UnloadVirtual: Virtual tools not implemented yet. T%d." % self.name )
+
+    def set_offset(self, **kwargs):
+        for i in kwargs:
+            if i == "x_pos":
+                self.offset[0] = float(kwargs[i])
+            elif i == "x_adjust":
+                self.offset[0] = float(self.offset[0]) + float(kwargs[i])
+            elif i == "y_pos":
+                self.offset[1] = float(kwargs[i])
+            elif i == "y_adjust":
+                self.offset[1] = float(self.offset[1]) + float(kwargs[i])
+            elif i == "z_pos":
+                self.offset[2] = float(kwargs[i])
+            elif i == "z_adjust":
+                self.offset[2] = float(self.offset[2]) + float(kwargs[i])
+
+        self.gcode.respond_info("T%d offset now set to: %f, %f, %f." % (int(self.name), float(self.offset[0]), float(self.offset[1]), float(self.offset[2])))
 
     def set_heater(self, **kwargs):
         if self.extruder is None:
@@ -356,7 +381,6 @@ class Tool:
 
     def get_timer_to_powerdown(self):
         return self.timer_idle_to_powerdown
-
 
     def get_status(self, eventtime= None):
         status = {
