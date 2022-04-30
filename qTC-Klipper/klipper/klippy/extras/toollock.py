@@ -132,7 +132,7 @@ class ToolLock:
             self.gcode.respond_info("cmd_SET_AND_SAVE_FAN_SPEED: Invalid tool:"+str(tool_id))
             return None
 
-        self.gcode.respond_info("ToolLock.cmd_SET_AND_SAVE_FAN_SPEED: Change fan speed for T%d to %f." % (tool_id, fanspeed))
+        self.gcode.respond_info("ToolLock.cmd_SET_AND_SAVE_FAN_SPEED: Change fan speed for T%s to %f." % (str(tool_id), fanspeed))
 
         # If value is >1 asume it is given in 0-255 and convert to percentage.
         if fanspeed > 1:
@@ -149,7 +149,7 @@ class ToolLock:
         tool = self.printer.lookup_object("tool " + str(tool_id))
 
         if tool.fan is None:
-            self.gcode.respond_info("ToolLock.SetAndSaveFanSpeed: Tool %d has no fan." % tool_id)
+            self.gcode.respond_info("ToolLock.SetAndSaveFanSpeed: Tool %s has no fan." % str(tool_id))
         else:
             self.SaveFanSpeed(fanspeed)
             self.gcode.run_script_from_command(
@@ -238,7 +238,7 @@ class ToolLock:
             return None
 
         if self.printer.lookup_object("tool " + str(tool_id)).get_status()["extruder"] is None:
-            self.gcode.respond_info("cmd_SET_TOOL_TEMPERATURE: T%d has no extruder! Nothing to do." % tool_id )
+            self.gcode.respond_info("cmd_SET_TOOL_TEMPERATURE: T%s has no extruder! Nothing to do." % str(tool_id) )
             return None
 
         tool = self.printer.lookup_object("tool " + str(tool_id))
@@ -315,7 +315,9 @@ class ToolLock:
 
     cmd_SET_PURGE_ON_TOOLCHANGE_help = "Set the global variable if the tool should be purged or primed with filament at toolchange."
     def cmd_SET_PURGE_ON_TOOLCHANGE(self, gcmd = None):
-        value = str(gcmd.get('VALUE')).upper()
+        param = gcmd.get('RESTORE_POSITION', 0)
+        param = int(param)
+
         # self.gcode.respond_info("SET_PURGE_ON_TOOLCHANGE running: " + str(value))
         if value == 'FALSE' or value == '0':
             self.purge_on_toolchange = False
@@ -337,9 +339,15 @@ class ToolLock:
         gcode_move = self.printer.lookup_object('gcode_move')
         self.saved_position = gcode_move._get_gcode_position()
 
-    cmd_RESTORE_POSITION_help = "Restore a previously saved G-Code position if it was specified in the toolchange command, T1 RESTORE_POSITION=1"
+    cmd_RESTORE_POSITION_help = "Restore a previously saved G-Code position if it was specified in the toolchange T# command."
     def cmd_RESTORE_POSITION(self, gcmd):
         self.gcode.respond_info("cmd_RESTORE_POSITION running: " + str(self.restore_position_on_toolchange))
+
+        param = gcmd.get_int('RESTORE_POSITION', None, minval=0, maxval=2)
+
+        if param is not None:
+            if param == 0 or param == 1:
+                self.restore_position_on_toolchange = param
 
         if self.restore_position_on_toolchange == 0:
             return
@@ -366,7 +374,8 @@ class ToolLock:
             "tool_current": self.tool_current,
             "saved_fan_speed": self.saved_fan_speed,
             "purge_on_toolchange": self.purge_on_toolchange,
-            "restore_position_on_toolchange": self.restore_position_on_toolchange
+            "restore_position_on_toolchange": self.restore_position_on_toolchange,
+            "saved_position": self.saved_position
         }
         return status
 
