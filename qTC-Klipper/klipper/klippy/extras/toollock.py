@@ -32,7 +32,8 @@ class ToolLock:
             'SAVE_CURRENT_TOOL', 'TOOL_LOCK', 'TOOL_UNLOCK',
             'T_1', 'SET_AND_SAVE_FAN_SPEED', 'TEMPERATURE_WAIT_WITH_TOLERANCE', 
             'SET_TOOL_TEMPERATURE', 'SET_GLOBAL_OFFSET', 'SET_TOOL_OFFSET',
-            'SET_PURGE_ON_TOOLCHANGE', 'SAVE_POSITION', 'RESTORE_POSITION']
+            'SET_PURGE_ON_TOOLCHANGE', 'SAVE_POSITION', 'SAVE_CURRENT_POSITION', 
+            'RESTORE_POSITION']
         for cmd in handlers:
             func = getattr(self, 'cmd_' + cmd)
             desc = getattr(self, 'cmd_' + cmd + '_help', None)
@@ -315,27 +316,38 @@ class ToolLock:
 
     cmd_SET_PURGE_ON_TOOLCHANGE_help = "Set the global variable if the tool should be purged or primed with filament at toolchange."
     def cmd_SET_PURGE_ON_TOOLCHANGE(self, gcmd = None):
-        param = gcmd.get('RESTORE_POSITION', 0)
-        param = int(param)
+        param = gcmd.get('VALUE', 'FALSE')
 
-        # self.gcode.respond_info("SET_PURGE_ON_TOOLCHANGE running: " + str(value))
-        if value == 'FALSE' or value == '0':
+        if param.upper() == 'FALSE' or param == '0':
             self.purge_on_toolchange = False
         else:
             self.purge_on_toolchange = True
-        # self.gcode.respond_info("SET_PURGE_ON_TOOLCHANGE running: " + str(self.purge_on_toolchange))
 
     def SaveFanSpeed(self, fanspeed):
         self.saved_fan_speed = float(fanspeed)
        
-    def Set_restore_position_on_toolchange(self, value):
-        self.restore_position_on_toolchange = value
-
-    cmd_SAVE_POSITION_help = "Save the current G-Code position."
+    cmd_SAVE_POSITION_help = "Save the specified G-Code position."
     def cmd_SAVE_POSITION(self, gcmd):
-        self.SavePosition()
+        param_X = gcmd.get_float('X', None)
+        param_Y = gcmd.get_float('Y', None)
+        param_Z = gcmd.get_float('Z', None)
+        
+        if param_X is None or param_Y is None:
+            self.restore_position_on_toolchange = 0
+            return
+        elif param_Z is None:
+            self.restore_position_on_toolchange = 1
+        else:
+            self.restore_position_on_toolchange = 2
 
-    def SavePosition(self):
+        self.saved_position = [param_X, param_Y, param_Z]
+
+
+    cmd_SAVE_CURRENT_POSITION_help = "Save the current G-Code position."
+    def cmd_SAVE_CURRENT_POSITION(self, gcmd):
+        self.SaveCurrentPosition()
+
+    def SaveCurrentPosition(self):
         gcode_move = self.printer.lookup_object('gcode_move')
         self.saved_position = gcode_move._get_gcode_position()
 
