@@ -11,7 +11,10 @@ class ToolGroup:
         self.name = config.get_name().split(' ')[1]
         gcode_macro = self.printer.load_object(config, 'gcode_macro')
 
-        if not unicode(self.name, 'utf-8').isnumeric():
+        try:
+            _, name = config.get_name().split(' ', 1)
+            self.name = int(name)
+        except ValueError:
             raise config.error(
                     "Name of section '%s' contains illegal characters. Use only integer ToolGroup number."
                     % (config.get_name()))
