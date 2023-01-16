@@ -27,6 +27,8 @@ class ToolGroup:
        # -1 = none, 1= Only load filament, 2= Wipe in front of carriage, 3= Pebble wiper, 4= First Silicone, then pebble. Defaults to 0.
         self.pickup_gcode = config.get('pickup_gcode', '')
         self.dropoff_gcode = config.get('dropoff_gcode', '')
+        self.virtual_toolload_gcode = config.get('virtual_toolload_gcode', '')
+        self.virtual_toolunload_gcode = config.get('virtual_toolunload_gcode', '')
         self.meltzonelength = config.get('meltzonelength', 0)
         self.idle_to_standby_time = config.getfloat( 'idle_to_standby_time', 30, minval = 0.1)
         self.idle_to_powerdown_time = config.getfloat( 'idle_to_powerdown_time', 600, minval = 0.1)
@@ -36,6 +38,12 @@ class ToolGroup:
 
     def get_dropoff_gcode(self):
         return self.dropoff_gcode
+
+    def get_virtual_toolload_gcode(self):
+        return self.virtual_toolload_gcode
+
+    def get_virtual_toolunload_gcode(self):
+        return self.virtual_toolunload_gcode
 
     def get_status(self, eventtime= None):
         status = {
