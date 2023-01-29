@@ -42,7 +42,21 @@ class ToolLock:
             self.gcode.register_command(cmd, func, False, desc)
 
         self.printer.register_event_handler("klippy:ready", self.Initialize_Tool_Lock)
-        
+
+    def setup_tools(self, config, gcode_id=None):
+        heater_name = config.get_name().split()[-1]
+        if heater_name in self.heaters:
+            raise config.error("Heater %s already registered" % (heater_name,))
+        # Setup sensor
+        sensor = self.setup_sensor(config)
+        # Create heater
+        self.heaters[heater_name] = heater = Heater(config, sensor)
+        self.register_sensor(config, heater, gcode_id)
+        self.available_heaters.append(config.get_name())
+        return heater
+    def get_all_heaters(self):
+        return self.available_heaters
+
     cmd_TOOL_LOCK_help = "Lock the ToolLock."
     def cmd_TOOL_LOCK(self, gcmd = None):
         self.ToolLock()
@@ -134,10 +148,10 @@ class ToolLock:
 
         # The minval above doesn't seem to work.
         if tool_id < 0:
-            self.LogThis("cmd_SET_AND_SAVE_FAN_SPEED: Invalid tool:"+str(tool_id))
+            self.log.always("cmd_SET_AND_SAVE_FAN_SPEED: Invalid tool:"+str(tool_id))
             return None
 
-        self.LogThis("ToolLock.cmd_SET_AND_SAVE_FAN_SPEED: Change fan speed for T%s to %f." % (str(tool_id), fanspeed))
+        self.log.trace("ToolLock.cmd_SET_AND_SAVE_FAN_SPEED: Change fan speed for T%s to %f." % (str(tool_id), fanspeed))
 
         # If value is >1 asume it is given in 0-255 and convert to percentage.
         if fanspeed > 1:

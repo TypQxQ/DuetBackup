@@ -4,8 +4,10 @@
 #
 # This file may be distributed under the terms of the GNU GPLv3 license.
 import logging
-
 class Tool:
+    TOOL_UNKNOWN = -2
+    TOOL_UNLOCKED = -1
+
     def __init__(self, config = None):
         self.name = None
         self.toolgroup = None               # defaults to 0. Check if tooltype is defined.
@@ -49,10 +51,10 @@ class Tool:
 
         # Load used objects.
         self.printer = config.get_printer()
-        self.gcode = config.get_printer().lookup_object('gcode')
+        self.gcode = self.printer.lookup_object('gcode')
         gcode_macro = self.printer.load_object(config, 'gcode_macro')
         self.toollock = self.printer.lookup_object('toollock')
-        self.log = self.printer.load_object(config, 'ktcclog')
+        self.log = self.printer.lookup_object('ktcclog')
 
         ##### Name #####
         try:
@@ -193,12 +195,13 @@ class Tool:
         if current_tool_id == self.name:              # If trying to select the already selected tool:
             return None                                   # Exit
 
-        if current_tool_id < -1:
+        if current_tool_id < self.TOOL_UNLOCKED:
             msg = "TOOL_PICKUP: Unknown tool already mounted Can't park it before selecting new tool."
             self.log.always(msg)
             raise self.printer.command_error(msg)
 
-        self.log.track_load_start()                 # Log the time it takes for tool change.
+        self.log.track_swap_start()                 # Log the time it takes for tool change.
+        self.log.track_selected_tool_start(self.name)
 
         if self.extruder is not None:               # If the new tool to be selected has an extruder prepare warmup before actual tool change so all unload commands will be done while heating up.
             self.gcode.run_script_from_command("M568 P%d A2" % (int(self.name)))
@@ -213,6 +216,8 @@ class Tool:
 
         # Drop any tools already mounted.
         if current_tool_id >= 0:                    # If there is a current tool already selected and it's a dropable.
+            self.log.track_selected_tool_end(current_tool_id) # Log that the current tool is to be unmounted.
+
             current_tool = self.printer.lookup_object('tool ' + str(current_tool_id))
            
             self.toollock.LogThis("self.physical_parent_id:" + str(self.physical_parent_id) + ".")
@@ -253,15 +258,16 @@ class Tool:
                 self.LoadVirtual()
 
         self.toollock.SaveCurrentTool(self.name)
-        self.log.track_load_end()                   # Log the time it takes for tool change.
+        self.log.track_swap_end()                   # Log the time it takes for tool change.
         self.log.track_swap_completed()             # Log number of toolchanges.
-
 
     def Pickup(self):
         # Check if homed
         if not self.toollock.PrinterIsHomedForToolchange():
             raise self.printer.command_error("Tool.Pickup: Printer not homed and Lazy homing option is: " + self.lazy_home_when_parking)
             return None
+
+        self.log.increase_tool_statistics('pickups_started', self.name)
 
         # If has an extruder then activate that extruder.
         if self.extruder is not None:
@@ -299,9 +305,13 @@ class Tool:
         self.toollock.SaveCurrentTool(self.name)
         self.log.debug("T%d picked up." % (self.name))
         self.log.track_total_toolpickups()
+        self.log.increase_tool_statistics('pickups_completed', self.name)
 
     def Dropoff(self):
         self.log.debug("Dropoff: T%s - Running." % str(self.name))
+        self.log.increase_tool_statistics('droppoffs_started', self.name)
+
+        self.log.track_selected_tool_end(self.name) # Log that the current tool is to be unmounted.
 
         # Check if homed
         if not self.toollock.PrinterIsHomedForToolchange():
@@ -330,6 +340,7 @@ class Tool:
 
         self.toollock.SaveCurrentTool(-1)   # Dropoff successfull
         self.log.track_total_tooldropoffs()
+        self.log.increase_tool_statistics('droppoffs_completed', self.name)
 
 
     def LoadVirtual(self):
@@ -383,7 +394,7 @@ class Tool:
 
     def set_heater(self, **kwargs):
         if self.extruder is None:
-            self.toollock.LogThis("set_heater: T%d has no extruder! Nothing to do." % self.name )
+            self.log.debug("set_heater: T%d has no extruder! Nothing to do." % self.name )
             return None
 
         #if self.physical_parent_id >= 0 and self.physical_parent_id != self.name:
@@ -411,17 +422,21 @@ class Tool:
             if chng_state == 0:                                                                         # If Change to Shutdown
                 self.timer_idle_to_standby.set_timer(0)
                 self.timer_idle_to_powerdown.set_timer(0.1)
-            elif chng_state == 2:
+                self.log.track_standby_heater_end(self.name)                                                # Set the standby as finishes in statistics.
+                self.log.track_active_heater_end(self.name)                                                # Set the active as finishes in statistics.
+            elif chng_state == 2:                                                                       # Else If Active
                 self.timer_idle_to_standby.set_timer(0)
                 self.timer_idle_to_powerdown.set_timer(0)
                 heater.set_temp(self.heater_active_temp)
+                self.log.track_standby_heater_end(self.name)                                                # Set the standby as finishes in statistics.
+                self.log.track_active_heater_start(self.name)                                               # Set the active as started in statistics.
             elif chng_state == 1:                                                                       # Else If Standby
                 curtime = self.printer.get_reactor().monotonic()
                 if int(self.heater_state) == 2 and int(self.heater_standby_temp) < int(heater.get_status(curtime)["temperature"]):
                     self.timer_idle_to_standby.set_timer(self.idle_to_standby_time)
                     self.timer_idle_to_powerdown.set_timer(self.idle_to_powerdown_time)
                 else:                                                                                   # Else (Standby temperature is lower than the current temperature)
-                    self.toollock.LogThis("set_heater: T%d standbytemp:%d;heater_state:%d; current_temp:%d." % (self.name, int(self.heater_state), int(self.heater_standby_temp), int(heater.get_status(curtime)["temperature"])))
+                    # self.toollock.LogThis("set_heater: T%d standbytemp:%d;heater_state:%d; current_temp:%d." % (self.name, int(self.heater_state), int(self.heater_standby_temp), int(heater.get_status(curtime)["temperature"])))
                     self.timer_idle_to_standby.set_timer(0.1)
                     self.timer_idle_to_powerdown.set_timer(self.idle_to_powerdown_time)
             self.heater_state = kwargs["heater_state"]
@@ -485,6 +500,8 @@ class ToolStandbyTempTimer:
         self.inside_timer = self.repeat = False
         self.printer.register_event_handler("klippy:ready", self._handle_ready)
         self.toollock = self.printer.lookup_object('toollock')
+        self.log = self.printer.lookup_object('ktcclog')
+
 
     def _handle_ready(self):
         self.timer_handler = self.reactor.register_timer(
@@ -497,10 +514,16 @@ class ToolStandbyTempTimer:
             temperature = 0
             if self.temp_type == 1:
                 temperature = tool.get_status()["heater_standby_temp"]
+                self.log.track_standby_heater_start(self.tool_id)                                                # Set the standby as started in statistics.
+            else:
+                self.log.track_standby_heater_end(self.tool_id)                                                # Set the standby as finishes in statistics.
+                self.log.track_active_heater_end(self.tool_id)                                                 # Set the active as finishes in statistics.
             heater = self.printer.lookup_object(tool.extruder).get_heater()
             heater.set_temp(temperature)
-        except Exception:
-            self.toollock.LogThis("Failed to set Standby temp for tool T" + str(self.tool_id) + ".",0)
+            self.log.track_active_heater_end(self.tool_id)                                               # Set the active as finishes in statistics.
+
+        except Exception as e:
+            self.log.debug("Failed to set Standby temp for tool T%s: %s" % (str(self.tool_id), str(e)))
             logging.exception("Failed to set Standby temp for tool T" + str(self.tool_id) + ".")
         nextwake = self.reactor.NEVER
         if self.repeat:
