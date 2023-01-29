@@ -52,6 +52,7 @@ class Tool:
         self.gcode = config.get_printer().lookup_object('gcode')
         gcode_macro = self.printer.load_object(config, 'gcode_macro')
         self.toollock = self.printer.lookup_object('toollock')
+        self.log = self.printer.load_object(config, 'ktcclog')
 
         ##### Name #####
         try:
@@ -185,15 +186,19 @@ class Tool:
     def cmd_SelectTool(self, gcmd):
         current_tool_id = int(self.toollock.get_status()['tool_current']) # int(self.toollock.get_tool_current())
 
-        self.toollock.LogThis("T" + str(self.name) + " Selected.", 1)
-        self.toollock.LogThis("Current Tool is T" + str(current_tool_id) + ".")
-        self.toollock.LogThis("This tool is_virtual is " + str(self.is_virtual) + ".")
+        self.log.debug("T" + str(self.name) + " Selected.")
+        self.log.debug("Current Tool is T" + str(current_tool_id) + ".")
+        self.log.debug("This tool is_virtual is " + str(self.is_virtual) + ".")
 
         if current_tool_id == self.name:              # If trying to select the already selected tool:
             return None                                   # Exit
 
         if current_tool_id < -1:
-            raise self.printer.command_error("TOOL_PICKUP: Unknown tool already mounted Can't park it before selecting new tool.")
+            msg = "TOOL_PICKUP: Unknown tool already mounted Can't park it before selecting new tool."
+            self.log.always(msg)
+            raise self.printer.command_error(msg)
+
+        self.log.track_load_start()                 # Log the time it takes for tool change.
 
         if self.extruder is not None:               # If the new tool to be selected has an extruder prepare warmup before actual tool change so all unload commands will be done while heating up.
             self.gcode.run_script_from_command("M568 P%d A2" % (int(self.name)))
@@ -248,6 +253,9 @@ class Tool:
                 self.LoadVirtual()
 
         self.toollock.SaveCurrentTool(self.name)
+        self.log.track_load_end()                   # Log the time it takes for tool change.
+        self.log.track_swap_completed()             # Log number of toolchanges.
+
 
     def Pickup(self):
         # Check if homed
@@ -284,15 +292,16 @@ class Tool:
                 " DAMPING_RATIO_Y=" + str(self.shaper_damping_ratio_y) +
                 " SHAPER_TYPE_X=" + str(self.shaper_type_x) +
                 " SHAPER_TYPE_Y=" + str(self.shaper_type_y) )
-            self.toollock.LogThis("Pickup_inpshaper: " + cmd)
+            self.log.debug("Pickup_inpshaper: " + cmd)
             self.gcode.run_script_from_command(cmd)
 
         # Save current picked up tool and print on screen.
         self.toollock.SaveCurrentTool(self.name)
-        self.toollock.LogThis("T%d picked up." % (self.name))
+        self.log.debug("T%d picked up." % (self.name))
+        self.log.track_total_toolpickups()
 
     def Dropoff(self):
-        self.toollock.LogThis("Dropoff: T" + str(self.name) + "- Running.")
+        self.log.debug("Dropoff: T%s - Running." % str(self.name))
 
         # Check if homed
         if not self.toollock.PrinterIsHomedForToolchange():
@@ -320,6 +329,8 @@ class Tool:
             logging.exception("Dropoff gcode: Script running error")
 
         self.toollock.SaveCurrentTool(-1)   # Dropoff successfull
+        self.log.track_total_tooldropoffs()
+
 
     def LoadVirtual(self):
         self.toollock.LogThis("LoadVirtual: Loading T%d." % self.name, 2 )
@@ -497,7 +508,7 @@ class ToolStandbyTempTimer:
         self.inside_timer = self.repeat = False
         return nextwake
     def set_timer(self, duration):
-        self.toollock.LogThis("ToolStandbyTempTimer.set_timer: T" + str(self.tool_id) + "; temp_type:" + str(self.temp_type) + "; duration:" + str(duration) + ".", 1)
+        self.toollock.LogThis(str(self.timer_handler) + ".set_timer: T" + str(self.tool_id) + "; temp_type:" + str(self.temp_type) + "; duration:" + str(duration) + ".", 1)
         self.duration = float(duration)
         if self.inside_timer:
             self.repeat = (self.duration != 0.)

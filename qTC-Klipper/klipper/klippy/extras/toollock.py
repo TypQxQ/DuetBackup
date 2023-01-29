@@ -1,10 +1,10 @@
+# KTCC - Klipper Tool Changer Code
+
 # Toollock and general Tool support
 #
-# Copyright (C) 2022  Andrei Ignat <andrei@ignat.se>
+# Copyright (C) 2023  Andrei Ignat <andrei@ignat.se>
 #
 # This file may be distributed under the terms of the GNU GPLv3 license.
-import logging
-
 
 class ToolLock:
     def __init__(self, config):
@@ -22,7 +22,8 @@ class ToolLock:
             'purge_on_toolchange', True)
         self.saved_position = None
         self.restore_position_on_toolchange_type = 0   # 0: Don't restore; 1: Restore XY; 2: Restore XYZ
-        self.LogLevel = config.getint('LogLevel', 0) # Level of Debug text to write to console. 0=None, 1=Some, 2=All. Defaults to 0.
+        self.LogLevel = config.getint('LogLevel', 0) # Deprecated
+        self.log = self.printer.load_object(config, 'ktcclog')
 
         # G-Code macros
         self.tool_lock_gcode_template = gcode_macro.load_template(config, 'tool_lock_gcode', '')
@@ -47,13 +48,14 @@ class ToolLock:
         self.ToolLock()
 
     def ToolLock(self, ignore_locked = False):
-        self.LogThis("TOOL_LOCK running. ")
+        self.log.debug("TOOL_LOCK running. ")
         if not ignore_locked and int(self.tool_current) != -1:
-            self.LogThis("TOOL_LOCK is already locked with tool " + self.tool_current + ".", 0)
+            self.log.always("TOOL_LOCK is already locked with tool " + self.tool_current + ".", 0)
         else:
             self.tool_lock_gcode_template.run_gcode_from_command()
             self.SaveCurrentTool("-2")
-            self.LogThis("Locked")
+            self.log.debug("Tool Locked")
+            self.log.track_total_toollocks()
 
     cmd_T_1_help = "Deselect all tools"
     def cmd_T_1(self, gcmd = None):
@@ -65,10 +67,11 @@ class ToolLock:
 
     cmd_TOOL_UNLOCK_help = "Unlock the ToolLock."
     def cmd_TOOL_UNLOCK(self, gcmd = None):
-        self.LogThis("TOOL_UNLOCK running. ")
+        self.log.debug("TOOL_UNLOCK running. ")
         self.tool_unlock_gcode_template.run_gcode_from_command()
         self.SaveCurrentTool(-1)
-        self.LogThis("ToolLock Unlocked.")
+        self.log.debug("ToolLock Unlocked.")
+        self.log.track_total_toolunlocks()
 
 
     def PrinterIsHomedForToolchange(self, lazy_home_when_parking =0):
@@ -227,8 +230,8 @@ class ToolLock:
     def cmd_SET_TOOL_TEMPERATURE(self, gcmd):
         curtime = self.printer.get_reactor().monotonic()
         tool_id = gcmd.get_int('TOOL', self.tool_current, minval=0)
-        stdb_tmp = gcmd.get_int('STDB_TMP', None, minval=0)
-        actv_tmp = gcmd.get_int('ACTV_TMP', None, minval=0)
+        stdb_tmp = gcmd.get_float('STDB_TMP', None, minval=0)
+        actv_tmp = gcmd.get_float('ACTV_TMP', None, minval=0)
         chng_state = gcmd.get_int('CHNG_STATE', None, minval=0, maxval=2)
         stdb_timeout = gcmd.get_float('STDB_TIMEOUT', None, minval=0)
         shtdwn_timeout = gcmd.get_float('SHTDWN_TIMEOUT', None, minval=0)
@@ -245,9 +248,9 @@ class ToolLock:
         set_heater_cmd = {}
 
         if stdb_tmp is not None:
-            set_heater_cmd["heater_standby_temp"] = stdb_tmp
+            set_heater_cmd["heater_standby_temp"] = int(stdb_tmp)
         if actv_tmp is not None:
-            set_heater_cmd["heater_active_temp"] = actv_tmp
+            set_heater_cmd["heater_active_temp"] = int(actv_tmp)
         if stdb_timeout is not None:
             set_heater_cmd["heater_standby_temp"] = stdb_timeout
         if shtdwn_timeout is not None:
@@ -405,9 +408,15 @@ class ToolLock:
             raise gcmd.error("Could not restore position.")
 
     # Prints debugging text to console if configured Log level is higher than requested Log level.
-    def LogThis(self, dbgText, LogLevel=2):
-        if self.LogLevel >= LogLevel:
-            self.gcode.respond_info(dbgText)
+    def LogThis(self, msg, LogLevel=2):
+        if self.LogLevel >= 2:
+            self.log.always(msg)
+        elif self.LogLevel == 1:
+            self.log.info(msg)
+        else:
+            self.log.debug(msg)
+            
+            # self.gcode.respond_info(dbgText)
 
     def get_status(self, eventtime= None):
         status = {
