@@ -78,6 +78,10 @@ class KtccLog:
         self.queue_listener = None
         self.ktcc_logger = None
 
+        # Save to file
+        self.changes_to_save = False
+        self.save_delay = 10
+
         # Register commands
         handlers = [
             'KTCC_LOG_TRACE', 'KTCC_LOG_DEBUG', 'KTCC_LOG_INFO', 'KTCC_LOG_ALWAYS', 
@@ -86,6 +90,19 @@ class KtccLog:
             func = getattr(self, 'cmd_' + cmd)
             desc = getattr(self, 'cmd_' + cmd + '_help', None)
             self.gcode.register_command(cmd, func, False, desc)
+
+    def _save_changes_timer_event(self, eventtime):
+        try:
+            if self.changes_to_save:
+                self.changes_to_save = False
+                self.trace("Saving state in logs.")
+                self._persist_swap_statistics()
+                self._persist_tool_statistics()
+        except Exception as e:
+            self.log.debug("_save_changes_timer_event:Exception: %s" % (str(e)))
+            logging.exception("_save_changes_timer_event:Exception: %s" % (str(e)))
+        nextwake = eventtime + self.save_delay
+        return nextwake
 
     def handle_connect(self):
         # Load saved variables
@@ -107,15 +124,19 @@ class KtccLog:
             self.ktcc_logger.setLevel(logging.INFO)
             self.ktcc_logger.addHandler(queue_handler)
 
+        # Load saved values
         self._load_persisted_state()
 
+        # Set up timer to save values when needed
+        self.timer_save = self.reactor.register_timer(
+            self._save_changes_timer_event, self.reactor.monotonic() + (self.save_delay))
 
     def _load_persisted_state(self):
         swap_stats = self.variables.get("ktcc_statistics_swaps", {})
         try:
             if swap_stats is None or swap_stats == {}:
                 raise Exception("Couldn't find any saved statistics.")
-            self.debug("Loading statistics for KTCC: %s" % str(swap_stats))
+            # self.trace("Loading statistics for KTCC: %s" % str(swap_stats))
             self.total_swaps = swap_stats['total_swaps'] or 0
             self.time_spent_swaping = swap_stats['time_spent_swaping'] or 0
             self.time_spent_unloading = swap_stats['time_spent_unloading'] or 0
@@ -224,7 +245,8 @@ class KtccLog:
 
     def track_swap_completed(self):
         self.total_swaps += 1
-        self._persist_swap_statistics()
+        self.changes_to_save = True
+        # self._persist_swap_statistics()
 
     def track_swap_start(self):
         self.tracked_start_time = time.time()
@@ -234,33 +256,39 @@ class KtccLog:
 
     def track_total_toolunlocks(self):
         self.total_toolunlocks += 1
-        self._persist_swap_statistics()
+        self.changes_to_save = True
+        # self._persist_swap_statistics()
 
     def track_total_toollocks(self):
         self.total_toollocks += 1
-        self._persist_swap_statistics()
+        self.changes_to_save = True
+        # self._persist_swap_statistics()
 
     def track_total_toolpickups(self):
         self.total_toolpickups += 1
-        self._persist_swap_statistics()
+        self.changes_to_save = True
+        # self._persist_swap_statistics()
 
     def track_total_tooldropoffs(self):
         self.total_tooldropoffs += 1
-        self._persist_swap_statistics()
+        self.changes_to_save = True
+        # self._persist_swap_statistics()
 
     def track_selected_tool_start(self, tool_id):
         self._set_tool_statistics(tool_id, 'tracked_start_time_selected', time.time())
 
     def track_selected_tool_end(self, tool_id):
         self._set_tool_statistics_time_diff(tool_id, 'time_selected', 'tracked_start_time_selected')
-        self._persist_tool_statistics()
+        self.changes_to_save = True
+        # self._persist_tool_statistics()
 
     def track_active_heater_start(self, tool_id):
         self._set_tool_statistics(tool_id, 'tracked_start_time_active', time.time())
 
     def track_active_heater_end(self, tool_id):
         self._set_tool_statistics_time_diff(tool_id, 'time_heater_active', 'tracked_start_time_active')
-        self._persist_tool_statistics()
+        self.changes_to_save = True
+        # self._persist_tool_statistics()
 
 
     def track_standby_heater_start(self, tool_id):
@@ -268,7 +296,8 @@ class KtccLog:
 
     def track_standby_heater_end(self, tool_id):
         self._set_tool_statistics_time_diff(tool_id, 'time_heater_standby', 'tracked_start_time_standby')
-        self._persist_tool_statistics()
+        self.changes_to_save = True
+        # self._persist_tool_statistics()
 
     def _seconds_to_human_string(self, seconds):
         result = ""
@@ -298,8 +327,9 @@ class KtccLog:
             self.always(self._swap_statistics_to_human_string())
             self._dump_tool_statistics()
         # This is good place to update the persisted stats...
-        self._persist_swap_statistics()
-        self._persist_tool_statistics()
+        # self.changes_to_save = True
+        # self._persist_swap_statistics()
+        # self._persist_tool_statistics()
 
     def _dump_tool_statistics(self):
         msg = "Tool Statistics:\n"
@@ -384,8 +414,8 @@ class KtccLog:
     def cmd_KTCC_RESET_STATS(self, gcmd):
         self._reset_statistics()
         self._dump_statistics(True)
-        self._persist_swap_statistics()
-        # self._persist_gate_statistics()
+        self.changes_to_save = True
+        # self._persist_swap_statistics()
 
     cmd_KTCC_DUMP_STATS_help = "Dump the KTCC statistics"
     def cmd_KTCC_DUMP_STATS(self, gcmd):
@@ -473,3 +503,4 @@ class KtccLog:
 
 def load_config(config):
     return KtccLog(config)
+
