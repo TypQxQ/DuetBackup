@@ -340,7 +340,7 @@ class Tool:
 
         self.toollock.SaveCurrentTool(-1)   # Dropoff successfull
         self.log.increase_tool_statistics('droppoffs_completed', self.name)
-        self.log.track_total_tooldropoffs(self.name)
+        self.log.track_total_tooldropoffs()
 
 
     def LoadVirtual(self):
