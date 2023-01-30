@@ -151,7 +151,7 @@ class ToolLock:
             self.log.always("cmd_SET_AND_SAVE_FAN_SPEED: Invalid tool:"+str(tool_id))
             return None
 
-        self.log.trace("ToolLock.cmd_SET_AND_SAVE_FAN_SPEED: Change fan speed for T%s to %f." % (str(tool_id), fanspeed))
+        # self.log.trace("ToolLock.cmd_SET_AND_SAVE_FAN_SPEED: Change fan speed for T%s to %f." % (str(tool_id), fanspeed))
 
         # If value is >1 asume it is given in 0-255 and convert to percentage.
         if fanspeed > 1:

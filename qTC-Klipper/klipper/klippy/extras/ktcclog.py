@@ -99,7 +99,7 @@ class KtccLog:
                 self._persist_swap_statistics()
                 self._persist_tool_statistics()
         except Exception as e:
-            self.log.debug("_save_changes_timer_event:Exception: %s" % (str(e)))
+            self.debug("_save_changes_timer_event:Exception: %s" % (str(e)))
             logging.exception("_save_changes_timer_event:Exception: %s" % (str(e)))
         nextwake = eventtime + self.save_delay
         return nextwake

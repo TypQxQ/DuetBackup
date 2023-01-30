@@ -339,8 +339,8 @@ class Tool:
             logging.exception("Dropoff gcode: Script running error")
 
         self.toollock.SaveCurrentTool(-1)   # Dropoff successfull
-        self.log.track_total_tooldropoffs()
         self.log.increase_tool_statistics('droppoffs_completed', self.name)
+        self.log.track_total_tooldropoffs(self.name)
 
 
     def LoadVirtual(self):
@@ -508,7 +508,7 @@ class ToolStandbyTempTimer:
             self._standby_tool_temp_timer_event, self.reactor.NEVER)
     def _standby_tool_temp_timer_event(self, eventtime):
         self.inside_timer = True
-        self.toollock.LogThis("_standby_tool_temp_timer_event: Running for T" + str(self.tool_id) + ". temp_type:" + str(self.temp_type))
+        self.log.trace("_standby_tool_temp_timer_event: Running for T" + str(self.tool_id) + ". temp_type:" + str(self.temp_type))
         try:
             tool = self.printer.lookup_object("tool " + str(self.tool_id))
             temperature = 0
@@ -531,7 +531,7 @@ class ToolStandbyTempTimer:
         self.inside_timer = self.repeat = False
         return nextwake
     def set_timer(self, duration):
-        self.toollock.LogThis(str(self.timer_handler) + ".set_timer: T" + str(self.tool_id) + "; temp_type:" + str(self.temp_type) + "; duration:" + str(duration) + ".", 1)
+        self.log.trace(str(self.timer_handler) + ".set_timer: T" + str(self.tool_id) + "; temp_type:" + str(self.temp_type) + "; duration:" + str(duration) + ".")
         self.duration = float(duration)
         if self.inside_timer:
             self.repeat = (self.duration != 0.)
