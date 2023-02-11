@@ -32,7 +32,7 @@ class ToolLock:
         # Register commands
         handlers = [
             'SAVE_CURRENT_TOOL', 'TOOL_LOCK', 'TOOL_UNLOCK',
-            'T_1', 'SET_AND_SAVE_FAN_SPEED', 'TEMPERATURE_WAIT_WITH_TOLERANCE', 
+            'KTCC_TOOL_DROPOFF_ALL', 'SET_AND_SAVE_FAN_SPEED', 'TEMPERATURE_WAIT_WITH_TOLERANCE', 
             'SET_TOOL_TEMPERATURE', 'SET_GLOBAL_OFFSET', 'SET_TOOL_OFFSET',
             'SET_PURGE_ON_TOOLCHANGE', 'SAVE_POSITION', 'SAVE_CURRENT_POSITION', 
             'RESTORE_POSITION']
@@ -71,11 +71,11 @@ class ToolLock:
             self.log.debug("Tool Locked")
             self.log.track_total_toollocks()
 
-    cmd_T_1_help = "Deselect all tools"
-    def cmd_T_1(self, gcmd = None):
-        self.LogThis("T_1 running. ")# + gcmd.get_raw_command_parameters())
+    cmd_KTCC_TOOL_DROPOFF_ALL_help = "Deselect all tools"
+    def cmd_KTCC_TOOL_DROPOFF_ALL(self, gcmd = None):
+        self.LogThis("KTCC_TOOL_DROPOFF_ALL running. ")# + gcmd.get_raw_command_parameters())
         if self.tool_current == "-2":
-            raise self.printer.command_error("cmd_T_1: Unknown tool already mounted Can't park unknown tool.")
+            raise self.printer.command_error("cmd_KTCC_TOOL_DROPOFF_ALL: Unknown tool already mounted Can't park unknown tool.")
         if self.tool_current != "-1":
             self.printer.lookup_object('tool ' + str(self.tool_current)).Dropoff()
 

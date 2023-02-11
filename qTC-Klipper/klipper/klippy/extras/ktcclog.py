@@ -257,22 +257,18 @@ class KtccLog:
     def track_total_toolunlocks(self):
         self.total_toolunlocks += 1
         self.changes_to_save = True
-        # self._persist_swap_statistics()
 
     def track_total_toollocks(self):
         self.total_toollocks += 1
         self.changes_to_save = True
-        # self._persist_swap_statistics()
 
     def track_total_toolpickups(self):
         self.total_toolpickups += 1
         self.changes_to_save = True
-        # self._persist_swap_statistics()
 
     def track_total_tooldropoffs(self):
         self.total_tooldropoffs += 1
         self.changes_to_save = True
-        # self._persist_swap_statistics()
 
     def track_selected_tool_start(self, tool_id):
         self._set_tool_statistics(tool_id, 'tracked_start_time_selected', time.time())
@@ -280,7 +276,6 @@ class KtccLog:
     def track_selected_tool_end(self, tool_id):
         self._set_tool_statistics_time_diff(tool_id, 'time_selected', 'tracked_start_time_selected')
         self.changes_to_save = True
-        # self._persist_tool_statistics()
 
     def track_active_heater_start(self, tool_id):
         self._set_tool_statistics(tool_id, 'tracked_start_time_active', time.time())
@@ -288,7 +283,6 @@ class KtccLog:
     def track_active_heater_end(self, tool_id):
         self._set_tool_statistics_time_diff(tool_id, 'time_heater_active', 'tracked_start_time_active')
         self.changes_to_save = True
-        # self._persist_tool_statistics()
 
 
     def track_standby_heater_start(self, tool_id):
@@ -297,7 +291,6 @@ class KtccLog:
     def track_standby_heater_end(self, tool_id):
         self._set_tool_statistics_time_diff(tool_id, 'time_heater_standby', 'tracked_start_time_standby')
         self.changes_to_save = True
-        # self._persist_tool_statistics()
 
     def _seconds_to_human_string(self, seconds):
         result = ""
@@ -389,24 +382,26 @@ class KtccLog:
         except Exception as e:
             self.debug("Exception whilst tracking tool stats: %s" % str(e))
             self.debug("_set_tool_statistics: Error while tool: %s provided to record tool stats while key: %s and value: %s" % (tool_id, str(key), str(value)))
-        # self.trace("_set_tool_statistics: Tool: %s provided to record tool stats while key: %s and value: %s" % (tool_id, str(key), str(value)))
+        self.trace("_set_tool_statistics: Tool: %s provided to record tool stats while key: %s and value: %s" % (tool_id, str(key), str(value)))
 
     def _set_tool_statistics_time_diff(self, tool_id, final_time_key, start_time_key):
-        # self.trace("_set_tool_statistics_time_diff: Tool: %s provided to record tool stats while final_time_key: %s and start_time_key: %s" % (tool_id, str(final_time_key), str(start_time_key)))
         try:
             if str(tool_id) in self.tool_statistics:
                 tool_stat= self.tool_statistics[str(tool_id)]
                 if tool_stat[start_time_key] is not None and tool_stat[start_time_key] != 0:
-                    # self.trace("_set_tool_statistics_time_diff: value before running: final_time_key: %s, start_time_key: %s" % (str(tool_stat[final_time_key]), str(tool_stat[start_time_key])))
-                    tool_stat[final_time_key] = time.time() - tool_stat[start_time_key]
+                    self.trace("_set_tool_statistics_time_diff: Tool: %s value before running: final_time_key: %s=%s, start_time_key: %s" % (tool_id, final_time_key, str(tool_stat[final_time_key]), start_time_key, str(tool_stat[start_time_key])))
+                    if tool_stat[final_time_key] is not None and tool_stat[final_time_key] != 0:
+                        tool_stat[final_time_key] += time.time() - tool_stat[start_time_key]
+                    else:
+                        tool_stat[final_time_key] = time.time() - tool_stat[start_time_key]
                     tool_stat[start_time_key] = 0
-                    # self.trace("_set_tool_statistics_time_diff: value after running: final_time_key: %s, start_time_key: %s" % (str(tool_stat[final_time_key]), str(tool_stat[start_time_key])))
             else:
                 self.debug("_set_tool_statistics_time_diff: Unknown tool: %s provided to record tool stats while final_time_key: %s and start_time_key: %s" % (tool_id, str(final_time_key), str(start_time_key)))
         except Exception as e:
             self.debug("Exception whilst tracking tool stats: %s" % str(e))
             self.debug("_set_tool_statistics_time_diff: Error while tool: %s provided to record tool stats while final_time_key: %s and start_time_key: %s" % (tool_id, str(final_time_key), str(start_time_key)))
-        # self.trace("_set_tool_statistics_time_diff: Tool: %s provided to record tool stats while final_time_key: %s and start_time_key: %s" % (tool_id, str(final_time_key), str(start_time_key)))
+        self.trace("_set_tool_statistics_time_diff: Tool: %s value after running: final_time_key: %s=%s, start_time_key: %s" % (tool_id, final_time_key, str(tool_stat[final_time_key]), start_time_key, str(tool_stat[start_time_key])))
+        # self.trace("_set_tool_statistics_time_diff: Tool: %s provided to record tool stats while final_time_key: %s=%d and start_time_key: %s" % (tool_id, str(final_time_key), tool_stat[final_time_key], str(start_time_key)))
 
 ### LOGGING AND STATISTICS FUNCTIONS GCODE FUNCTIONS
 
