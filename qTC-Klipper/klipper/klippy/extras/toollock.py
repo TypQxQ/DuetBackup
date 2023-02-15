@@ -64,7 +64,7 @@ class ToolLock:
     def ToolLock(self, ignore_locked = False):
         self.log.debug("TOOL_LOCK running. ")
         if not ignore_locked and int(self.tool_current) != -1:
-            self.log.always("TOOL_LOCK is already locked with tool " + self.tool_current + ".", 0)
+            self.log.always("TOOL_LOCK is already locked with tool " + self.tool_current + ".")
         else:
             self.tool_lock_gcode_template.run_gcode_from_command()
             self.SaveCurrentTool("-2")
@@ -73,7 +73,7 @@ class ToolLock:
 
     cmd_KTCC_TOOL_DROPOFF_ALL_help = "Deselect all tools"
     def cmd_KTCC_TOOL_DROPOFF_ALL(self, gcmd = None):
-        self.LogThis("KTCC_TOOL_DROPOFF_ALL running. ")# + gcmd.get_raw_command_parameters())
+        self.log.trace("KTCC_TOOL_DROPOFF_ALL running. ")# + gcmd.get_raw_command_parameters())
         if self.tool_current == "-2":
             raise self.printer.command_error("cmd_KTCC_TOOL_DROPOFF_ALL: Unknown tool already mounted Can't park unknown tool.")
         if self.tool_current != "-1":
@@ -122,7 +122,7 @@ class ToolLock:
         if not self.init_printer_to_last_tool:
             return None
 
-        self.LogThis("Initialize_Tool_Lock running.")
+        self.log.always("Initialize_Tool_Lock running.")
         save_variables = self.printer.lookup_object('save_variables')
         try:
             self.tool_current = save_variables.allVariables["tool_current"]
@@ -133,13 +133,13 @@ class ToolLock:
 
         if str(self.tool_current) == "-1":
             self.cmd_TOOL_UNLOCK()
-            self.LogThis("ToolLock initialized unlocked", 0)
+            self.log.always("ToolLock initialized unlocked")
 
         else:
             t = self.tool_current
             self.ToolLock(True)
             self.SaveCurrentTool(str(t))
-            self.LogThis("ToolLock initialized with T%s." % self.tool_current) 
+            self.log.always("ToolLock initialized with T%s." % self.tool_current) 
 
     cmd_SET_AND_SAVE_FAN_SPEED_help = "Save the fan speed to be recovered at ToolChange."
     def cmd_SET_AND_SAVE_FAN_SPEED(self, gcmd):
@@ -168,7 +168,7 @@ class ToolLock:
         tool = self.printer.lookup_object("tool " + str(tool_id))
 
         if tool.fan is None:
-            self.LogThis("ToolLock.SetAndSaveFanSpeed: Tool %s has no fan." % str(tool_id), 0)
+            self.log.debug("ToolLock.SetAndSaveFanSpeed: Tool %s has no fan." % str(tool_id))
         else:
             self.SaveFanSpeed(fanspeed)
             self.gcode.run_script_from_command(
@@ -193,7 +193,7 @@ class ToolLock:
         tolerance = gcmd.get_int('TOLERANCE', 1, minval=0, maxval=50)
 
         if tool_id is not None and heater_id is not None:
-            self.LogThis("cmd_TEMPERATURE_WAIT_WITH_TOLERANCE: Can't use both P and H parameter at the same time.", 0)
+            self.log.always("cmd_TEMPERATURE_WAIT_WITH_TOLERANCE: Can't use both P and H parameter at the same time.")
             return None
         elif tool_id is None and heater_id is None:
             tool_id = self.tool_current
@@ -223,12 +223,12 @@ class ToolLock:
                           )
         
         if target_temp > 40:                                # Only wait if set temperature is over 40*C
-            self.LogThis("Wait for heater " + heater_name + " to reach " + str(target_temp) + " with a tolerance of " + str(tolerance) + ".",1)
+            self.log.always("Wait for heater " + heater_name + " to reach " + str(target_temp) + " with a tolerance of " + str(tolerance) + ".")
             self.gcode.run_script_from_command(
                 "TEMPERATURE_WAIT SENSOR=" + heater_name + 
                 " MINIMUM=" + str(target_temp - tolerance) + 
                 " MAXIMUM=" + str(target_temp + tolerance) )
-            self.LogThis("Wait for heater " + heater_name + " complete.")
+            self.log.always("Wait for heater " + heater_name + " complete.")
 
 
     cmd_SET_TOOL_TEMPERATURE_help = "Waits for all temperatures, or a specified (TOOL) tool or (HEATER) heater's temperature within (TOLERANCE) tolerance."
@@ -251,11 +251,11 @@ class ToolLock:
         shtdwn_timeout = gcmd.get_float('SHTDWN_TIMEOUT', None, minval=0)
 
         if int(tool_id) < 0:
-            self.LogThis("cmd_SET_TOOL_TEMPERATURE: Tool " + str(tool_id) + " is not valid.",0)
+            self.log.always("cmd_SET_TOOL_TEMPERATURE: Tool " + str(tool_id) + " is not valid.")
             return None
 
         if self.printer.lookup_object("tool " + str(tool_id)).get_status()["extruder"] is None:
-            self.LogThis("cmd_SET_TOOL_TEMPERATURE: T%s has no extruder! Nothing to do." % str(tool_id), 1)
+            self.log.trace("cmd_SET_TOOL_TEMPERATURE: T%s has no extruder! Nothing to do." % str(tool_id))
             return None
 
         tool = self.printer.lookup_object("tool " + str(tool_id))
@@ -285,7 +285,7 @@ class ToolLock:
         z_adjust = gcmd.get_float('Z_ADJUST', None)
 
         if tool_id < 0:
-            self.LogThis("cmd_SET_TOOL_TEMPERATURE: Tool " + str(tool_id) + " is not valid.", 0)
+            self.log.always("cmd_SET_TOOL_TEMPERATURE: Tool " + str(tool_id) + " is not valid.")
             return None
 
         tool = self.printer.lookup_object("tool " + str(tool_id))
@@ -328,7 +328,7 @@ class ToolLock:
         elif z_adjust is not None:
             self.global_offset[2] = float(self.global_offset[2]) + float(z_adjust)
 
-        self.LogThis("Global offset now set to: %f, %f, %f." % (float(self.global_offset[0]), float(self.global_offset[1]), float(self.global_offset[2])))
+        self.log.trace("Global offset now set to: %f, %f, %f." % (float(self.global_offset[0]), float(self.global_offset[1]), float(self.global_offset[2])))
 
     cmd_SET_PURGE_ON_TOOLCHANGE_help = "Set the global variable if the tool should be purged or primed with filament at toolchange."
     def cmd_SET_PURGE_ON_TOOLCHANGE(self, gcmd = None):
@@ -395,7 +395,7 @@ class ToolLock:
 #    1: Restore XY
 #    2: Restore XYZ
     def cmd_RESTORE_POSITION(self, gcmd):
-        self.LogThis("cmd_RESTORE_POSITION running: " + str(self.restore_position_on_toolchange_type))
+        self.log.trace("cmd_RESTORE_POSITION running: " + str(self.restore_position_on_toolchange_type))
 
         param = gcmd.get_int('RESTORE_POSITION_TYPE', None, minval=0, maxval=2)
 
@@ -416,21 +416,10 @@ class ToolLock:
             elif self.restore_position_on_toolchange_type == 2:
                 v=str("G1 X%.3f Y%.3f Z%.3f" % (p[0], p[1], p[2]))
             # Restore position
-            self.LogThis("cmd_RESTORE_POSITION running: " + v)
+            self.log.trace("cmd_RESTORE_POSITION running: " + v)
             self.gcode.run_script_from_command(v)
         except:
             raise gcmd.error("Could not restore position.")
-
-    # Prints debugging text to console if configured Log level is higher than requested Log level.
-    def LogThis(self, msg, LogLevel=2):
-        if self.LogLevel >= 2:
-            self.log.always(msg)
-        elif self.LogLevel == 1:
-            self.log.info(msg)
-        else:
-            self.log.debug(msg)
-            
-            # self.gcode.respond_info(dbgText)
 
     def get_status(self, eventtime= None):
         status = {
@@ -443,6 +432,17 @@ class ToolLock:
             "LogLevel": self.LogLevel
         }
         return status
+
+    # # Prints debugging text to console if configured Log level is higher than requested Log level.
+    # def LogThis(self, msg, LogLevel=2):
+    #     if self.LogLevel >= 2:
+    #         self.log.always(msg)
+    #     elif self.LogLevel == 1:
+    #         self.log.info(msg)
+    #     else:
+    #         self.log.debug(msg)
+            
+    #         # self.gcode.respond_info(dbgText)
 
 def load_config(config):
     return ToolLock(config)

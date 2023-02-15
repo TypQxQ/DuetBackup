@@ -188,9 +188,9 @@ class Tool:
     def cmd_SelectTool(self, gcmd):
         current_tool_id = int(self.toollock.get_status()['tool_current']) # int(self.toollock.get_tool_current())
 
-        self.log.debug("T" + str(self.name) + " Selected.")
-        self.log.debug("Current Tool is T" + str(current_tool_id) + ".")
-        self.log.debug("This tool is_virtual is " + str(self.is_virtual) + ".")
+        self.log.trace("T" + str(self.name) + " Selected.")
+        self.log.trace("Current Tool is T" + str(current_tool_id) + ".")
+        self.log.trace("This tool is_virtual is " + str(self.is_virtual) + ".")
 
         if current_tool_id == self.name:              # If trying to select the already selected tool:
             return None                                   # Exit
@@ -200,11 +200,8 @@ class Tool:
             self.log.always(msg)
             raise self.printer.command_error(msg)
 
-        self.log.track_swap_start()                 # Log the time it takes for tool change.
-        self.log.track_selected_tool_start(self.name)
-
         if self.extruder is not None:               # If the new tool to be selected has an extruder prepare warmup before actual tool change so all unload commands will be done while heating up.
-            self.gcode.run_script_from_command("M568 P%d A2" % (int(self.name)))
+            self.set_heater(heater_state = 2)
 
         # If optional RESTORE_POSITION_TYPE parameter is passed as 1 or 2 then save current position and restore_position_on_toolchange_type as passed. Otherwise do not change either the restore_position_on_toolchange_type or saved_position. This makes it possible to call SAVE_POSITION or SAVE_CURRENT_POSITION before the actual T command.
         param = gcmd.get_int('R', None, minval=0, maxval=2)
@@ -215,24 +212,29 @@ class Tool:
                 self.toollock.SavePosition()  # Sets restore_position_on_toolchange_type to 0
 
         # Drop any tools already mounted.
-        if current_tool_id >= 0:                    # If there is a current tool already selected and it's a dropable.
+        if current_tool_id > self.TOOL_UNLOCKED:                    # If there is a current tool already selected and it's a dropable.
             self.log.track_selected_tool_end(current_tool_id) # Log that the current tool is to be unmounted.
 
             current_tool = self.printer.lookup_object('tool ' + str(current_tool_id))
            
-            # self.log.trace("self.physical_parent_id:" + str(self.physical_parent_id) + ".")
-            # self.log.trace("current_tool.get_status()['physical_parent_id']:" + str(current_tool.get_status()["physical_parent_id"]) + ".")
-
                                                         # If the next tool is not another virtual tool on the same physical tool.
             if int(self.physical_parent_id ==  self.TOOL_UNLOCKED or 
                         self.physical_parent_id) !=  int( 
                         current_tool.get_status()["physical_parent_id"]
                         ):
-                self.log.trace("Will Dropoff():%s" % str(current_tool_id))
+                self.log.info("Will Dropoff():%s" % str(current_tool_id))
                 current_tool.Dropoff()
                 current_tool_id = self.TOOL_UNLOCKED
+            else:
+                self.log.track_unmount_start(self.name)                 # Log the time it takes for tool change.
+                self.log.info("Dropoff: T" + str(self.name) + "- Virtual - Running UnloadVirtual")
+                current_tool.UnloadVirtual()
+                self.log.track_unmount_end(self.name)                 # Log the time it takes for tool change.
+
 
         # Now we asume tool has been dropped if needed be.
+
+        self.log.track_mount_start(self.name)                 # Log the time it takes for tool change.
 
         # Check if this is a virtual tool.
         if not self.is_virtual:
@@ -258,8 +260,8 @@ class Tool:
                 self.LoadVirtual()
 
         self.toollock.SaveCurrentTool(self.name)
-        self.log.track_swap_end()                   # Log the time it takes for tool change.
-        self.log.track_swap_completed()             # Log number of toolchanges.
+        self.log.track_mount_end(self.name)             # Log number of toolchanges and the time it takes for tool mounting.
+        self.log.track_selected_tool_start(self.name)
 
     def Pickup(self):
         # Check if homed
@@ -267,7 +269,7 @@ class Tool:
             raise self.printer.command_error("Tool.Pickup: Printer not homed and Lazy homing option is: " + self.lazy_home_when_parking)
             return None
 
-        self.log.increase_tool_statistics('pickups_started', self.name)
+        self.log.increase_tool_statistics(self.name, 'pickups_started')
 
         # If has an extruder then activate that extruder.
         if self.extruder is not None:
@@ -305,11 +307,12 @@ class Tool:
         self.toollock.SaveCurrentTool(self.name)
         self.log.debug("T%d picked up." % (self.name))
         self.log.track_total_toolpickups()
-        self.log.increase_tool_statistics('pickups_completed', self.name)
+        # self.log.increase_tool_statistics(self.name, 'pickups_completed')
 
     def Dropoff(self):
         self.log.debug("Dropoff: T%s - Running." % str(self.name))
-        self.log.increase_tool_statistics('droppoffs_started', self.name)
+        self.log.increase_tool_statistics(self.name, 'droppoffs_started')
+        self.log.track_unmount_start(self.name)                 # Log the time it takes for tool change.
 
         self.log.track_selected_tool_end(self.name) # Log that the current tool is to be unmounted.
 
@@ -339,8 +342,7 @@ class Tool:
             logging.exception("Dropoff gcode: Script running error")
 
         self.toollock.SaveCurrentTool(self.TOOL_UNLOCKED)   # Dropoff successfull
-        self.log.increase_tool_statistics('droppoffs_completed', self.name)
-        self.log.track_total_tooldropoffs()
+        self.log.track_unmount_end(self.name)                 # Log the time it takes for tool change.
 
 
     def LoadVirtual(self):

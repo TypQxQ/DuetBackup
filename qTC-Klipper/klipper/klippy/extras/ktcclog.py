@@ -54,7 +54,7 @@ class KtccMultiLineFormatter(logging.Formatter):
 class KtccLog:
     TOOL_UNKNOWN = -2
     TOOL_UNLOCKED = -1
-    EMPTY_TOOL_STATS = {'pickups_completed': 0, 'droppoffs_completed': 0, 'pickups_started': 0, 'droppoffs_started': 0, 'time_selected': 0, 'time_heater_active': 0, 'time_heater_standby': 0, 'tracked_start_time_selected':0, 'tracked_start_time_active':0, 'tracked_start_time_standby':0}
+    EMPTY_TOOL_STATS = {'pickups_completed': 0, 'droppoffs_completed': 0, 'pickups_started': 0, 'droppoffs_started': 0, 'time_selected': 0, 'time_heater_active': 0, 'time_heater_standby': 0, 'tracked_start_time_selected':0, 'tracked_start_time_active':0, 'tracked_start_time_standby':0, 'time_spent_unmounting':0, 'time_spent_mounting':0}
 
     VARS_KTCC_TOOL_STATISTICS_PREFIX = "ktcc_statistics_tool"
 
@@ -137,11 +137,10 @@ class KtccLog:
             if swap_stats is None or swap_stats == {}:
                 raise Exception("Couldn't find any saved statistics.")
             # self.trace("Loading statistics for KTCC: %s" % str(swap_stats))
-            self.total_swaps = swap_stats['total_swaps'] or 0
-            self.time_spent_swaping = swap_stats['time_spent_swaping'] or 0
-            self.time_spent_unloading = swap_stats['time_spent_unloading'] or 0
+            # self.total_mounts = swap_stats['total_mounts'] or 0
+            self.time_spent_mounting = swap_stats['time_spent_mounting'] or 0
+            self.time_spent_unmounting = swap_stats['time_spent_unmounting'] or 0
             self.total_pauses = swap_stats['total_pauses'] or 0
-            self.time_spent_paused = swap_stats['time_spent_paused'] or 0
             self.total_toollocks = swap_stats['total_toollocks'] or 0
             self.total_toolunlocks = swap_stats['total_toolunlocks'] or 0
             self.total_toolpickups = swap_stats['total_toolpickups'] or 0
@@ -159,12 +158,11 @@ class KtccLog:
                 self.tool_statistics[toolname]["tracked_start_time_selected"] = 0
                 self.tool_statistics[toolname]["tracked_start_time_active"] = 0
                 self.tool_statistics[toolname]["tracked_start_time_standby"] = 0
-
+                self.tool_statistics[toolname]["tracked_unmount_start_time"] = 0
+                self.tool_statistics[toolname]["tracked_mount_start_time"] = 0
 
             except Exception as err:
                 self.debug("Unexpected error in toolstast: %s" % err)
-
-        # self.trace(str(self.tool_statistics))
 
     def handle_disconnect(self):
         self.always('KTCC Shutdown')
@@ -231,28 +229,69 @@ class KtccLog:
 ####################################
     def _reset_statistics(self):
         self.debug("Reseting KTCC statistics.")
-        self.total_swaps = 0
-        self.time_spent_swaping = 0
-        self.time_spent_unloading = 0
+        # self.total_mounts = 0
+        self.time_spent_mounting = 0
+        self.time_spent_unmounting = 0
         self.total_pauses = 0
-        self.time_spent_paused = 0
-        self.tracked_start_time = 0
+        self.tracked_mount_start_time = 0
+        # self.tracked_unmount_start_time = 0
         self.pause_start_time = 0
         self.total_toollocks = 0
         self.total_toolunlocks = 0
         self.total_toolpickups = 0
         self.total_tooldropoffs = 0
 
-    def track_swap_completed(self):
-        self.total_swaps += 1
-        self.changes_to_save = True
-        # self._persist_swap_statistics()
+    # def track_mount_completed(self):
+        # self.total_mounts += 1
+        # self.track_mount_end()
+        # self.changes_to_save = True
 
-    def track_swap_start(self):
-        self.tracked_start_time = time.time()
+    def track_mount_start(self, tool_id):
+        self._set_tool_statistics(tool_id, 'tracked_mount_start_time', time.time())
 
-    def track_swap_end(self):
-        self.time_spent_swaping += time.time() - self.tracked_start_time
+    def track_mount_end(self, tool_id):
+        start_time = self.tool_statistics[str(tool_id)]['tracked_mount_start_time']
+        if start_time is not None and start_time != 0:
+            time_spent = time.time() - start_time
+            self.increase_tool_statistics(tool_id, 'time_spent_mounting', time_spent)
+            self.time_spent_mounting += time_spent
+            self._set_tool_statistics(tool_id, 'tracked_mount_start_time', 0)
+            
+            self.increase_tool_statistics(tool_id, 'pickups_completed')
+            self.total_toolpickups += 1
+            self.changes_to_save = True
+
+    # def track_mount_start(self):
+    #     self.tracked_mount_start_time = time.time()
+
+    # def track_mount_end(self):
+    #     newtime = time.time() - self.tracked_mount_start_time
+    #     # if newtime < 300: # If less than 5 minutes
+    #     self.time_spent_mounting += newtime
+    #     self.changes_to_save = True
+
+    def track_unmount_start(self, tool_id):
+        self._set_tool_statistics(tool_id, 'tracked_unmount_start_time', time.time())
+
+    def track_unmount_end(self, tool_id):
+        start_time = self.tool_statistics[str(tool_id)]['tracked_unmount_start_time']
+        if start_time is not None and start_time != 0:
+            time_spent = time.time() - start_time
+            self.increase_tool_statistics(tool_id, 'time_spent_unmounting', time_spent)
+            self.time_spent_unmounting += time_spent
+            self._set_tool_statistics(tool_id, 'tracked_unmount_start_time', 0)
+            
+            self.increase_tool_statistics(tool_id, 'droppoffs_completed')
+            self.total_tooldropoffs += 1
+            self.changes_to_save = True
+
+    # def track_unmount_start(self):
+    #     self.tracked_unmount_start_time = time.time()
+
+    # def track_unmount_end(self):
+    #     self.time_spent_unmounting += time.time() - self.tracked_unmount_start_time
+    #     self.changes_to_save = True
+    #     self.track_unmount_completed()
 
     def track_total_toolunlocks(self):
         self.total_toolunlocks += 1
@@ -266,7 +305,7 @@ class KtccLog:
         self.total_toolpickups += 1
         self.changes_to_save = True
 
-    def track_total_tooldropoffs(self):
+    def track_unmount_completed(self):
         self.total_tooldropoffs += 1
         self.changes_to_save = True
 
@@ -283,7 +322,6 @@ class KtccLog:
     def track_active_heater_end(self, tool_id):
         self._set_tool_statistics_time_diff(tool_id, 'time_heater_active', 'tracked_start_time_active')
         self.changes_to_save = True
-
 
     def track_standby_heater_start(self, tool_id):
         self._set_tool_statistics(tool_id, 'tracked_start_time_standby', time.time())
@@ -305,44 +343,45 @@ class KtccLog:
 
     def _swap_statistics_to_human_string(self):
         msg = "KTCC Statistics:"
-        msg += "\n%d swaps completed" % self.total_swaps
-        msg += "\n%s spent mounting tools" % self._seconds_to_human_string(self.time_spent_swaping)
-        msg += "\n%s spent unmounting tools" % self._seconds_to_human_string(self.time_spent_unloading)
-        # msg += "\n%s spent paused (%d pauses total)" % (self._seconds_to_human_string(self.time_spent_paused), self.total_pauses)
+        # msg += "\n%d swaps completed" % self.total_mounts
+        msg += "\n%s spent mounting tools" % self._seconds_to_human_string(self.time_spent_mounting)
+        msg += "\n%s spent unmounting tools" % self._seconds_to_human_string(self.time_spent_unmounting)
         msg += "\n%d tool unlocks completed" % self.total_toolunlocks
         msg += "\n%d tool locks completed" % self.total_toollocks
         msg += "\n%d tool pickups completed" % self.total_toolpickups
         msg += "\n%d tool dropoffs completed" % self.total_tooldropoffs
         return msg
 
+    def _division(self, dividend, divisor):
+        try:
+            return dividend/divisor
+        except ZeroDivisionError:
+            return 0
+
     def _dump_statistics(self, report=False):
         if self.log_statistics or report:
-            self.always(self._swap_statistics_to_human_string())
-            self._dump_tool_statistics()
-        # This is good place to update the persisted stats...
-        # self.changes_to_save = True
-        # self._persist_swap_statistics()
-        # self._persist_tool_statistics()
+            msg = "ToolChanger Statistics:\n"
+            msg += self._swap_statistics_to_human_string()
+            msg += "\n------------\n"
 
-    def _dump_tool_statistics(self):
-        msg = "Tool Statistics:\n"
-        for tool_id in self.tool_statistics:
-            # self.trace(str(tool))
-            msg += "Tool#%s:\n" % (tool_id)
-            msg += "Completed %d out of %d pickups.\n" % (self.tool_statistics[tool_id]['pickups_completed'], self.tool_statistics[tool_id]['pickups_started'])
-            msg += "Completed %d out of %d droppoffs.\n" % (self.tool_statistics[tool_id]['droppoffs_completed'], self.tool_statistics[tool_id]['droppoffs_started'])
-            msg += "Time spent selected %s, active heater %s, standby heater %s.\n" % (self._seconds_to_human_string(self.tool_statistics[tool_id]['time_selected']), self._seconds_to_human_string(self.tool_statistics[tool_id]['time_heater_active']), self._seconds_to_human_string(self.tool_statistics[tool_id]['time_heater_standby']))
-            msg += "------------"
+            msg += "Tool Statistics:\n"
+            for tool_id in self.tool_statistics:
+                # self.trace(str(tool))
+                msg += "Tool#%s:\n" % (tool_id)
+                msg += "Completed %d out of %d pickups in %s. Average of %s per pickup.\n" % (self.tool_statistics[tool_id]['pickups_completed'], self.tool_statistics[tool_id]['pickups_started'], self._seconds_to_human_string(self.tool_statistics[tool_id]['time_spent_mounting']), self._seconds_to_human_string(self._division(self.tool_statistics[tool_id]['time_spent_mounting'], self.tool_statistics[tool_id]['pickups_completed'])))
+                msg += "Completed %d out of %d droppoffs in %s.\n" % (self.tool_statistics[tool_id]['droppoffs_completed'], self.tool_statistics[tool_id]['droppoffs_started'], self._seconds_to_human_string(self.tool_statistics[tool_id]['time_spent_unmounting']))
+                msg += "Time spent selected %s, active heater %s, standby heater %s.\n" % (self._seconds_to_human_string(self.tool_statistics[tool_id]['time_selected']), self._seconds_to_human_string(self.tool_statistics[tool_id]['time_heater_active']), self._seconds_to_human_string(self.tool_statistics[tool_id]['time_heater_standby']))
+                msg += "------------\n"
+                
 
         self.always(msg)
 
     def _persist_swap_statistics(self):
         swap_stats = {
-            'total_swaps': self.total_swaps,
-            'time_spent_swaping': round(self.time_spent_swaping, 1),
-            'time_spent_unloading': round(self.time_spent_unloading, 1),
+            # 'total_mounts': self.total_mounts,
+            'time_spent_mounting': round(self.time_spent_mounting, 1),
+            'time_spent_unmounting': round(self.time_spent_unmounting, 1),
             'total_pauses': self.total_pauses,
-            'time_spent_paused': self.time_spent_paused,
             'total_toolunlocks': self.total_toolunlocks,
             'total_toollocks': self.total_toollocks,
             'total_toolpickups': self.total_toolpickups,
@@ -357,10 +396,12 @@ class KtccLog:
             except Exception as err:
                 self.debug("Unexpected error in _persist_tool_statistics: %s" % err)
 
-    def increase_tool_statistics(self, key, tool_id, count=1):
+    def increase_tool_statistics(self, tool_id, key, count=1):
         try:
             # if self.tool_statistics.get(str(tool_id)) is not None:
             if str(tool_id) in self.tool_statistics:
+                if self.tool_statistics[str(tool_id)][key] is None:
+                    self.tool_statistics[str(tool_id)][key]=0
                 if isinstance(count, float):
                     self.tool_statistics[str(tool_id)][key] = round(self.tool_statistics[str(tool_id)][key] + count, 3)
                 else:
@@ -389,7 +430,7 @@ class KtccLog:
             if str(tool_id) in self.tool_statistics:
                 tool_stat= self.tool_statistics[str(tool_id)]
                 if tool_stat[start_time_key] is not None and tool_stat[start_time_key] != 0:
-                    self.trace("_set_tool_statistics_time_diff: Tool: %s value before running: final_time_key: %s=%s, start_time_key: %s" % (tool_id, final_time_key, str(tool_stat[final_time_key]), start_time_key, str(tool_stat[start_time_key])))
+                    self.trace("_set_tool_statistics_time_diff: Tool: %s value before running: final_time_key: %s=%s, start_time_key: %s=%s." % (tool_id, final_time_key, str(tool_stat[final_time_key]), start_time_key, str(tool_stat[start_time_key])))
                     if tool_stat[final_time_key] is not None and tool_stat[final_time_key] != 0:
                         tool_stat[final_time_key] += time.time() - tool_stat[start_time_key]
                     else:
@@ -400,7 +441,7 @@ class KtccLog:
         except Exception as e:
             self.debug("Exception whilst tracking tool stats: %s" % str(e))
             self.debug("_set_tool_statistics_time_diff: Error while tool: %s provided to record tool stats while final_time_key: %s and start_time_key: %s" % (tool_id, str(final_time_key), str(start_time_key)))
-        self.trace("_set_tool_statistics_time_diff: Tool: %s value after running: final_time_key: %s=%s, start_time_key: %s" % (tool_id, final_time_key, str(tool_stat[final_time_key]), start_time_key, str(tool_stat[start_time_key])))
+        self.trace("_set_tool_statistics_time_diff: Tool: %s value after running: final_time_key: %s=%s, start_time_key: %s=%s." % (tool_id, final_time_key, str(tool_stat[final_time_key]), start_time_key, str(tool_stat[start_time_key])))
         # self.trace("_set_tool_statistics_time_diff: Tool: %s provided to record tool stats while final_time_key: %s=%d and start_time_key: %s" % (tool_id, str(final_time_key), tool_stat[final_time_key], str(start_time_key)))
 
 ### LOGGING AND STATISTICS FUNCTIONS GCODE FUNCTIONS
