@@ -226,10 +226,10 @@ class Tool:
                 current_tool.Dropoff()
                 current_tool_id = self.TOOL_UNLOCKED
             else:
-                self.log.track_unmount_start(self.name)                 # Log the time it takes for tool change.
-                self.log.info("Dropoff: T" + str(self.name) + "- Virtual - Running UnloadVirtual")
+                self.log.track_unmount_start(current_tool_id)                 # Log the time it takes for tool change.
+                self.log.info("Dropoff: T" + str(current_tool_id) + "- Virtual - Running UnloadVirtual")
                 current_tool.UnloadVirtual()
-                self.log.track_unmount_end(self.name)                 # Log the time it takes for tool change.
+                self.log.track_unmount_end(current_tool_id)                 # Log the time it takes for tool change.
 
 
         # Now we asume tool has been dropped if needed be.
@@ -247,12 +247,9 @@ class Tool:
                 if self.physical_parent_id >= 0 and self.physical_parent_id == current_tool.get_status()["physical_parent_id"]:
                     self.log.trace("cmd_SelectTool: T" + str(self.name) + "- Virtual - Same physical tool - Pickup")
                     self.LoadVirtual()
-                    return ""
                 else:
-                    self.log.trace("cmd_SelectTool: T" + str(self.name) + "- Virtual - Not Same physical tool")
-                    current_tool.UnloadVirtual()
+                    self.log.debug("cmd_SelectTool: T" + str(self.name) + "- Virtual - Not Same physical tool")
                     self.log.debug("Shouldn't reach this because it is dropped in previous.")
-                    #self.Pickup()
             else:
                 self.log.trace("cmd_SelectTool: T" + str(self.name) + "- Virtual - Picking upp physical tool")
                 self.Pickup()
@@ -268,8 +265,6 @@ class Tool:
         if not self.toollock.PrinterIsHomedForToolchange():
             raise self.printer.command_error("Tool.Pickup: Printer not homed and Lazy homing option is: " + self.lazy_home_when_parking)
             return None
-
-        self.log.increase_tool_statistics(self.name, 'pickups_started')
 
         # If has an extruder then activate that extruder.
         if self.extruder is not None:
@@ -300,18 +295,18 @@ class Tool:
                 " DAMPING_RATIO_Y=" + str(self.shaper_damping_ratio_y) +
                 " SHAPER_TYPE_X=" + str(self.shaper_type_x) +
                 " SHAPER_TYPE_Y=" + str(self.shaper_type_y) )
-            self.log.debug("Pickup_inpshaper: " + cmd)
+            self.log.trace("Pickup_inpshaper: " + cmd)
             self.gcode.run_script_from_command(cmd)
 
         # Save current picked up tool and print on screen.
         self.toollock.SaveCurrentTool(self.name)
-        self.log.debug("T%d picked up." % (self.name))
-        self.log.track_total_toolpickups()
-        # self.log.increase_tool_statistics(self.name, 'pickups_completed')
+        if self.is_virtual:
+            self.log.always("Physical Tool for T%d picked up." % (self.name))
+        else:
+            self.log.always("T%d picked up." % (self.name))
 
     def Dropoff(self):
-        self.log.debug("Dropoff: T%s - Running." % str(self.name))
-        self.log.increase_tool_statistics(self.name, 'droppoffs_started')
+        self.log.always("Dropoff: T%s - Running." % str(self.name))
         self.log.track_unmount_start(self.name)                 # Log the time it takes for tool change.
 
         self.log.track_selected_tool_end(self.name) # Log that the current tool is to be unmounted.
@@ -377,22 +372,22 @@ class Tool:
         self.toollock.SaveCurrentTool(self.name)
         self.log.trace("Virtual T%d Unloaded" % (int(self.name)))
 
-    def set_offset(self, **kwargs):
-        for i in kwargs:
-            if i == "x_pos":
-                self.offset[0] = float(kwargs[i])
-            elif i == "x_adjust":
-                self.offset[0] = float(self.offset[0]) + float(kwargs[i])
-            elif i == "y_pos":
-                self.offset[1] = float(kwargs[i])
-            elif i == "y_adjust":
-                self.offset[1] = float(self.offset[1]) + float(kwargs[i])
-            elif i == "z_pos":
-                self.offset[2] = float(kwargs[i])
-            elif i == "z_adjust":
-                self.offset[2] = float(self.offset[2]) + float(kwargs[i])
+    # def set_offset(self, **kwargs):
+    #     for i in kwargs:
+    #         if i == "x_pos":
+    #             self.offset[0] = float(kwargs[i])
+    #         elif i == "x_adjust":
+    #             self.offset[0] = float(self.offset[0]) + float(kwargs[i])
+    #         elif i == "y_pos":
+    #             self.offset[1] = float(kwargs[i])
+    #         elif i == "y_adjust":
+    #             self.offset[1] = float(self.offset[1]) + float(kwargs[i])
+    #         elif i == "z_pos":
+    #             self.offset[2] = float(kwargs[i])
+    #         elif i == "z_adjust":
+    #             self.offset[2] = float(self.offset[2]) + float(kwargs[i])
 
-        self.log.trace("T%d offset now set to: %f, %f, %f." % (int(self.name), float(self.offset[0]), float(self.offset[1]), float(self.offset[2])))
+    #     self.log.trace("T%d offset now set to: %f, %f, %f." % (int(self.name), float(self.offset[0]), float(self.offset[1]), float(self.offset[2])))
 
     def set_heater(self, **kwargs):
         if self.extruder is None:
@@ -417,6 +412,9 @@ class Tool:
         # Change Active mode:
         if "heater_state" in kwargs:
             chng_state = kwargs["heater_state"]
+            if self.heater_state == chng_state:                                                         # If we don't actually change the state don't do anything.
+                self.log.trace("set_heater: T%d heater state not changed." % self.name )
+                return None
             if chng_state == 0:                                                                         # If Change to Shutdown
                 self.timer_idle_to_standby.set_timer(0)
                 self.timer_idle_to_powerdown.set_timer(0.1)
@@ -436,7 +434,7 @@ class Tool:
                     self.log.trace("set_heater: T%d standbytemp:%d;heater_state:%d; current_temp:%d." % (self.name, int(self.heater_state), int(self.heater_standby_temp), int(heater.get_status(curtime)["temperature"])))
                     self.timer_idle_to_standby.set_timer(0.1)
                     self.timer_idle_to_powerdown.set_timer(self.idle_to_powerdown_time)
-            self.heater_state = kwargs["heater_state"]
+            self.heater_state = chng_state
         # self.log.trace("Heater mode changed: T%d heater_state now set to:%d. Current_temp:%d, Standbytemp:%d, ActiveTemp:%d." % (int(self.name), int(self.heater_state), int(heater.get_status(curtime)["temperature"]), int(self.heater_standby_temp), int(heater.set_temp(self.heater_active_temp))))
 
     def get_pickup_gcode(self):

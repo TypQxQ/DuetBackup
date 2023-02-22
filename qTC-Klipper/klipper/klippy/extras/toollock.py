@@ -7,6 +7,9 @@
 # This file may be distributed under the terms of the GNU GPLv3 license.
 
 class ToolLock:
+    TOOL_UNKNOWN = -2
+    TOOL_UNLOCKED = -1
+
     def __init__(self, config):
         self.printer = config.get_printer()
         self.reactor = self.printer.get_reactor()
@@ -22,7 +25,6 @@ class ToolLock:
             'purge_on_toolchange', True)
         self.saved_position = None
         self.restore_position_on_toolchange_type = 0   # 0: Don't restore; 1: Restore XY; 2: Restore XYZ
-        self.LogLevel = config.getint('LogLevel', 0) # Deprecated
         self.log = self.printer.load_object(config, 'ktcclog')
 
         # G-Code macros
@@ -35,7 +37,7 @@ class ToolLock:
             'KTCC_TOOL_DROPOFF_ALL', 'SET_AND_SAVE_FAN_SPEED', 'TEMPERATURE_WAIT_WITH_TOLERANCE', 
             'SET_TOOL_TEMPERATURE', 'SET_GLOBAL_OFFSET', 'SET_TOOL_OFFSET',
             'SET_PURGE_ON_TOOLCHANGE', 'SAVE_POSITION', 'SAVE_CURRENT_POSITION', 
-            'RESTORE_POSITION']
+            'RESTORE_POSITION', 'KTCC_SET_GCODE_OFFSET_FOR_CURRENT_TOOL']
         for cmd in handlers:
             func = getattr(self, 'cmd_' + cmd)
             desc = getattr(self, 'cmd_' + cmd + '_help', None)
@@ -62,13 +64,13 @@ class ToolLock:
         self.ToolLock()
 
     def ToolLock(self, ignore_locked = False):
-        self.log.debug("TOOL_LOCK running. ")
+        self.log.trace("TOOL_LOCK running. ")
         if not ignore_locked and int(self.tool_current) != -1:
             self.log.always("TOOL_LOCK is already locked with tool " + self.tool_current + ".")
         else:
             self.tool_lock_gcode_template.run_gcode_from_command()
             self.SaveCurrentTool("-2")
-            self.log.debug("Tool Locked")
+            self.log.trace("Tool Locked")
             self.log.track_total_toollocks()
 
     cmd_KTCC_TOOL_DROPOFF_ALL_help = "Deselect all tools"
@@ -81,10 +83,10 @@ class ToolLock:
 
     cmd_TOOL_UNLOCK_help = "Unlock the ToolLock."
     def cmd_TOOL_UNLOCK(self, gcmd = None):
-        self.log.debug("TOOL_UNLOCK running. ")
+        self.log.trace("TOOL_UNLOCK running. ")
         self.tool_unlock_gcode_template.run_gcode_from_command()
         self.SaveCurrentTool(-1)
-        self.log.debug("ToolLock Unlocked.")
+        self.log.trace("ToolLock Unlocked.")
         self.log.track_total_toolunlocks()
 
 
@@ -428,21 +430,32 @@ class ToolLock:
             "saved_fan_speed": self.saved_fan_speed,
             "purge_on_toolchange": self.purge_on_toolchange,
             "restore_position_on_toolchange_type": self.restore_position_on_toolchange_type,
-            "saved_position": self.saved_position,
-            "LogLevel": self.LogLevel
+            "saved_position": self.saved_position
         }
         return status
 
-    # # Prints debugging text to console if configured Log level is higher than requested Log level.
-    # def LogThis(self, msg, LogLevel=2):
-    #     if self.LogLevel >= 2:
-    #         self.log.always(msg)
-    #     elif self.LogLevel == 1:
-    #         self.log.info(msg)
-    #     else:
-    #         self.log.debug(msg)
-            
-    #         # self.gcode.respond_info(dbgText)
+    cmd_KTCC_SET_GCODE_OFFSET_FOR_CURRENT_TOOL_help = "Set G-Code offset to the one of current tool."
+#  Sets the G-Code offset to the one of the current tool.
+#   With no parameters it will not move the toolhead.
+#  MOVE= If should move the toolhead, optional. If not specified, it will not move.
+#    0: No move
+#    1: Move
+    def cmd_KTCC_SET_GCODE_OFFSET_FOR_CURRENT_TOOL(self, gcmd):
+        current_tool_id = int(self.get_status()['tool_current']) # int(self.toollock.get_tool_current())
+
+        self.log.trace("Setting offsets to those of T" + str(current_tool_id) + ".")
+
+        if current_tool_id <= self.TOOL_UNLOCKED:
+            msg = "KTCC_SET_GCODE_OFFSET_FOR_CURRENT_TOOL: Unknown tool mounted. Can't set offsets."
+            self.log.always(msg)
+            # raise self.printer.command_error(msg)
+        else:
+            # If optional MOVE parameter is passed as 0 or 1
+            param_Move = gcmd.get_int('MOVE', 0, minval=0, maxval=1)
+            current_tool = self.printer.lookup_object('tool ' + str(current_tool_id))
+            self.log.trace("SET_GCODE_OFFSET X=%s Y=%s Z=%s MOVE=%s" % (str(current_tool.offset[0]), str(current_tool.offset[1]), str(current_tool.offset[2]), str(param_Move)))
+            self.gcode.run_script_from_command("SET_GCODE_OFFSET X=%s Y=%s Z=%s MOVE=%s" % (str(current_tool.offset[0]), str(current_tool.offset[1]), str(current_tool.offset[2]), str(param_Move)))
+    
 
 def load_config(config):
     return ToolLock(config)
