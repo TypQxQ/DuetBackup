@@ -503,7 +503,7 @@ class ToolStandbyTempTimer:
             self._standby_tool_temp_timer_event, self.reactor.NEVER)
     def _standby_tool_temp_timer_event(self, eventtime):
         self.inside_timer = True
-        self.log.trace("_standby_tool_temp_timer_event: Running for T" + str(self.tool_id) + ". temp_type:" + str(self.temp_type))
+        self.log.trace("_standby_tool_temp_timer_event: Running for T%s. temp_type:%s." % (str(self.tool_id), "Time to shutdown" if self.temp_type == 0 else "Time to standby"))
         try:
             tool = self.printer.lookup_object("tool " + str(self.tool_id))
             temperature = 0
@@ -515,6 +515,7 @@ class ToolStandbyTempTimer:
                 self.log.track_active_heater_end(self.tool_id)                                                 # Set the active as finishes in statistics.
             heater = self.printer.lookup_object(tool.extruder).get_heater()
             heater.set_temp(temperature)
+            self.log.trace("_standby_tool_temp_timer_event: Running heater.set_temp(%s)" % str(temperature))
             self.log.track_active_heater_end(self.tool_id)                                               # Set the active as finishes in statistics.
 
         except Exception as e:
