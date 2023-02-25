@@ -1731,6 +1731,8 @@ class Ercf:
                 for i in range(2):
                     if delta >= tolerance:
                         msg = "Correction load move #%d into bowden" % (i+1)
+                        self._servo_up()
+                        self._servo_down()
                         delta = self._trace_filament_move(msg, delta, track=True)
                         self._log_debug("Correction load move was necessary, encoder now measures %.1fmm" % self.encoder_sensor.get_distance())
                     else:
@@ -2032,6 +2034,8 @@ class Ercf:
                 self._log_always("Error unloading filament - not enough detected at encoder. Suspect servo not properly down. Retrying...")
                 self._track_gate_statistics('servo_retries', self.gate_selected)
                 self._servo_up()
+                self._log_always("Error unloading filament - trying forming tip before trying again.")
+                self._form_tip_standalone()
                 self._servo_down()
                 if sync:
                     delta = self._trace_filament_move("Retrying sync unload move after servo reset", -delta, speed=self.sync_unload_speed, motor="both")
