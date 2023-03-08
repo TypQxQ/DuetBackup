@@ -29,7 +29,7 @@ pins: PG6, PG9 #, toolboard:P1.28
 [include custom/M104.cfg]
 [include custom/M106.cfg]
 [include custom/M107.cfg]
-[include custom/M109.cfg]
+#[include custom/M109.cfg]
 [include custom/M568.cfg]
 [include custom/M116.cfg]
 

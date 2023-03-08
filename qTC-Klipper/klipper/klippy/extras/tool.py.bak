@@ -9,7 +9,7 @@
 # Mount: Tool is selected and loaded for use, be it a physical or a virtual on physical.
 # Unmopunt: Tool is unselected and unloaded, be it a physical or a virtual on physical.
 # Pickup: Tool is physically picked up and attached to the toolchanger head.
-# Droppoff: Tool is physically parked and dropped of the toolchanger head.
+# Droppoff: Tool is physically parked  and dropped of the toolchanger head.
 # ToolLock: Toollock is engaged.
 # ToolUnLock: Toollock is disengaged.
 

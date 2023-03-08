@@ -1,0 +1,50 @@
+#
+# This is an example (but working) macro to park toolhead out of the way of print
+# You can also use your existing
+#
+#[gcode_macro _PARK]
+#description: Park toolhead safely away from print
+#gcode:
+#  G90
+
+#[gcode_macro _PARK_Z]
+#description: Park Z toolhead safely away from print
+#gcode:
+#  G90
+
+
+
+#
+# This is an example (but working) CANCEL_PRINT macro
+# You can also use your existing, but it should follow this pattern
+#
+[gcode_macro CANCEL_PRINT]
+#rename_existing: BASE_CANCEL_PRINT
+description: Cancel print
+gcode:
+  G90
+
+#
+# This is an example (but working) PAUSE macro
+# You can also use your existing, but it should follow this pattern
+#
+[gcode_macro PAUSE]
+#rename_existing: BASE_PAUSE
+description: Pause the print and park
+gcode:
+  G90
+
+[gcode_macro PAUSE_NOHEAT]
+description: Pause the print and park, first turning off all tool heaters
+gcode:
+  G90
+
+#
+# This is an example (but working) RESUME macro
+# You can also use your existing, but it should follow this pattern
+#
+[gcode_macro RESUME]
+#rename_existing: BASE_RESUME
+description: Resume the print
+gcode:
+  G90
