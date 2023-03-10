@@ -110,6 +110,8 @@ class KtccLog:
         # Need to do it outermost so that any G28 macros are used too.
         # When inside a G28 the parser won't run any SAVE_VARIABLE resulting in Klipper 
         try:
+            self.toolhead = self.printer.lookup_object('toolhead')
+
             self.prev_G28 = self.gcode.register_command("G28", None)
             self.gcode.register_command("G28", self.cmd_KTCC_G28, desc = self.cmd_KTCC_G28_help)
         except Exception as e:
@@ -117,9 +119,11 @@ class KtccLog:
 
     cmd_KTCC_G28_help = "Homing axes."
     def cmd_KTCC_G28(self, gcmd):
+        self.always("Starting G28")
         self.save_active = False                    # Don't try to use SAVE_VARIABLE commands.
         self.prev_G28(gcmd)
         self.save_active = True                     # Resume to use SAVE_VARIABLE commands.
+        self.always("Ending G28")
 
     def _save_changes_timer_event(self, eventtime):
         try:
@@ -459,11 +463,13 @@ class KtccLog:
             'total_toolmounts': self.total_toolmounts,
             'total_toolunmounts': self.total_toolunmounts
             }
+        self.toolhead.wait_moves()
         self.gcode.run_script_from_command("SAVE_VARIABLE VARIABLE=%s VALUE=\"%s\"" % ("ktcc_statistics_swaps", swap_stats))
 
     def _persist_tool_statistics(self):
         for tool in self.tool_statistics:
             try:
+                self.toolhead.wait_moves()
                 self.gcode.run_script_from_command("SAVE_VARIABLE VARIABLE=%s%s VALUE=\"%s\"" % (self.KTCC_TOOL_STATISTICS_PREFIX, tool, self.tool_statistics[tool]))
             except Exception as err:
                 self.debug("Unexpected error in _persist_tool_statistics: %s" % err)

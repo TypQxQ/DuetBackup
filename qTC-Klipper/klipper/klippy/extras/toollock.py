@@ -38,6 +38,8 @@ class ToolLock:
         self.log = self.printer.load_object(config, 'ktcclog')
 
         self.tool_map = {}
+        self.last_endstop_query = {}
+        self.changes_made_by_set_all_tool_heaters_off={}
 
         # G-Code macros
         self.tool_lock_gcode_template = gcode_macro.load_template(config, 'tool_lock_gcode', '')
@@ -50,7 +52,8 @@ class ToolLock:
             'SET_TOOL_TEMPERATURE', 'SET_GLOBAL_OFFSET', 'SET_TOOL_OFFSET',
             'SET_PURGE_ON_TOOLCHANGE', 'SAVE_POSITION', 'SAVE_CURRENT_POSITION', 
             'RESTORE_POSITION', 'KTCC_SET_GCODE_OFFSET_FOR_CURRENT_TOOL',
-            'KTCC_DISPLAY_TOOL_MAP', 'KTCC_REMAP_TOOL']
+            'KTCC_DISPLAY_TOOL_MAP', 'KTCC_REMAP_TOOL', 'KTCC_ENDSTOP_QUERY',
+            'KTCC_SET_ALL_TOOL_HEATERS_OFF', 'KTCC_RESUME_ALL_TOOL_HEATERS']
         for cmd in handlers:
             func = getattr(self, 'cmd_' + cmd)
             desc = getattr(self, 'cmd_' + cmd + '_help', None)
@@ -70,7 +73,7 @@ class ToolLock:
                 self.log.always(self._tool_map_to_human_string())
             self.Initialize_Tool_Lock()
         except Exception as e:
-            self._log_always('Warning: Error booting up KTCC: %s' % str(e))
+            self.log.always('Warning: Error booting up KTCC: %s' % str(e))
 
     def Initialize_Tool_Lock(self):
         if not self.init_printer_to_last_tool:
@@ -197,7 +200,7 @@ class ToolLock:
                 (tool.fan, 
                 fanspeed))
 
-    cmd_TEMPERATURE_WAIT_WITH_TOLERANCE_help = "Waits for all temperatures, or a specified (TOOL) tool or (HEATER) heater's temperature within (TOLERANCE) tolerance."
+    cmd_TEMPERATURE_WAIT_WITH_TOLERANCE_help = "Waits for current tool temperature, or a specified (TOOL) tool or (HEATER) heater's temperature within (TOLERANCE) tolerance."
 #  Waits for all temperatures, or a specified tool or heater's temperature.
 #  This command can be used without any additional parameters.
 #  Without parameters it waits for bed and current extruder.
@@ -283,8 +286,6 @@ class ToolLock:
 #  SHTDWN_TIMEOUT = Time in seconds to wait from docking tool to shutting off the heater, optional.
 #      Use for example 86400 to wait 24h if you want to disable shutdown timer.
     def cmd_SET_TOOL_TEMPERATURE(self, gcmd):
-        # curtime = self.printer.get_reactor().monotonic()
-
         tool_id = self._get_tool_id_from_gcmd(gcmd)
         if tool_id is None: return
 
@@ -314,6 +315,44 @@ class ToolLock:
             tool.set_heater(heater_state= chng_state)
         if len(set_heater_cmd) > 0:
             tool.set_heater(**set_heater_cmd)
+
+    cmd_KTCC_SET_ALL_TOOL_HEATERS_OFF_help = "Turns off all heaters and saves changes made to be resumed by KTCC_RESUME_ALL_TOOL_HEATERS."
+    def cmd_KTCC_SET_ALL_TOOL_HEATERS_OFF(self, gcmd):
+        self.set_all_tool_heaters_off()
+
+    def set_all_tool_heaters_off(self):
+        all_tools = dict(self.printer.lookup_objects('tool'))
+        self.changes_made_by_set_all_tool_heaters_off = {}
+
+        try:
+            for tool_name, tool in all_tools.items():
+                if tool.get_status()["extruder"] is None:
+                    self.log.trace("set_all_tool_heaters_off: %s has no extruder! Nothing to do." % str(tool_name))
+                    continue
+                if tool.get_status()["heater_state"] == 0:
+                    self.log.trace("set_all_tool_heaters_off: T%s already off! Nothing to do." % str(tool_name))
+                    continue
+                self.log.trace("set_all_tool_heaters_off: T%s saved with heater_state: %str." % ( str(tool_name), str(tool.get_status()["heater_state"])))
+                self.changes_made_by_set_all_tool_heaters_off[tool_name] = tool.get_status()["heater_state"]
+                tool.set_heater(heater_state = 0)
+        except Exception as e:
+            raise Exception('set_all_tool_heaters_off: Error: %s' % str(e))
+
+
+    
+        
+    cmd_KTCC_RESUME_ALL_TOOL_HEATERS_help = "Resumes all heaters previously turned off by KTCC_SET_ALL_TOOL_HEATERS_OFF."
+    def cmd_KTCC_RESUME_ALL_TOOL_HEATERS(self, gcmd):
+        self.resume_all_tool_heaters()
+
+    def resume_all_tool_heaters(self):
+        try:
+            for tool_name, v in self.changes_made_by_set_all_tool_heaters_off.items():
+                self.printer.lookup_object(str(tool_name)).set_heater(heater_state = v)
+
+        except Exception as e:
+            raise Exception('set_all_tool_heaters_off: Error: %s' % str(e))
+
 
     cmd_SET_TOOL_OFFSET_help = "Set an individual tool offset"
     def cmd_SET_TOOL_OFFSET(self, gcmd):
@@ -467,7 +506,8 @@ class ToolLock:
             "saved_fan_speed": self.saved_fan_speed,
             "purge_on_toolchange": self.purge_on_toolchange,
             "restore_position_on_toolchange_type": self.restore_position_on_toolchange_type,
-            "saved_position": self.saved_position
+            "saved_position": self.saved_position,
+            "last_endstop_query": self.last_endstop_query
         }
         return status
 
@@ -508,10 +548,6 @@ class ToolLock:
         # Set the new tool.
         self.tool_map[from_tool] = to_tool
         self.gcode.run_script_from_command("SAVE_VARIABLE VARIABLE=%s VALUE='%s'" % (self.VARS_KTCC_TOOL_MAP, self.tool_map))
-
-    # def _set_tool_status(self, tool, state):
-        # self.gate_status[tool] = state
-        # self.gcode.run_script_from_command("SAVE_VARIABLE VARIABLE=%s VALUE='%s'" % (self.VARS_KTCC_TOOL_MAP, self.tool_map))
 
     def _tool_map_to_human_string(self):
         msg = "Number of tools remaped: " + str(len(self.tool_map))
@@ -559,6 +595,46 @@ class ToolLock:
             # else:
             #     self._set_tool_status(to_tool, available)
         self.log.info(self._tool_map_to_human_string())
+
+### GCODE COMMANDS FOR witing on endstop (Jubilee sytle toollock) ##################################
+
+    cmd_KTCC_ENDSTOP_QUERY_help = "Wait for a ENDSTOP= untill it is TRIGGERED=0/[1] or ATEMPTS=#"
+    def cmd_KTCC_ENDSTOP_QUERY(self, gcmd):
+        endstop_name = gcmd.get('ENDSTOP') #'manual_stepper tool_lock'
+        should_be_triggered = bool(gcmd.get_int('TRIGGERED', 1, minval=0, maxval=1))
+        atempts = gcmd.get_int('ATEMPTS', -1, minval=1)
+        self.query_endstop(endstop_name, should_be_triggered, atempts)
+
+    def query_endstop(self, endstop_name, should_be_triggered=True, atempts=-1):
+        # Get endstops
+        endstop = None
+        query_endstops = self.printer.lookup_object('query_endstops')
+        for es, name in query_endstops.endstops:
+            if name == endstop_name:
+                endstop = es
+                break
+        if endstop is None:
+            raise Exception("Unknown endstop '%s'" % (endstop_name))
+
+        toolhead = self.printer.lookup_object("toolhead")
+        eventtime = self.reactor.monotonic()
+
+        i=0
+        while not self.printer.is_shutdown():
+            i += 1
+            last_move_time = toolhead.get_last_move_time()
+            is_triggered = bool(endstop.query_endstop(last_move_time))
+            self.log.trace("Check #%d of %s endstop: %s" % (i, endstop_name, ("Triggered" if is_triggered else "Not Triggered")))
+            if is_triggered == should_be_triggered:
+                break
+            # If not running continuesly then check for atempts.
+            if atempts > 0 and atempts <= i:
+                break
+            eventtime = self.reactor.pause(eventtime + 1.)
+        if i > 1 or atempts == 1:
+            self.log.debug("Endstop %s is %s Triggered after #%d checks." % (endstop_name, ("" if is_triggered else "Not"), i))
+
+        self.last_endstop_query[endstop_name] = is_triggered
 
 def load_config(config):
     return ToolLock(config)

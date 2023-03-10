@@ -14,8 +14,8 @@
 # ToolUnLock: Toollock is disengaged.
 
 # KTCC exception error class
-class KTCCError(Exception):
-    pass
+# class KTCCError(Exception):
+#     pass
 
 # Each tool is getting an instance of this.
 class Tool:
@@ -36,11 +36,14 @@ class Tool:
         self.park = None                    # Position to move to when fully parking the tool in the dock in the format X, Y
         self.offset = None                  # Offset of the nozzle in the format X, Y, Z
 
-        self.pickup_gcode = None            # The plain gcode string is to load for virtual tool having this tool as parent.
-        self.dropoff_gcode = None           # The plain gcode string is to load for virtual tool having this tool as parent.
+        self.pickup_gcode = None            # The plain gcode string for pickup of the tool.
+        self.dropoff_gcode = None           # The plain gcode string for droppoff of the tool.
         self.virtual_toolload_gcode = None  # The plain gcode string is to load for virtual tool having this tool as parent. This is for loading the virtual tool.
-        self.virtual_toolunload_gcode = None
+        self.virtual_toolunload_gcode = None# The plain gcode string is to unload for virtual tool having this tool as parent. This is for unloading the virtual tool.
 
+        self.requires_pickup_for_virtual_load = True   # May be needed for a filament swap to prevent ooze but not for a pen.
+        self.requires_pickup_for_virtual_unload = True # May be needed for a filament swap to prevent ooze but not for a pen. Used when forcing unload.
+        self.unload_virtual_at_dropoff = True          # If it takes long time to unload/load it may be faster to leave it loaded and force unload at end of print.
 
         self.heater_state = 0               # 0 = off, 1 = standby temperature, 2 = active temperature. Placeholder. Requred on Physical tool.
         self.heater_active_temp = 0         # Temperature to set when in active mode. Placeholder. Requred on Physical and virtual tool if any has extruder.
@@ -56,8 +59,10 @@ class Tool:
         self.shaper_damping_ratio_x = 0.1
         self.shaper_damping_ratio_y = 0.1
 
-        # Under Development:
-        HeatMultiplyerAtFullFanSpeed = 1    # Multiplier to be aplied to hotend temperature when fan is at maximum. Will be multiplied with fan speed. Ex. 1.1 at 205*C and fan speed of 40% will set temperature to 213*C
+        self.config = config
+
+        # Under Consideration:
+        # HeatMultiplyerAtFullFanSpeed = 1    # Multiplier to be aplied to hotend temperature when fan is at maximum. Will be multiplied with fan speed. Ex. 1.1 at 205*C and fan speed of 40% will set temperature to 213*C
 
         # If called without config then just return a dummy object.
         if config is None:
@@ -66,7 +71,7 @@ class Tool:
         # Load used objects.
         self.printer = config.get_printer()
         self.gcode = self.printer.lookup_object('gcode')
-        gcode_macro = self.printer.load_object(config, 'gcode_macro')
+        self.gcode_macro = self.printer.load_object(config, 'gcode_macro')
         self.toollock = self.printer.lookup_object('toollock')
         self.log = self.printer.lookup_object('ktcclog')
 
@@ -90,10 +95,6 @@ class Tool:
                     % (config.get_name()))
         tg_status = self.toolgroup.get_status()
 
-        ##### Is Virtual #####
-        self.is_virtual = config.getboolean('is_virtual', 
-                                            tg_status["is_virtual"])
-
         ##### Physical Parent #####
         self.physical_parent_id = config.getint('physical_parent', 
                                                 tg_status["physical_parent_id"])
@@ -107,12 +108,14 @@ class Tool:
                     % (config.get_name()))
         
         if self.physical_parent_id >= 0 and not self.physical_parent_id == self.name:
-            pp = self.printer.lookup_object("tool " + str(self.physical_parent_id))
+            self.pp = self.printer.lookup_object("tool " + str(self.physical_parent_id))
         else:
-            pp = Tool()     # Initialize physical parent as a dummy object.
+            self.pp = Tool()     # Initialize physical parent as a dummy object.
 
-        pp_status = pp.get_status()
+        pp_status = self.pp.get_status()
 
+        ##### Is Virtual #####
+        self.is_virtual = bool(self._get_config_parameter_with_inheritence('is_virtual'))
 
         ##### Extruder #####
         self.extruder = config.get('extruder', pp_status['extruder'])      
@@ -121,25 +124,34 @@ class Tool:
         self.fan = config.get('fan', pp_status['fan'])                     
 
         ##### Meltzone Length #####
-        self.meltzonelength = config.get('meltzonelength', pp_status['meltzonelength'])      
-        if self.meltzonelength is None:
-            self.meltzonelength = tg_status["meltzonelength"]
+        self.meltzonelength = self._get_config_parameter_with_inheritence('meltzonelength')
 
         ##### Lazy Home when parking #####
-        self.lazy_home_when_parking = config.get('lazy_home_when_parking', pp_status['lazy_home_when_parking'])   
-        if self.lazy_home_when_parking is None:
-            self.lazy_home_when_parking = tg_status["lazy_home_when_parking"]
+        self.lazy_home_when_parking = self._get_config_parameter_with_inheritence('lazy_home_when_parking')
 
         ##### Coordinates #####
-        self.zone = config.get('zone', pp_status['zone'])
-        if not isinstance(self.zone, list):
-            self.zone = str(self.zone).split(',')
-        self.park = config.get('park', pp_status['park'])                  
-        if not isinstance(self.park, list):
-            self.park = str(self.park).split(',')
-        self.offset = config.get('offset', pp_status['offset'])
-        if not isinstance(self.offset, list):
-            self.offset = str(self.offset).split(',')
+        try:
+            self.zone = config.get('zone', pp_status['zone'])
+            if not isinstance(self.zone, list):
+                self.zone = str(self.zone).split(',')
+            self.park = config.get('park', pp_status['park'])                  
+            if not isinstance(self.park, list):
+                self.park = str(self.park).split(',')
+            self.offset = config.get('offset', pp_status['offset'])
+            if not isinstance(self.offset, list):
+                self.offset = str(self.offset).split(',')
+
+            if len(self.zone) < 3:
+                raise config.error("zone Offset is malformed, must be a list of x,y,z If you want it blank, use 0,0,0")
+            if len(self.park) < 3:
+                raise config.error("park Offset is malformed, must be a list of x,y,z If you want it blank, use 0,0,0")
+            if len(self.offset) < 3:
+                raise config.error("offset Offset is malformed, must be a list of x,y,z. If you want it blank, use 0,0,0")
+
+        except Exception as e:
+            raise config.error(
+                    "Coordinates of section '%s' is not well formated: %s"
+                    % (config.get_name(), str(e)))
 
         # Tool specific input shaper parameters. Initiated with Klipper standard values where not specified.
         self.shaper_freq_x = config.get('shaper_freq_x', pp_status['shaper_freq_x'])                     
@@ -160,44 +172,48 @@ class Tool:
                     'idle_to_powerdown_time', tg_status['idle_to_powerdown_time'], minval = 0.1)
                 self.timer_idle_to_powerdown = ToolStandbyTempTimer(self.printer, self.name, 0)
             else:
-                self.idle_to_standby_time = pp.idle_to_standby_time
-                self.idle_to_powerdown_time = pp.idle_to_powerdown_time
-                self.timer_idle_to_standby = pp.get_timer_to_standby()
-                self.timer_idle_to_powerdown = pp.get_timer_to_powerdown()
+                self.idle_to_standby_time = self.pp.idle_to_standby_time
+                self.idle_to_powerdown_time = self.pp.idle_to_powerdown_time
+                self.timer_idle_to_standby = self.pp.get_timer_to_standby()
+                self.timer_idle_to_powerdown = self.pp.get_timer_to_powerdown()
 
         ##### G-Code ToolChange #####
-        self.pickup_gcode = config.get('pickup_gcode', None)
-        self.dropoff_gcode = config.get('dropoff_gcode', None)
-
-        temp_pickup_gcode = pp.get_pickup_gcode()
-        if temp_pickup_gcode is None:
-            temp_pickup_gcode =  self.toolgroup.get_pickup_gcode()
-        self.pickup_gcode_template = gcode_macro.load_template(config, 'pickup_gcode', temp_pickup_gcode)
-
-        temp_dropoff_gcode = pp.get_dropoff_gcode()
-        if temp_dropoff_gcode is None:
-            temp_dropoff_gcode = self.toolgroup.get_dropoff_gcode()
-        self.dropoff_gcode_template = gcode_macro.load_template(config, 'dropoff_gcode', temp_dropoff_gcode)
+        self.pickup_gcode, self.pickup_gcode_template = self._get_gcode_template_with_inheritence('pickup_gcode')
+        self.dropoff_gcode, self.dropoff_gcode_template = self._get_gcode_template_with_inheritence('dropoff_gcode')
 
         ##### G-Code VirtualToolChange #####
         if self.is_virtual:
-            self.virtual_toolload_gcode = config.get('virtual_toolload_gcode', None)
-            self.virtual_toolunload_gcode = config.get('virtual_toolunload_gcode', None)
+            self.virtual_toolload_gcode, self.virtual_toolload_gcode_template = self._get_gcode_template_with_inheritence('virtual_toolload_gcode')
+            self.virtual_toolunload_gcode, self.virtual_toolunload_gcode_template = self._get_gcode_template_with_inheritence('virtual_toolunload_gcode')
 
-            temp_virtual_toolload_gcode = pp.get_virtual_toolload_gcode()
-            if temp_virtual_toolload_gcode is None:
-                temp_virtual_toolload_gcode =  self.toolgroup.get_virtual_toolload_gcode()
-            self.virtual_toolload_gcode_template = gcode_macro.load_template(config, 'virtual_toolload_gcode', temp_virtual_toolload_gcode)
-
-            temp_virtual_toolunload_gcode = pp.get_virtual_toolunload_gcode()
-            if temp_virtual_toolunload_gcode is None:
-                temp_virtual_toolunload_gcode = self.toolgroup.get_virtual_toolunload_gcode()
-            self.virtual_toolunload_gcode_template = gcode_macro.load_template(config, 'virtual_toolunload_gcode', temp_virtual_toolunload_gcode)
+        ##### Parameters for VirtualToolChange #####
+            self.requires_pickup_for_virtual_load = self._get_config_parameter_with_inheritence('requires_pickup_for_virtual_load')
+            self.requires_pickup_for_virtual_unload = self._get_config_parameter_with_inheritence('requires_pickup_for_virtual_unload')
+            self.unload_virtual_at_dropoff = self._get_config_parameter_with_inheritence('unload_virtual_at_dropoff')
 
         ##### Register Tool select command #####
         self.gcode.register_command("KTCC_T" + str(self.name), self.cmd_SelectTool, desc=self.cmd_SelectTool_help)
 
+    def _get_config_parameter_with_inheritence(self, config_param, optional = False):
+        tmp = self.config.get(config_param, self.pp.get_config(config_param))   
+        if tmp is None:
+            tmp = self.toolgroup.get_config(config_param)
 
+    def _get_gcode_template_with_inheritence(self, config_param, optional = False):
+        temp_gcode = self.pp.get_config(config_param)                   # First try to get gcode parameter from eventual physical Parent.
+        if temp_gcode is None:                                          # If didn't get any from physical parent,
+            temp_gcode =  self.toolgroup.get_config(config_param)       # try getting from toolgroup.
+
+        if optional and temp_gcode is None: temp_gcode = ""
+
+        gcode = self.get_config(config_param, temp_gcode)               # Get from this config and fallback on previous.
+        template = self.gcode_macro.load_template(self.config, config_param, temp_gcode)
+        return gcode, template
+
+    def get_config(self, config_param, default = None):
+        if self.config is None: return None
+        return self.config.get(config_param, default)
+        
     cmd_SelectTool_help = "Select Tool"
     def cmd_SelectTool(self, gcmd):
         self.log.trace("T" + str(self.name) + " Selected.")
@@ -305,8 +321,8 @@ class Tool:
             context['myself'] = self.get_status()
             context['toollock'] = self.toollock.get_status()
             self.pickup_gcode_template.run_gcode_from_command(context)
-        except KTCCError as ee:
-            raise KTCCError("Pickup gcode: Script running error: %s" % (str(ee)))
+        except Exception as e:
+            raise Exception("Pickup gcode: Script running error: %s" % (str(e)))
 
         # Restore fan if has a fan.
         if self.fan is not None:
@@ -315,6 +331,7 @@ class Tool:
 
         # Set Tool specific input shaper.
         if self.shaper_freq_x != 0 or self.shaper_freq_y != 0:
+            self.log.always("shaper_freq will be deprecated. Use SET_INPUT_SHAPER inside the pickup gcode instead.")
             cmd = ("SET_INPUT_SHAPER" +
                 " SHAPER_FREQ_X=" + str(self.shaper_freq_x) +
                 " SHAPER_FREQ_Y=" + str(self.shaper_freq_y) +
@@ -360,8 +377,8 @@ class Tool:
             context['myself'] = self.get_status()
             context['toollock'] = self.toollock.get_status()
             self.dropoff_gcode_template.run_gcode_from_command(context)
-        except KTCCError as ee:
-            raise KTCCError("Dropoff gcode: Script running error: %s" % (str(ee)))
+        except Exception as e:
+            raise Exception("Dropoff gcode: Script running error: %s" % (str(e)))
 
         self.toollock.SaveCurrentTool(self.TOOL_UNLOCKED)   # Dropoff successfull
         self.log.track_unmount_end(self.name)                 # Log the time it takes for tool change.
@@ -376,8 +393,8 @@ class Tool:
             context['myself'] = self.get_status()
             context['toollock'] = self.toollock.get_status()
             self.virtual_toolload_gcode_template.run_gcode_from_command(context)
-        except KTCCError as ee:
-            raise KTCCError("virtual_toolload_gcode: Script running error: %s" % (str(ee)))
+        except Exception as e:
+            raise Exception("virtual_toolload_gcode: Script running error: %s" % (str(e)))
 
         # Save current picked up tool and print on screen.
         self.toollock.SaveCurrentTool(self.name)
@@ -392,8 +409,8 @@ class Tool:
             context['myself'] = self.get_status()
             context['toollock'] = self.toollock.get_status()
             self.virtual_toolunload_gcode_template.run_gcode_from_command(context)
-        except KTCCError as ee:
-            raise KTCCError("virtual_toolunload_gcode: Script running error:\n%s" % str(ee))
+        except Exception as e:
+            raise Exception("virtual_toolunload_gcode: Script running error:\n%s" % str(e))
 
         # Save current picked up tool and print on screen.
         self.toollock.SaveCurrentTool(self.name)
@@ -462,19 +479,24 @@ class Tool:
                     self.timer_idle_to_standby.set_timer(0.1)
                     self.timer_idle_to_powerdown.set_timer(self.idle_to_powerdown_time)
             self.heater_state = chng_state
-        # self.log.trace("Heater mode changed: T%d heater_state now set to:%d. Current_temp:%d, Standbytemp:%d, ActiveTemp:%d." % (int(self.name), int(self.heater_state), int(heater.get_status(curtime)["temperature"]), int(self.heater_standby_temp), int(heater.set_temp(self.heater_active_temp))))
 
-    def get_pickup_gcode(self):
-        return self.pickup_gcode
+    # def get_pickup_gcode(self):
+    #     return self.pickup_gcode
 
-    def get_dropoff_gcode(self):
-        return self.dropoff_gcode
+    # def get_dropoff_gcode(self):
+    #     return self.dropoff_gcode
 
-    def get_virtual_toolload_gcode(self):
-        return self.virtual_toolload_gcode
+    # def get_virtual_toolload_gcode(self):
+    #     return self.virtual_toolload_gcode
 
-    def get_virtual_toolunload_gcode(self):
-        return self.virtual_toolunload_gcode
+    # def get_virtual_toolunload_gcode(self):
+    #     return self.virtual_toolunload_gcode
+
+    # def get_postmount_gcode(self):
+    #     return self.postmount_gcode
+
+    # def get_postunmount_gcode(self):
+    #     return self.postunmount_gcode
 
     def get_timer_to_standby(self):
         return self.timer_idle_to_standby
@@ -546,8 +568,8 @@ class ToolStandbyTempTimer:
             self.log.trace("_standby_tool_temp_timer_event: Running heater.set_temp(%s)" % str(temperature))
             self.log.track_active_heater_end(self.tool_id)                                               # Set the active as finishes in statistics.
 
-        except KTCCError as ee:
-            raise KTCCError("Failed to set Standby temp for tool T%s: %s" % (str(self.tool_id), str(ee)))
+        except Exception as e:
+            raise Exception("Failed to set Standby temp for tool T%s: %s" % (str(self.tool_id), str(e)))
 
         nextwake = self.reactor.NEVER
         if self.repeat:

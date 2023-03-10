@@ -19,7 +19,8 @@ class ToolGroup:
     def __init__(self, config):
         self.printer = config.get_printer()
         self.name = config.get_name().split(' ')[1]
-        gcode_macro = self.printer.load_object(config, 'gcode_macro')
+        self.config = config
+        # gcode_macro = self.printer.load_object(config, 'gcode_macro')
 
         try:
             _, name = config.get_name().split(' ', 1)
@@ -43,18 +44,10 @@ class ToolGroup:
         self.idle_to_standby_time = config.getfloat( 'idle_to_standby_time', 30, minval = 0.1)
         self.idle_to_powerdown_time = config.getfloat( 'idle_to_powerdown_time', 600, minval = 0.1)
 
-    def get_pickup_gcode(self):
-        return self.pickup_gcode
-
-    def get_dropoff_gcode(self):
-        return self.dropoff_gcode
-
-    def get_virtual_toolload_gcode(self):
-        return self.virtual_toolload_gcode
-
-    def get_virtual_toolunload_gcode(self):
-        return self.virtual_toolunload_gcode
-
+    def get_config(self, config_param, default = None):
+        if self.config is None: return None
+        return self.config.get(config_param, default)
+        
     def get_status(self, eventtime= None):
         status = {
             "is_virtual": self.is_virtual,
