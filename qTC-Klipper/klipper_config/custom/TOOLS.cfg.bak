@@ -13,40 +13,40 @@ logfile_level: 4
 purge_on_toolchange = True          # Here we can disable all purging. When disabled it overrides all other purge options. Defaults to true. This can be turned off by a macro for automatic probing hot tools without probing them. For example when doing TAMV or ZTATP.
 #init_printer_to_last_tool = True   #Initialise as it was turned off, unlock tool if none was loaded or lock if one was loaded. Defaults to True
 tool_lock_gcode:
-    SAVE_GCODE_STATE NAME=tool_unlock_state                                         # Save gcode state
+    # SAVE_GCODE_STATE NAME=tool_unlock_state                                         # Save gcode state
     MANUAL_STEPPER STEPPER=tool_lock SET_POSITION=0                                 # Set assumed possition as rotated to min
     MANUAL_STEPPER STEPPER=tool_lock Move=1 SPEED=30 STOP_ON_ENDSTOP=-1 SYNC=1      # Move until no longer endstop is triggered, max 1degree. If Endstop is not untriggered then raise an error. Wait for the movement before continuing.
     SET_TMC_CURRENT STEPPER=tool_lock CURRENT=1.0                                   # Raise current of stepper temporarily
     MANUAL_STEPPER STEPPER=tool_lock Move=140 SPEED=50 STOP_ON_ENDSTOP=2 SYNC=1     # Move to max and stop on endstop. If Endstop is not triggered then don't raise an error. Wait for the movement before continuing.
     # If endstop is not triggered then try to lock again for safety. Best to check the endstops before calling this. 
-    QUERY_ENDSTOPS
+    KTCC_ENDSTOP_QUERY ENDSTOP='manual_stepper tool_lock' ATEMPTS=3
     SUB_TOOL_LOCK_ENDSTOP_CHECK
     M400
     MANUAL_STEPPER STEPPER=tool_lock SET_POSITION=0                                 # Set manual extruder position as 0
     SET_TMC_CURRENT STEPPER=tool_lock CURRENT=0.7                                   # Decrease current to standard current.
-    RESTORE_GCODE_STATE NAME=tool_unlock_state MOVE=0                               # Restore gcode state
+    # RESTORE_GCODE_STATE NAME=tool_unlock_state MOVE=0                               # Restore gcode state
 
 tool_unlock_gcode:
-    SAVE_GCODE_STATE NAME=tool_lock_state                                           # Save gcode state
+    # SAVE_GCODE_STATE NAME=tool_lock_state                                           # Save gcode state
     MANUAL_STEPPER STEPPER=tool_lock SET_POSITION=180                               # Set assumed possition as rotated to max
     MANUAL_STEPPER STEPPER=tool_lock Move=179 SPEED=30 STOP_ON_ENDSTOP=-1 SYNC=1    # Move until no longer endstop is triggered, max 1degree. If Endstop is not untriggered then raise an error. Wait for the movement before continuing.
     MANUAL_STEPPER STEPPER=tool_lock Move=0 SPEED=100 STOP_ON_ENDSTOP=2 SYNC=1      # Move to min and stop on endstop. If Endstop is not triggered then raise an error. Wait for the movement before continuing.
     # If endstop is not triggered then try to lock again for safety. Best to check the endstops before calling this. 
-    QUERY_ENDSTOPS
+    KTCC_ENDSTOP_QUERY ENDSTOP='manual_stepper tool_lock' ATEMPTS=3
     SUB_TOOL_UNLOCK_ENDSTOP_CHECK
     M400
     MANUAL_STEPPER STEPPER=tool_lock SET_POSITION=0                                 # Set manual extruder position as 0
     MANUAL_STEPPER STEPPER=tool_lock ENABLE=0                                       # Turn off the stepper while unlocked so it can rest without triggering the endswitch
-    RESTORE_GCODE_STATE NAME=tool_lock_state MOVE=0                                 # Restore gcode state
+    # RESTORE_GCODE_STATE NAME=tool_lock_state MOVE=0                                 # Restore gcode state
 
 [toolgroup 0]
 is_virtual: True            # If True then must have a physical_parent declared and shares extruder, hotend and fan with the physical_parent
 physical_parent: 0          # Tool used as a Physical parent for all toos of this group. Only used if the tool i virtual.
 virtual_toolload_gcode:
-  # Because the virtual tools match the number on ERCF I just call that.
   SUB_VIRTUALTOOL_LOAD T={myself.name}
 virtual_toolunload_gcode:
   SUB_VIRTUALTOOL_UNLOAD T={myself.name}
+unload_virtual_at_dropoff: 0
 #idle_to_standby_time: 30
 #idle_to_powerdown_time: 600
 
@@ -54,9 +54,6 @@ virtual_toolunload_gcode:
 # Used to group several tools with similar settings.
 [toolgroup 1]
 is_virtual: False            # If True then must have a physical_parent declared and shares extruder, hotend and fan with the physical_parent
-pickup_gcode: 
-  SUB_TOOL_PICKUP_START T={myself.name}
-  SUB_TOOL_PICKUP_END T={myself.name}
 dropoff_gcode:
   SUB_TOOL_DROPOFF_START T={myself.name}
   SUB_TOOL_DROPOFF_END T={myself.name}
@@ -67,28 +64,27 @@ tool_group: 0                     # Must be used and configured before this tool
 ##### Following can be inherited from Physical parent if not specified for this tool. Needed only by physical tools.
 extruder: extruder
 fan: partfan_t0
-zone: 555,200
-park: 598,200
+zone: 555,200, 0
+park: 598,200, 0
 offset: 11.663,5.255,3.10  #12.151,4.271,3.10
 #####
 ##### Following can be inherited from ToolGroup if not specified for this tool or inherited from a Physical parent.
 #physical_parent:                  # Defaults to None.
 #is_virtual: False                 # Defaults to False
-meltzonelength: 14 #18                 # Defaults to 0
+meltzonelength: 14                 # Defaults to 0
 #####
 ##### Options below have no effect on Virtual tools.
 idle_to_standby_time: 0.1          # Time in seconds from being parked to setting temperature to standby the temperature above. Use 0.1 to change imediatley to standby temperature. Defaults to 30
 #idle_to_powerdown_time: 600       # Time in seconds from being parked to setting temperature to 0. Use something like 86400 to wait 24h if you want to disable. Defaults to 600
-lazy_home_when_parking: 0           # (default: 0 - disabled) - When set to 1, will home unhomed XY axes if needed and will not move any axis if already homed and parked. 2 Will also home Z if not homed.
-#shaper_freq_x: 119.8
-#shaper_freq_y: 126.6
-#shaper_type_x: mzv
-#shaper_type_y: 2hump_ei
+#lazy_home_when_parking: 0         # (default: 0 - disabled) - When set to 1, will home unhomed XY axes if needed and will not move any axis if already homed and parked. 2 Will also home Z if not homed.
 
 #pickup_gcode= The code that is run when picking up the physical tool. Variable {myself} refers to the tool calling this code.
 pickup_gcode: 
   SUB_TOOL_PICKUP_START T={myself.name}
   SUB_TOOL_PICKUP_END T={myself.name}
+  SET_INPUT_SHAPER SHAPER_FREQ_X=48.4 SHAPER_FREQ_Y=114.6 SHAPER_TYPE_X=MZV SHAPER_TYPE_Y=2hump_ei
+  SET_PRESSURE_ADVANCE ADVANCE=0.06
+
 dropoff_gcode:
   SUB_TOOL_DROPOFF_START T={myself.name}
   SUB_TOOL_DROPOFF_END T={myself.name}
@@ -116,58 +112,58 @@ tool_group: 0
 tool_group: 1
 extruder: extruder1
 fan: partfan_t9
-zone: 555,100
-park: 598,100
-offset: -1.055,0.055,-1.51  #-1.010,-0.036,-1.55
-meltzonelength: 14 #18
+zone: 555,100,0
+park: 598,100,0
+offset: -1.055,0.055,-1.51
+meltzonelength: 14
 idle_to_standby_time: 0.1
-#shaper_freq_x: 126.8
-#shaper_freq_y: 128.6
-#shaper_type_x: 3hump_ei
-#shaper_type_y: 3hump_ei
+pickup_gcode: 
+  SUB_TOOL_PICKUP_START T={myself.name}
+  SUB_TOOL_PICKUP_END T={myself.name}
+  SET_INPUT_SHAPER SHAPER_FREQ_X=48.4 SHAPER_FREQ_Y=114.6 SHAPER_TYPE_X=MZV SHAPER_TYPE_Y=2hump_ei
+  SET_PRESSURE_ADVANCE ADVANCE=0.12
+
 
 [tool 10]
 tool_group: 1
 extruder: extruder2
 fan: partfan_t10
-zone: 555,5
-park: 598,5
-offset: 11.555,4.775,3.43  #11.602,4.656,3.41
-meltzonelength: 14 #18
+zone: 555,5,0
+park: 598,5,0
+offset: 11.555,4.775,3.43
+meltzonelength: 14
 idle_to_standby_time: 0.1
-#shaper_freq_x: 137.2
-#shaper_freq_y: 116.4
-#shaper_type_x: 2hump_ei
-#shaper_type_y: 2hump_ei
-
-
-
+pickup_gcode: 
+  SUB_TOOL_PICKUP_START T={myself.name}
+  SUB_TOOL_PICKUP_END T={myself.name}
+  SET_INPUT_SHAPER SHAPER_FREQ_X=48.4 SHAPER_FREQ_Y=114.6 SHAPER_TYPE_X=MZV SHAPER_TYPE_Y=2hump_ei
+  SET_PRESSURE_ADVANCE ADVANCE=0.0775
 
 [tool 11]
 tool_group: 1
 extruder: extruder3
 fan: partfan_t11
-zone: 555,280
-park: 598,280
+zone: 555,280,0
+park: 598,280,0
 offset: 11.973,5.586,3.26
-meltzonelength: 14 #18
+meltzonelength: 14
 idle_to_standby_time: 0.1
-#shaper_freq_x: 69.6
-#shaper_freq_y: 134.2
-#shaper_type_x: 2hump_ei
-#shaper_type_y: 2hump_ei
-
+pickup_gcode: 
+  SUB_TOOL_PICKUP_START T={myself.name}
+  SUB_TOOL_PICKUP_END T={myself.name}
+  SET_INPUT_SHAPER SHAPER_FREQ_X=48.4 SHAPER_FREQ_Y=114.6 SHAPER_TYPE_X=MZV SHAPER_TYPE_Y=2hump_ei
+  SET_PRESSURE_ADVANCE ADVANCE=0.0775
 
 [tool 49]
 tool_group: 1
-zone: 560,515
-park: 598,515
+zone: 560,515,0
+park: 598,515,0
 offset: 0,0,0
-# Just to reset the input shaper.
-#shaper_freq_x: 0
-#shaper_freq_y: 0
-#shaper_type_x: mzv
-#shaper_type_y: mzv
+pickup_gcode: 
+  SUB_TOOL_PICKUP_START T={myself.name}
+  SUB_TOOL_PICKUP_END T={myself.name}
+  SET_INPUT_SHAPER SHAPER_FREQ_X=0 SHAPER_FREQ_Y=0 SHAPER_TYPE_X=MZV SHAPER_TYPE_Y=MZV
+  SET_PRESSURE_ADVANCE ADVANCE=0
 
 [gcode_macro SUB_TOOL_PICKUP_START]
 description: Internal subroutine. Do not use!
@@ -181,7 +177,7 @@ gcode:
   M204 S8000                                                           # Set high acceleration for toolchanging
 
   SAVE_GCODE_STATE NAME=TOOL_PICKUP_T{myself.name}                     # Save GCODE state. Will be restored at the end of SUB_TOOL_PICKUP_END
-#  SET_GCODE_VARIABLE MACRO=HOMING_STATUS VARIABLE=maxx VALUE=0         # Don't use the X-max endstop as EmergencyStop.
+  SET_GCODE_VARIABLE MACRO=HOMING_STATUS VARIABLE=maxx VALUE=0         # Don't use the X-max endstop as EmergencyStop.
   G90
 
   ##############  Move in to zone  ##############
@@ -203,7 +199,7 @@ gcode:
 
   ##############  Wait for heater  ##############
   {% if myself.extruder|default("none")|lower !="none" %}              # If the tool has an extruder:
-    M116 P{myself.name}                                                  # Wait for tool to reach target temperature.
+    M116 P{myself.name} S2                                             # Wait for tool to reach target temperature with a tolerance of 2*C
   {% endif %}                                                          # /
 
   ##############  Move out to zone  ##############
@@ -218,12 +214,13 @@ gcode:
   G0 X500 F40000                                                       # Fast Move to the safe position for tools.
 
     ##############  Check Tool Lock  ##############
-  QUERY_ENDSTOPS                                                       # Check the endstops and save the state to be retrieved in the macro below.
+  # QUERY_ENDSTOPS                                                       # Check the endstops and save the state to be retrieved in the macro below.
+  KTCC_ENDSTOP_QUERY ENDSTOP='manual_stepper tool_lock' ATEMPTS=3
   SUB_TOOL_LOCK_CHECK                                                      # MAcro to check so the tool is mounted by slightly advancing the lock again until hit endstop, only if endstop not already hit. Do not wait for it to finish.
 
     ##############  Finnish up  ##############
   M400                                                                 # Wait for current moves to finish.
-#  SET_GCODE_VARIABLE MACRO=HOMING_STATUS VARIABLE=maxx VALUE=1         # Use the X max as EmergencyStop.
+  SET_GCODE_VARIABLE MACRO=HOMING_STATUS VARIABLE=maxx VALUE=1         # Use the X max as EmergencyStop.
   RESTORE_GCODE_STATE NAME=TOOL_PICKUP_T{myself.name} MOVE=0           # Restore GCODE state. Was saved at the begining of SUB_TOOL_PICKUP_START. No move.
                                                                        # Set the toolhead offsets. Z is set and moved before any moves in SUB_TOOL_PICKUP_START. Needs to be after any RESTORE_GCODE_STATE!
   SET_GCODE_OFFSET X={myself.offset[0]} Y={myself.offset[1]} Z={myself.offset[2]} MOVE=0  # Set X and Y offsets, 
@@ -283,7 +280,7 @@ gcode:
   SAVE_GCODE_STATE NAME=TOOL_DROPOFF_002_T{myself.name}         # Save GCode state.
   G90                                                           # Absolute positions
 
-#  SET_GCODE_VARIABLE MACRO=HOMING_STATUS VARIABLE=maxx VALUE=0 # Don't use the X max as EmergencyStop.
+  SET_GCODE_VARIABLE MACRO=HOMING_STATUS VARIABLE=maxx VALUE=0 # Don't use the X max as EmergencyStop.
 
   # Fast Move to the general pickup position for tools.
   {% if printer.toolhead.position.x|int < 500 %}
@@ -311,6 +308,6 @@ gcode:
   G0 X500 F40000                           # Fast Move to the general pickup position for tools.
   M400
 
-#  SET_GCODE_VARIABLE MACRO=HOMING_STATUS VARIABLE=maxx VALUE=1 # Use the X max as EmergencyStop.
+  SET_GCODE_VARIABLE MACRO=HOMING_STATUS VARIABLE=maxx VALUE=1 # Use the X max as EmergencyStop.
   RESTORE_GCODE_STATE NAME=TOOL_DROPOFF_002_T{myself.name} MOVE=0   # Restore Gcode state
   RESTORE_ACCELERATION                # Restore saved acceleration value.

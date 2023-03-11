@@ -44,8 +44,12 @@ class ToolGroup:
         self.idle_to_standby_time = config.getfloat( 'idle_to_standby_time', 30, minval = 0.1)
         self.idle_to_powerdown_time = config.getfloat( 'idle_to_powerdown_time', 600, minval = 0.1)
 
+        self.requires_pickup_for_virtual_load = self.config.getboolean("requires_pickup_for_virtual_load", True)
+        self.requires_pickup_for_virtual_unload = self.config.getboolean("requires_pickup_for_virtual_unload", True)
+        self.unload_virtual_at_dropoff = self.config.getboolean("unload_virtual_at_dropoff", True)
+
+
     def get_config(self, config_param, default = None):
-        if self.config is None: return None
         return self.config.get(config_param, default)
         
     def get_status(self, eventtime= None):
@@ -55,7 +59,10 @@ class ToolGroup:
             "lazy_home_when_parking": self.lazy_home_when_parking,
             "meltzonelength": self.meltzonelength,
             "idle_to_standby_time": self.idle_to_standby_time,
-            "idle_to_powerdown_time": self.idle_to_powerdown_time
+            "idle_to_powerdown_time": self.idle_to_powerdown_time,
+            "requires_pickup_for_virtual_load": self.requires_pickup_for_virtual_load,
+            "requires_pickup_for_virtual_unload": self.requires_pickup_for_virtual_unload,
+            "unload_virtual_at_dropoff": self.unload_virtual_at_dropoff
         }
         return status
 

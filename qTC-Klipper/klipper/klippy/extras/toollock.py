@@ -110,7 +110,8 @@ class ToolLock:
             self.tool_lock_gcode_template.run_gcode_from_command()
             self.SaveCurrentTool("-2")
             self.log.trace("Tool Locked")
-            self.log.track_total_toollocks()
+            self.log.increase_statistics('total_toollocks')
+            
 
     cmd_KTCC_TOOL_DROPOFF_ALL_help = "Deselect all tools"
     def cmd_KTCC_TOOL_DROPOFF_ALL(self, gcmd = None):
@@ -118,7 +119,27 @@ class ToolLock:
         if self.tool_current == "-2":
             raise self.printer.command_error("cmd_KTCC_TOOL_DROPOFF_ALL: Unknown tool already mounted Can't park unknown tool.")
         if self.tool_current != "-1":
-            self.printer.lookup_object('tool ' + str(self.tool_current)).Dropoff()
+            self.printer.lookup_object('tool ' + str(self.tool_current)).Dropoff( force_virtual_unload = True )
+        
+
+        try:
+            # Need to check all tools at least once but reload them after each time.
+            all_checked_once = False
+            while not all_checked_once:
+                all_tools = dict(self.printer.lookup_objects('tool'))
+                all_checked_once =True # If no breaks in next For loop then we can exit the While loop.
+                for tool_name, tool in all_tools.items():
+                    # If there is a virtual tool loaded:
+                    if tool.get_status()["virtual_loaded"] > self.TOOL_UNLOCKED:
+                        # Pickup and then unload and drop the tool.
+                        self.log.trace("cmd_KTCC_TOOL_DROPOFF_ALL: Picking up and dropping forced: %s." % str(tool.get_status()["virtual_loaded"]))
+                        self.printer.lookup_object("tool " + str(tool.get_status()["virtual_loaded"])).select_tool_actual()
+                        self.printer.lookup_object("tool " + str(tool.get_status()["virtual_loaded"])).Dropoff( force_virtual_unload = True )
+                        all_checked_once =False # Do not exit while loop.
+                        break # Break for loop to start again.
+
+        except Exception as e:
+            raise Exception('cmd_KTCC_TOOL_DROPOFF_ALL: Error: %s' % str(e))
 
     cmd_TOOL_UNLOCK_help = "Unlock the ToolLock."
     def cmd_TOOL_UNLOCK(self, gcmd = None):
@@ -126,7 +147,7 @@ class ToolLock:
         self.tool_unlock_gcode_template.run_gcode_from_command()
         self.SaveCurrentTool(-1)
         self.log.trace("ToolLock Unlocked.")
-        self.log.track_total_toolunlocks()
+        self.log.increase_statistics('total_toolunlocks')
 
 
     def PrinterIsHomedForToolchange(self, lazy_home_when_parking =0):
@@ -327,7 +348,7 @@ class ToolLock:
         try:
             for tool_name, tool in all_tools.items():
                 if tool.get_status()["extruder"] is None:
-                    self.log.trace("set_all_tool_heaters_off: %s has no extruder! Nothing to do." % str(tool_name))
+                    self.log.trace("set_all_tool_heaters_off: T%s has no extruder! Nothing to do." % str(tool_name))
                     continue
                 if tool.get_status()["heater_state"] == 0:
                     self.log.trace("set_all_tool_heaters_off: T%s already off! Nothing to do." % str(tool_name))
@@ -619,6 +640,10 @@ class ToolLock:
         toolhead = self.printer.lookup_object("toolhead")
         eventtime = self.reactor.monotonic()
 
+        dwell = 0.1
+        if atempts == -1:
+            dwell = 1.0
+
         i=0
         while not self.printer.is_shutdown():
             i += 1
@@ -630,9 +655,9 @@ class ToolLock:
             # If not running continuesly then check for atempts.
             if atempts > 0 and atempts <= i:
                 break
-            eventtime = self.reactor.pause(eventtime + 1.)
-        if i > 1 or atempts == 1:
-            self.log.debug("Endstop %s is %s Triggered after #%d checks." % (endstop_name, ("" if is_triggered else "Not"), i))
+            eventtime = self.reactor.pause(eventtime + dwell)
+        # if i > 1 or atempts == 1:
+        # self.log.debug("Endstop %s is %s Triggered after #%d checks." % (endstop_name, ("" if is_triggered else "Not"), i))
 
         self.last_endstop_query[endstop_name] = is_triggered
 

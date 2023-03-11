@@ -304,7 +304,7 @@ class KtccLog:
     def track_mount_start(self, tool_id):
         self.trace("track_mount_start: Running for Tool: %s." % (tool_id))
         self._set_tool_statistics(tool_id, 'tracked_mount_start_time', time.time())
-        self.increase_tool_statistics(tool_id, 'toolmounts_started')
+        
 
     def track_mount_end(self, tool_id):
         self.trace("track_mount_end: Running for Tool: %s." % (tool_id))
@@ -315,9 +315,6 @@ class KtccLog:
             self.increase_tool_statistics(tool_id, 'total_time_spent_mounting', time_spent)
             self.total_time_spent_mounting += time_spent
             self._set_tool_statistics(tool_id, 'tracked_mount_start_time', 0)
-            
-            self.increase_tool_statistics(tool_id, 'toolmounts_completed')
-            self.total_toolmounts += 1
             self.changes_to_save = True
 
     def track_unmount_start(self, tool_id):
@@ -334,20 +331,25 @@ class KtccLog:
             self.increase_tool_statistics(tool_id, 'total_time_spent_unmounting', time_spent)
             self.total_time_spent_unmounting += time_spent
             self._set_tool_statistics(tool_id, 'tracked_unmount_start_time', 0)
-            
             self.increase_tool_statistics(tool_id, 'toolunmounts_completed')
-            self.total_toolunmounts += 1
             self.changes_to_save = True
 
-    def track_total_toolunlocks(self):
-        self.trace("track_total_toolunlocks: Running.")
-        self.total_toolunlocks += 1
-        self.changes_to_save = True
 
-    def track_total_toollocks(self):
-        self.trace("track_total_toollocks: Running.")
-        self.total_toollocks += 1
-        self.changes_to_save = True
+    def increase_statistics(self, key, count=1):
+        try:
+            self.trace("increase_statistics: Running. Provided to record tool stats while key: %s and count: %s" % (str(key), str(count)))
+            if key == 'total_toolmounts':
+                self.total_toolmounts += int(count)
+            elif key == 'total_toolunmounts':
+                self.total_toolunmounts += int(count)
+            elif key == 'total_toollocks':
+                self.total_toollocks += int(count)
+            elif key == 'total_toolunlocks':
+                self.total_toolunlocks += int(count)
+            self.changes_to_save = True
+        except Exception as e:
+            self.debug("Exception whilst tracking tool stats: %s" % str(e))
+            self.debug("increase_statistics: Error while increasing stats while key: %s and count: %s" % (str(key), str(count)))
 
     def track_selected_tool_start(self, tool_id):
         self.trace("track_selected_tool_start: Running for Tool: %s." % (tool_id))

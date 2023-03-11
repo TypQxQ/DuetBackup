@@ -18,6 +18,8 @@
 #     pass
 
 # Each tool is getting an instance of this.
+import logging
+
 class Tool:
     TOOL_UNKNOWN = -2
     TOOL_UNLOCKED = -1
@@ -41,9 +43,11 @@ class Tool:
         self.virtual_toolload_gcode = None  # The plain gcode string is to load for virtual tool having this tool as parent. This is for loading the virtual tool.
         self.virtual_toolunload_gcode = None# The plain gcode string is to unload for virtual tool having this tool as parent. This is for unloading the virtual tool.
 
-        self.requires_pickup_for_virtual_load = True   # May be needed for a filament swap to prevent ooze but not for a pen.
-        self.requires_pickup_for_virtual_unload = True # May be needed for a filament swap to prevent ooze but not for a pen. Used when forcing unload.
-        self.unload_virtual_at_dropoff = True          # If it takes long time to unload/load it may be faster to leave it loaded and force unload at end of print.
+        self.requires_pickup_for_virtual_load = None   # May be needed for a filament swap to prevent ooze but not for a pen.
+        self.requires_pickup_for_virtual_unload = None # May be needed for a filament swap to prevent ooze but not for a pen. Used when forcing unload.
+        self.unload_virtual_at_dropoff = None          # If it takes long time to unload/load it may be faster to leave it loaded and force unload at end of print.
+
+        self.virtual_loaded = -1
 
         self.heater_state = 0               # 0 = off, 1 = standby temperature, 2 = active temperature. Placeholder. Requred on Physical tool.
         self.heater_active_temp = 0         # Temperature to set when in active mode. Placeholder. Requred on Physical and virtual tool if any has extruder.
@@ -95,18 +99,16 @@ class Tool:
                     % (config.get_name()))
         tg_status = self.toolgroup.get_status()
 
+       ##### Is Virtual #####
+        self.is_virtual = config.getboolean('is_virtual', 
+                                            tg_status["is_virtual"])
+
         ##### Physical Parent #####
         self.physical_parent_id = config.getint('physical_parent', 
                                                 tg_status["physical_parent_id"])
         if self.physical_parent_id is None:
             self.physical_parent_id = self.TOOL_UNLOCKED
 
-        # Used as sanity check for tools that are virtual with same physical as themselves.
-        if self.is_virtual and self.physical_parent_id == self.TOOL_UNLOCKED:
-            raise config.error(
-                    "Section Tool '%s' cannot be virtual without a valid physical_parent. If Virtual and Physical then use itself as parent."
-                    % (config.get_name()))
-        
         if self.physical_parent_id >= 0 and not self.physical_parent_id == self.name:
             self.pp = self.printer.lookup_object("tool " + str(self.physical_parent_id))
         else:
@@ -114,8 +116,11 @@ class Tool:
 
         pp_status = self.pp.get_status()
 
-        ##### Is Virtual #####
-        self.is_virtual = bool(self._get_config_parameter_with_inheritence('is_virtual'))
+        # Used as sanity check for tools that are virtual with same physical as themselves.
+        if self.is_virtual and self.physical_parent_id == self.TOOL_UNLOCKED:
+            raise config.error(
+                    "Section Tool '%s' cannot be virtual without a valid physical_parent. If Virtual and Physical then use itself as parent."
+                    % (config.get_name()))
 
         ##### Extruder #####
         self.extruder = config.get('extruder', pp_status['extruder'])      
@@ -124,10 +129,10 @@ class Tool:
         self.fan = config.get('fan', pp_status['fan'])                     
 
         ##### Meltzone Length #####
-        self.meltzonelength = self._get_config_parameter_with_inheritence('meltzonelength')
+        self.meltzonelength = self._get_config_parameter_with_inheritence('meltzonelength', 0)
 
         ##### Lazy Home when parking #####
-        self.lazy_home_when_parking = self._get_config_parameter_with_inheritence('lazy_home_when_parking')
+        self.lazy_home_when_parking = self._get_bool_config_parameter_with_inheritence('lazy_home_when_parking', False)
 
         ##### Coordinates #####
         try:
@@ -178,37 +183,58 @@ class Tool:
                 self.timer_idle_to_powerdown = self.pp.get_timer_to_powerdown()
 
         ##### G-Code ToolChange #####
-        self.pickup_gcode, self.pickup_gcode_template = self._get_gcode_template_with_inheritence('pickup_gcode')
-        self.dropoff_gcode, self.dropoff_gcode_template = self._get_gcode_template_with_inheritence('dropoff_gcode')
+        self.pickup_gcode_template = self._get_gcode_template_with_inheritence('pickup_gcode')
+        self.dropoff_gcode_template = self._get_gcode_template_with_inheritence('dropoff_gcode')
 
         ##### G-Code VirtualToolChange #####
         if self.is_virtual:
-            self.virtual_toolload_gcode, self.virtual_toolload_gcode_template = self._get_gcode_template_with_inheritence('virtual_toolload_gcode')
-            self.virtual_toolunload_gcode, self.virtual_toolunload_gcode_template = self._get_gcode_template_with_inheritence('virtual_toolunload_gcode')
+            self.virtual_toolload_gcode_template = self._get_gcode_template_with_inheritence('virtual_toolload_gcode')
+            self.virtual_toolunload_gcode_template = self._get_gcode_template_with_inheritence('virtual_toolunload_gcode')
 
         ##### Parameters for VirtualToolChange #####
-            self.requires_pickup_for_virtual_load = self._get_config_parameter_with_inheritence('requires_pickup_for_virtual_load')
-            self.requires_pickup_for_virtual_unload = self._get_config_parameter_with_inheritence('requires_pickup_for_virtual_unload')
-            self.unload_virtual_at_dropoff = self._get_config_parameter_with_inheritence('unload_virtual_at_dropoff')
+            self.requires_pickup_for_virtual_load = self.config.getboolean(
+                "requires_pickup_for_virtual_load", self.pp.requires_pickup_for_virtual_load)
+            if self.requires_pickup_for_virtual_load is None:
+                self.requires_pickup_for_virtual_load = self.toolgroup.requires_pickup_for_virtual_load
 
+            self.requires_pickup_for_virtual_unload = self.config.getboolean(
+                "requires_pickup_for_virtual_unload", self.pp.requires_pickup_for_virtual_unload)
+            if self.requires_pickup_for_virtual_unload is None:
+                self.requires_pickup_for_virtual_unload = self.toolgroup.requires_pickup_for_virtual_unload
+
+            self.unload_virtual_at_dropoff = self.config.getboolean(
+                "unload_virtual_at_dropoff", self.pp.unload_virtual_at_dropoff)
+            if self.unload_virtual_at_dropoff is None:
+                self.unload_virtual_at_dropoff = self.toolgroup.unload_virtual_at_dropoff
+
+        logging.warn("T%s unload_virtual_at_dropoff: %s" % (str(self.name), str(self.requires_pickup_for_virtual_load)))
+            
         ##### Register Tool select command #####
         self.gcode.register_command("KTCC_T" + str(self.name), self.cmd_SelectTool, desc=self.cmd_SelectTool_help)
 
-    def _get_config_parameter_with_inheritence(self, config_param, optional = False):
+    def _get_bool_config_parameter_with_inheritence(self, config_param, default = None):
+        tmp = self.config.getboolean(config_param, self.pp.get_config(config_param))   
+        if tmp is None:
+            tmp = self.toolgroup.get_config(config_param, default)
+        return tmp
+
+    def _get_config_parameter_with_inheritence(self, config_param, default = None):
         tmp = self.config.get(config_param, self.pp.get_config(config_param))   
         if tmp is None:
-            tmp = self.toolgroup.get_config(config_param)
+            tmp = self.toolgroup.get_config(config_param, default)
+        return tmp
 
     def _get_gcode_template_with_inheritence(self, config_param, optional = False):
         temp_gcode = self.pp.get_config(config_param)                   # First try to get gcode parameter from eventual physical Parent.
         if temp_gcode is None:                                          # If didn't get any from physical parent,
             temp_gcode =  self.toolgroup.get_config(config_param)       # try getting from toolgroup.
 
-        if optional and temp_gcode is None: temp_gcode = ""
+        if optional and temp_gcode is None:
+            temp_gcode = ""
 
-        gcode = self.get_config(config_param, temp_gcode)               # Get from this config and fallback on previous.
+        # gcode = self.get_config(config_param, temp_gcode)               # Get from this config and fallback on previous.
         template = self.gcode_macro.load_template(self.config, config_param, temp_gcode)
-        return gcode, template
+        return template
 
     def get_config(self, config_param, default = None):
         if self.config is None: return None
@@ -216,51 +242,56 @@ class Tool:
         
     cmd_SelectTool_help = "Select Tool"
     def cmd_SelectTool(self, gcmd):
-        self.log.trace("T" + str(self.name) + " Selected.")
+        self.log.trace("KTCC T" + str(self.name) + " Selected.")
+        param = gcmd.get_int('R', None, minval=0, maxval=2)
 
         # Check if the requested tool has been remaped to another one.
         tool_is_remaped = self.toollock.tool_is_remaped(int(self.name))
+
         if tool_is_remaped > -1:
             self.log.always("Tool %d is remaped to Tool %d" % (self.name, tool_is_remaped))
             remaped_tool = self.printer.lookup_object('tool ' + str(tool_is_remaped))
-            remaped_tool.select_tool_actual(gcmd)
+            remaped_tool.select_tool_actual(param)
             return
         else:
-            self.select_tool_actual(gcmd)
+            self.select_tool_actual(param)
+            
 
     # To avoid recursive remaping.
-    def select_tool_actual(self, gcmd):
+    def select_tool_actual(self, param = None):
         current_tool_id = int(self.toollock.get_status()['tool_current']) # int(self.toollock.get_tool_current())
 
         self.log.trace("Current Tool is T" + str(current_tool_id) + ".")
         self.log.trace("This tool is_virtual is " + str(self.is_virtual) + ".")
 
         if current_tool_id == self.name:              # If trying to select the already selected tool:
-            return None                                   # Exit
+            return                                      # Exit
 
         if current_tool_id < self.TOOL_UNLOCKED:
             msg = "TOOL_PICKUP: Unknown tool already mounted Can't park it before selecting new tool."
             self.log.always(msg)
             raise self.printer.command_error(msg)
+        
+        self.log.increase_tool_statistics(self.name, 'toolmounts_started')
+
 
         if self.extruder is not None:               # If the new tool to be selected has an extruder prepare warmup before actual tool change so all unload commands will be done while heating up.
             self.set_heater(heater_state = 2)
 
         # If optional RESTORE_POSITION_TYPE parameter is passed as 1 or 2 then save current position and restore_position_on_toolchange_type as passed. Otherwise do not change either the restore_position_on_toolchange_type or saved_position. This makes it possible to call SAVE_POSITION or SAVE_CURRENT_POSITION before the actual T command.
-        param = gcmd.get_int('R', None, minval=0, maxval=2)
         if param is not None:
             if param in [ 1, 2 ]:
                 self.toollock.SaveCurrentPosition(param) # Sets restore_position_on_toolchange_type to 1 or 2 and saves current position
             else:
                 self.toollock.SavePosition()  # Sets restore_position_on_toolchange_type to 0
 
-        # Drop any tools already mounted.
-        if current_tool_id > self.TOOL_UNLOCKED:                    # If there is a current tool already selected and it's a dropable.
+        # Drop any tools already mounted if not virtual on same.
+        if current_tool_id > self.TOOL_UNLOCKED:              # If there is a current tool already selected and it's a known tool.
             self.log.track_selected_tool_end(current_tool_id) # Log that the current tool is to be unmounted.
 
             current_tool = self.printer.lookup_object('tool ' + str(current_tool_id))
            
-                                                        # If the next tool is not another virtual tool on the same physical tool.
+            # If the next tool is not another virtual tool on the same physical tool.
             if int(self.physical_parent_id ==  self.TOOL_UNLOCKED or 
                         self.physical_parent_id) !=  int( 
                         current_tool.get_status()["physical_parent_id"]
@@ -268,45 +299,58 @@ class Tool:
                 self.log.info("Will Dropoff():%s" % str(current_tool_id))
                 current_tool.Dropoff()
                 current_tool_id = self.TOOL_UNLOCKED
-            else:
-                self.log.track_unmount_start(current_tool_id)                 # Log the time it takes for tool change.
+            else: # If it's another virtual tool on the same parent physical tool.
                 self.log.info("Dropoff: T" + str(current_tool_id) + "- Virtual - Running UnloadVirtual")
                 current_tool.UnloadVirtual()
-                self.log.track_unmount_end(current_tool_id)                 # Log the time it takes for tool change.
+
 
 
         # Now we asume tool has been dropped if needed be.
-
-        self.log.track_mount_start(self.name)                 # Log the time it takes for tool change.
 
         # Check if this is a virtual tool.
         if not self.is_virtual:
             self.log.trace("cmd_SelectTool: T%s - Not Virtual - Pickup" % str(self.name))
             self.Pickup()
         else:
-            if current_tool_id >= 0:                 # If still has a selected tool: (This tool is a virtual tool with same physical tool as the last)
+            if current_tool_id > self.TOOL_UNLOCKED:                 # If still has a selected tool: (This tool is a virtual tool with same physical tool as the last)
                 current_tool = self.printer.lookup_object('tool ' + str(current_tool_id))
-                self.log.trace("cmd_SelectTool: T" + str(self.name) + "- Virtual - Tool is not Dropped - ")
-                if self.physical_parent_id >= 0 and self.physical_parent_id == current_tool.get_status()["physical_parent_id"]:
+                self.log.trace("cmd_SelectTool: T" + str(self.name) + "- Virtual - Physical Tool is not Dropped - ")
+                if self.physical_parent_id > self.TOOL_UNLOCKED and self.physical_parent_id == current_tool.get_status()["physical_parent_id"]:
                     self.log.trace("cmd_SelectTool: T" + str(self.name) + "- Virtual - Same physical tool - Pickup")
                     self.LoadVirtual()
                 else:
-                    self.log.debug("cmd_SelectTool: T" + str(self.name) + "- Virtual - Not Same physical tool")
-                    self.log.debug("Shouldn't reach this because it is dropped in previous.")
-            else:
+                    msg = "cmd_SelectTool: T" + str(self.name) + "- Virtual - Not Same physical tool"
+                    msg += "Shouldn't reach this because it is dropped in previous."
+                    self.log.debug(msg)
+                    raise Exception(msg)
+            else: # New Physical tool with a virtual tool.
+                pp = self.printer.lookup_object('tool ' + str(self.physical_parent_id))
+                pp_virtual_loaded = pp.get_status()["virtual_loaded"]
                 self.log.trace("cmd_SelectTool: T" + str(self.name) + "- Virtual - Picking upp physical tool")
                 self.Pickup()
+
+                # If the new physical tool already has another virtual tool loaded:
+                if pp_virtual_loaded > self.TOOL_UNLOCKED:
+                    if pp_virtual_loaded != self.name:
+                        self.log.info("cmd_SelectTool: T" + str(pp_virtual_loaded) + "- Virtual - Running UnloadVirtual")
+                        self.printer.lookup_object('tool ' + str(pp_virtual_loaded)).UnloadVirtual()
+
                 self.log.trace("cmd_SelectTool: T" + str(self.name) + "- Virtual - Picked up physical tool and now Loading virtual tool.")
                 self.LoadVirtual()
 
         self.toollock.SaveCurrentTool(self.name)
-        self.log.track_mount_end(self.name)             # Log number of toolchanges and the time it takes for tool mounting.
+
         self.log.track_selected_tool_start(self.name)
+        self.log.increase_statistics('total_toolmounts')
+        self.log.increase_statistics('toolmounts_completed')
+
 
     def Pickup(self):
+        self.log.track_mount_start(self.name)                 # Log the time it takes for tool mount.
+
         # Check if homed
         if not self.toollock.PrinterIsHomedForToolchange():
-            raise self.printer.command_error("Tool.Pickup: Printer not homed and Lazy homing option is: " + self.lazy_home_when_parking)
+            raise self.printer.command_error("Tool.Pickup: Printer not homed and Lazy homing option for tool %s is: %s" % (str(self.name), str(self.lazy_home_when_parking)))
             return None
 
         # If has an extruder then activate that extruder.
@@ -327,9 +371,9 @@ class Tool:
         # Restore fan if has a fan.
         if self.fan is not None:
             self.gcode.run_script_from_command(
-                "SET_FAN_SPEED FAN=" + self.fan + " SPEED=" + str(self.toollock.get_status()['saved_fan_speed'])) #  self.toollock.get_saved_fan_speed()) )
+                "SET_FAN_SPEED FAN=" + self.fan + " SPEED=" + str(self.toollock.get_status()['saved_fan_speed']))
 
-        # Set Tool specific input shaper.
+        # Set Tool specific input shaper. -- Deprecated --
         if self.shaper_freq_x != 0 or self.shaper_freq_y != 0:
             self.log.always("shaper_freq will be deprecated. Use SET_INPUT_SHAPER inside the pickup gcode instead.")
             cmd = ("SET_INPUT_SHAPER" +
@@ -349,9 +393,10 @@ class Tool:
         else:
             self.log.always("T%d picked up." % (self.name))
 
-    def Dropoff(self):
+        self.log.track_mount_end(self.name)             # Log number of toolchanges and the time it takes for tool mounting.
+
+    def Dropoff(self, force_virtual_unload = False):
         self.log.always("Dropoff: T%s - Running." % str(self.name))
-        self.log.track_unmount_start(self.name)                 # Log the time it takes for tool change.
 
         self.log.track_selected_tool_end(self.name) # Log that the current tool is to be unmounted.
 
@@ -368,9 +413,13 @@ class Tool:
         # Check if this is a virtual tool.
         self.log.trace("Dropoff: T" + str(self.name) + "- is_virtual: " + str(self.is_virtual))
         if self.is_virtual:
-            self.log.info("Dropoff: T" + str(self.name) + "- Virtual - Running UnloadVirtual")
-            self.UnloadVirtual()
+            # Only dropoff if it is required.
+            if self.unload_virtual_at_dropoff or force_virtual_unload:
+                self.log.debug("T%s: unload_virtual_at_dropoff: %s, force_virtual_unload: %s" % (str(self.name), str(self.unload_virtual_at_dropoff), str(force_virtual_unload)))
+                self.log.info("Dropoff: T" + str(self.name) + "- Virtual - Running UnloadVirtual")
+                self.UnloadVirtual()
 
+        self.log.track_unmount_start(self.name)                 # Log the time it takes for tool change.
         # Run the gcode for dropoff.
         try:
             context = self.dropoff_gcode_template.create_template_context()
@@ -386,6 +435,7 @@ class Tool:
 
     def LoadVirtual(self):
         self.log.info("Loading virtual tool: T%d." % self.name)
+        self.log.track_mount_start(self.name)                 # Log the time it takes for tool mount.
 
         # Run the gcode for Virtual Load.
         try:
@@ -396,12 +446,22 @@ class Tool:
         except Exception as e:
             raise Exception("virtual_toolload_gcode: Script running error: %s" % (str(e)))
 
+        pp = self.printer.lookup_object('tool ' + str(self.physical_parent_id))
+        pp.set_virtual_loaded(int(self.name))
+
         # Save current picked up tool and print on screen.
         self.toollock.SaveCurrentTool(self.name)
         self.log.trace("Virtual T%d Loaded" % (int(self.name)))
+        self.log.track_mount_end(self.name)             # Log number of toolchanges and the time it takes for tool mounting.
+
+    def set_virtual_loaded(self, value = -1):
+        self.virtual_loaded = value
+        self.log.trace("Saved VirtualToolLoaded for T%s as: %s" % (str(self.name), str(value)))
+
 
     def UnloadVirtual(self):
         self.log.info("Unloading virtual tool: T%d." % self.name)
+        self.log.track_unmount_start(self.name)                 # Log the time it takes for tool unload.
 
         # Run the gcode for Virtual Unload.
         try:
@@ -412,26 +472,14 @@ class Tool:
         except Exception as e:
             raise Exception("virtual_toolunload_gcode: Script running error:\n%s" % str(e))
 
+        pp = self.printer.lookup_object('tool ' + str(self.physical_parent_id))
+        pp.set_virtual_loaded(-1)
+
         # Save current picked up tool and print on screen.
         self.toollock.SaveCurrentTool(self.name)
         self.log.trace("Virtual T%d Unloaded" % (int(self.name)))
 
-    # def set_offset(self, **kwargs):
-    #     for i in kwargs:
-    #         if i == "x_pos":
-    #             self.offset[0] = float(kwargs[i])
-    #         elif i == "x_adjust":
-    #             self.offset[0] = float(self.offset[0]) + float(kwargs[i])
-    #         elif i == "y_pos":
-    #             self.offset[1] = float(kwargs[i])
-    #         elif i == "y_adjust":
-    #             self.offset[1] = float(self.offset[1]) + float(kwargs[i])
-    #         elif i == "z_pos":
-    #             self.offset[2] = float(kwargs[i])
-    #         elif i == "z_adjust":
-    #             self.offset[2] = float(self.offset[2]) + float(kwargs[i])
-
-    #     self.log.trace("T%d offset now set to: %f, %f, %f." % (int(self.name), float(self.offset[0]), float(self.offset[1]), float(self.offset[2])))
+        self.log.track_unmount_end(self.name)                 # Log the time it takes for tool unload. 
 
     def set_heater(self, **kwargs):
         if self.extruder is None:
@@ -480,24 +528,6 @@ class Tool:
                     self.timer_idle_to_powerdown.set_timer(self.idle_to_powerdown_time)
             self.heater_state = chng_state
 
-    # def get_pickup_gcode(self):
-    #     return self.pickup_gcode
-
-    # def get_dropoff_gcode(self):
-    #     return self.dropoff_gcode
-
-    # def get_virtual_toolload_gcode(self):
-    #     return self.virtual_toolload_gcode
-
-    # def get_virtual_toolunload_gcode(self):
-    #     return self.virtual_toolunload_gcode
-
-    # def get_postmount_gcode(self):
-    #     return self.postmount_gcode
-
-    # def get_postunmount_gcode(self):
-    #     return self.postunmount_gcode
-
     def get_timer_to_standby(self):
         return self.timer_idle_to_standby
 
@@ -526,7 +556,11 @@ class Tool:
             "shaper_type_x": self.shaper_type_x,
             "shaper_type_y": self.shaper_type_y,
             "shaper_damping_ratio_x": self.shaper_damping_ratio_x,
-            "shaper_damping_ratio_y": self.shaper_damping_ratio_y
+            "shaper_damping_ratio_y": self.shaper_damping_ratio_y,
+            "virtual_loaded": self.virtual_loaded,
+            "requires_pickup_for_virtual_load": self.requires_pickup_for_virtual_load,
+            "requires_pickup_for_virtual_unload": self.requires_pickup_for_virtual_unload,
+            "unload_virtual_at_dropoff": self.unload_virtual_at_dropoff
         }
         return status
 
