@@ -23,6 +23,9 @@ import logging
 class Tool:
     TOOL_UNKNOWN = -2
     TOOL_UNLOCKED = -1
+    HEATER_STATE_ACTIVE = 2
+    HEATER_STATE_STANDBY = 1
+    HEATER_STATE_OFF = 0
 
     def __init__(self, config = None):
         self.name = None
@@ -47,13 +50,13 @@ class Tool:
         self.requires_pickup_for_virtual_unload = None # May be needed for a filament swap to prevent ooze but not for a pen. Used when forcing unload.
         self.unload_virtual_at_dropoff = None          # If it takes long time to unload/load it may be faster to leave it loaded and force unload at end of print.
 
-        self.virtual_loaded = -1
+        self.virtual_loaded = -1            # The abstract tool loaded in the physical tool.
+        self.heater_state = 0               # 0 = off, 1 = standby temperature, 2 = active temperature. Placeholder.
 
-        self.heater_state = 0               # 0 = off, 1 = standby temperature, 2 = active temperature. Placeholder. Requred on Physical tool.
         self.heater_active_temp = 0         # Temperature to set when in active mode. Placeholder. Requred on Physical and virtual tool if any has extruder.
         self.heater_standby_temp = 0        # Temperature to set when in standby mode.  Placeholder. Requred on Physical and virtual tool if any has extruder.
-        self.idle_to_standby_time = 0.1     # Time in seconds from being parked to setting temperature to standby the temperature above. Use 0.1 to change imediatley to standby temperature. Requred on Physical tool
-        self.idle_to_powerdown_time = 600   # Time in seconds from being parked to setting temperature to 0. Use something like 86400 to wait 24h if you want to disable. Requred on Physical tool.
+        self.idle_to_standby_time = None    # Time in seconds from being parked to setting temperature to standby the temperature above. Use 0.1 to change imediatley to standby temperature. Requred on Physical tool
+        self.idle_to_powerdown_time = None  # Time in seconds from being parked to setting temperature to 0. Use something like 86400 to wait 24h if you want to disable. Requred on Physical tool.
 
         # Tool specific input shaper parameters. Initiated as Klipper standard.
         self.shaper_freq_x = 0
@@ -146,6 +149,11 @@ class Tool:
             if not isinstance(self.offset, list):
                 self.offset = str(self.offset).split(',')
 
+            # Remove any accidental blank spaces.
+            self.zone = [s.strip() for s in self.zone]
+            self.park = [s.strip() for s in self.park]
+            self.offset = [s.strip() for s in self.offset]
+
             if len(self.zone) < 3:
                 raise config.error("zone Offset is malformed, must be a list of x,y,z If you want it blank, use 0,0,0")
             if len(self.park) < 3:
@@ -166,21 +174,26 @@ class Tool:
         self.shaper_damping_ratio_x = config.get('shaper_damping_ratio_x', pp_status['shaper_damping_ratio_x'])                     
         self.shaper_damping_ratio_y = config.get('shaper_damping_ratio_y', pp_status['shaper_damping_ratio_y'])                     
 
-        ##### Standby settings #####
+        ##### Standby settings (if the tool has an extruder) #####
         if self.extruder is not None:
-            if self.physical_parent_id < 0 or self.physical_parent_id == self.name:
-                self.idle_to_standby_time = config.getfloat(
-                    'idle_to_standby_time', tg_status['idle_to_standby_time'], minval = 0.1)
-                self.timer_idle_to_standby = ToolStandbyTempTimer(self.printer, self.name, 1)
+            self.idle_to_standby_time = self.config.getfloat(
+                "idle_to_standby_time", self.pp.idle_to_standby_time)
+            if self.idle_to_standby_time is None:
+                self.idle_to_standby_time = self.toolgroup.idle_to_standby_time
 
-                self.idle_to_powerdown_time = config.getfloat(
-                    'idle_to_powerdown_time', tg_status['idle_to_powerdown_time'], minval = 0.1)
-                self.timer_idle_to_powerdown = ToolStandbyTempTimer(self.printer, self.name, 0)
-            else:
-                self.idle_to_standby_time = self.pp.idle_to_standby_time
-                self.idle_to_powerdown_time = self.pp.idle_to_powerdown_time
+            self.idle_to_powerdown_time = self.config.getfloat(
+                "idle_to_powerdown_time", self.pp.requireidle_to_powerdown_times_pickup_for_virtual_load)
+            if self.idle_to_powerdown_time is None:
+                self.idle_to_powerdown_time = self.toolgroup.idle_to_powerdown_time
+
+            # For all virtual tools that are not also a physical parent, use physical parent's timer.
+            if self.physical_parent_id > self.TOOL_UNLOCKED and self.physical_parent_id != self.name:
                 self.timer_idle_to_standby = self.pp.get_timer_to_standby()
                 self.timer_idle_to_powerdown = self.pp.get_timer_to_powerdown()
+            else:
+                # Set up new timers if physical tool.
+                self.timer_idle_to_standby = ToolStandbyTempTimer(self.printer, self.name, ToolStandbyTempTimer.TIMER_TO_STANDBY)
+                self.timer_idle_to_powerdown = ToolStandbyTempTimer(self.printer, self.name, ToolStandbyTempTimer.TIMER_TO_SHUTDOWN)
 
         ##### G-Code ToolChange #####
         self.pickup_gcode_template = self._get_gcode_template_with_inheritence('pickup_gcode')
@@ -481,6 +494,23 @@ class Tool:
 
         self.log.track_unmount_end(self.name)                 # Log the time it takes for tool unload. 
 
+    def set_offset(self, **kwargs):
+        for i in kwargs:
+            if i == "x_pos":
+                self.offset[0] = float(kwargs[i])
+            elif i == "x_adjust":
+                self.offset[0] = float(self.offset[0]) + float(kwargs[i])
+            elif i == "y_pos":
+                self.offset[1] = float(kwargs[i])
+            elif i == "y_adjust":
+                self.offset[1] = float(self.offset[1]) + float(kwargs[i])
+            elif i == "z_pos":
+                self.offset[2] = float(kwargs[i])
+            elif i == "z_adjust":
+                self.offset[2] = float(self.offset[2]) + float(kwargs[i])
+
+        self.log.always("T%d offset now set to: %f, %f, %f." % (int(self.name), float(self.offset[0]), float(self.offset[1]), float(self.offset[2])))
+        
     def set_heater(self, **kwargs):
         if self.extruder is None:
             self.log.debug("set_heater: T%d has no extruder! Nothing to do." % self.name )
@@ -488,44 +518,72 @@ class Tool:
 
         heater = self.printer.lookup_object(self.extruder).get_heater()
         curtime = self.printer.get_reactor().monotonic()
+        changing_timer = False
+        
+        # self is always pointing to abstract tool but its timers and extruder are always pointing to the physical tool.
+
+        # First set state if changed, so we set correct temps.
+        if "heater_state" in kwargs:
+            chng_state = kwargs["heater_state"]
 
         for i in kwargs:
             if i == "heater_active_temp":
                 self.heater_active_temp = kwargs[i]
-                if int(self.heater_state) == 2:
+                if int(self.heater_state) == self.HEATER_STATE_ACTIVE:
                     heater.set_temp(self.heater_active_temp)
             elif i == "heater_standby_temp":
                 self.heater_standby_temp = kwargs[i]
+                if int(self.heater_state) == self.HEATER_STATE_STANDBY:
+                    heater.set_temp(self.heater_standby_temp)
             elif i == "idle_to_standby_time":
                 self.idle_to_standby_time = kwargs[i]
+                changing_timer = True
             elif i == "idle_to_powerdown_time":
                 self.idle_to_powerdown_time = kwargs[i]
+                changing_timer = True
 
-        # Change Active mode:
+        # If already in standby and timers are counting down, i.e. have not triggered since set in standby, then reset the ones counting down.
+        if int(self.heater_state) == self.HEATER_STATE_STANDBY and changing_timer:
+            if self.timer_idle_to_powerdown.get_status()["counting_down"] == True:
+                self.timer_idle_to_powerdown.set_timer(self.idle_to_powerdown_time, self.name)
+            if self.timer_idle_to_standby.get_status()["counting_down"] == True:
+                self.timer_idle_to_standby.set_timer(self.idle_to_standby_time, self.name)
+
+
+        # Change Active mode, Continuing with part two of temp changing.:
         if "heater_state" in kwargs:
-            chng_state = kwargs["heater_state"]
             if self.heater_state == chng_state:                                                         # If we don't actually change the state don't do anything.
-                self.log.trace("set_heater: T%d heater state not changed." % self.name )
+                if chng_state == self.HEATER_STATE_ACTIVE:
+                    self.log.trace("set_heater: T%d heater state not changed. Setting active temp." % self.name )
+                    heater.set_temp(self.heater_active_temp)
+                elif chng_state == self.HEATER_STATE_STANDBY:
+                    self.log.trace("set_heater: T%d heater state not changed. Setting standby temp." % self.name )
+                    heater.set_temp(self.heater_standby_temp)
+                else:
+                    self.log.trace("set_heater: T%d heater state not changed." % self.name )
                 return None
-            if chng_state == 0:                                                                         # If Change to Shutdown
-                self.timer_idle_to_standby.set_timer(0)
-                self.timer_idle_to_powerdown.set_timer(0.1)
+            if chng_state == self.HEATER_STATE_OFF:                                                                         # If Change to Shutdown
+                self.log.trace("set_heater: T%d heater state now OFF." % self.name )
+                self.timer_idle_to_standby.set_timer(0, self.name)
+                self.timer_idle_to_powerdown.set_timer(0.1, self.name)
                 self.log.track_standby_heater_end(self.name)                                                # Set the standby as finishes in statistics.
                 self.log.track_active_heater_end(self.name)                                                # Set the active as finishes in statistics.
-            elif chng_state == 2:                                                                       # Else If Active
-                self.timer_idle_to_standby.set_timer(0)
-                self.timer_idle_to_powerdown.set_timer(0)
+            elif chng_state == self.HEATER_STATE_ACTIVE:                                                                       # Else If Active
+                self.log.trace("set_heater: T%d heater state now ACTIVE." % self.name )
+                self.timer_idle_to_standby.set_timer(0, self.name)
+                self.timer_idle_to_powerdown.set_timer(0, self.name)
                 heater.set_temp(self.heater_active_temp)
                 self.log.track_standby_heater_end(self.name)                                                # Set the standby as finishes in statistics.
                 self.log.track_active_heater_start(self.name)                                               # Set the active as started in statistics.
-            elif chng_state == 1:                                                                       # Else If Standby
-                if int(self.heater_state) == 2 and int(self.heater_standby_temp) < int(heater.get_status(curtime)["temperature"]):
-                    self.timer_idle_to_standby.set_timer(self.idle_to_standby_time)
-                    self.timer_idle_to_powerdown.set_timer(self.idle_to_powerdown_time)
+            elif chng_state == self.HEATER_STATE_STANDBY:                                                                       # Else If Standby
+                self.log.trace("set_heater: T%d heater state now STANDBY." % self.name )
+                if int(self.heater_state) == self.HEATER_STATE_ACTIVE and int(self.heater_standby_temp) < int(heater.get_status(curtime)["temperature"]):
+                    self.timer_idle_to_standby.set_timer(self.idle_to_standby_time, self.name)
+                    self.timer_idle_to_powerdown.set_timer(self.idle_to_powerdown_time, self.name)
                 else:                                                                                   # Else (Standby temperature is lower than the current temperature)
                     self.log.trace("set_heater: T%d standbytemp:%d;heater_state:%d; current_temp:%d." % (self.name, int(self.heater_state), int(self.heater_standby_temp), int(heater.get_status(curtime)["temperature"])))
-                    self.timer_idle_to_standby.set_timer(0.1)
-                    self.timer_idle_to_powerdown.set_timer(self.idle_to_powerdown_time)
+                    self.timer_idle_to_standby.set_timer(0.1, self.name)
+                    self.timer_idle_to_powerdown.set_timer(self.idle_to_powerdown_time, self.name)
             self.heater_state = chng_state
 
     def get_timer_to_standby(self):
@@ -550,7 +608,7 @@ class Tool:
             "heater_active_temp": self.heater_active_temp,
             "heater_standby_temp": self.heater_standby_temp,
             "idle_to_standby_time": self.idle_to_standby_time,
-            "idle_to_powerdown_time": self.idle_to_powerdown_time,
+            "idle_to_powerdown_next_wake": self.idle_to_powerdown_time,
             "shaper_freq_x": self.shaper_freq_x,
             "shaper_freq_y": self.shaper_freq_y,
             "shaper_type_x": self.shaper_type_x,
@@ -566,9 +624,14 @@ class Tool:
 
     # Based on DelayedGcode.
 class ToolStandbyTempTimer:
+    TIMER_TO_SHUTDOWN = 0
+    TIMER_TO_STANDBY = 1
+
     def __init__(self, printer, tool_id, temp_type):
         self.printer = printer
         self.tool_id = tool_id
+        self.last_virtual_tool_using_physical_timer = None
+
         self.duration = 0.
         self.temp_type = temp_type      # 0= Time to shutdown, 1= Time to standby.
 
@@ -580,6 +643,9 @@ class ToolStandbyTempTimer:
         self.toollock = self.printer.lookup_object('toollock')
         self.log = self.printer.lookup_object('ktcclog')
 
+        self.counting_down = False
+        self.nextwake = self.reactor.NEVER
+
 
     def _handle_ready(self):
         self.timer_handler = self.reactor.register_timer(
@@ -587,48 +653,78 @@ class ToolStandbyTempTimer:
 
     def _standby_tool_temp_timer_event(self, eventtime):
         self.inside_timer = True
-        self.log.trace("_standby_tool_temp_timer_event: Running for T%s. temp_type:%s." % (str(self.tool_id), "Time to shutdown" if self.temp_type == 0 else "Time to standby"))
+        self.counting_down = False
         try:
-            tool = self.printer.lookup_object("tool " + str(self.tool_id))
+            if self.last_virtual_tool_using_physical_timer is None:
+                raise Exception("last_virtual_tool_using_physical_timer is < None")
+
+            tool = self.printer.lookup_object("tool " + str(self.last_virtual_tool_using_physical_timer))
+            self.log.trace(
+                "_standby_tool_temp_timer_event: Running for T%s. temp_type:%s. %s" % 
+                (str(self.tool_id), 
+                 "Time to shutdown" if self.temp_type == 0 else "Time to standby"), 
+                 ("For loaded virtual tool T%s" % str(self.last_virtual_tool_using_physical_timer) ) 
+                 if  self.last_virtual_tool_using_physical_timer != self.tool_id else "")
+
             temperature = 0
-            if self.temp_type == 1:
+            if self.temp_type == self.TIMER_TO_STANDBY:
                 temperature = tool.get_status()["heater_standby_temp"]
-                self.log.track_standby_heater_start(self.tool_id)                                                # Set the standby as started in statistics.
+                self.log.track_standby_heater_start(tool.name)                                                # Set the standby as started in statistics.
+                heater = self.printer.lookup_object(tool.extruder).get_heater()
+                heater.set_temp(temperature)
+                self.log.trace("_standby_tool_temp_timer_event: Running heater.set_temp(%s)" % str(temperature))
             else:
-                self.log.track_standby_heater_end(self.tool_id)                                                # Set the standby as finishes in statistics.
-                self.log.track_active_heater_end(self.tool_id)                                                 # Set the active as finishes in statistics.
-            heater = self.printer.lookup_object(tool.extruder).get_heater()
-            heater.set_temp(temperature)
-            self.log.trace("_standby_tool_temp_timer_event: Running heater.set_temp(%s)" % str(temperature))
+                self.log.track_standby_heater_end(tool.name)                                                # Set the standby as finishes in statistics.
+                self.log.track_active_heater_end(tool.name)                                                 # Set the active as finishes in statistics.
+                tool.set_heater(heater_state= Tool.HEATER_STATE_OFF)
             self.log.track_active_heater_end(self.tool_id)                                               # Set the active as finishes in statistics.
 
         except Exception as e:
-            raise Exception("Failed to set Standby temp for tool T%s: %s" % (str(self.tool_id), str(e)))
+            raise Exception("Failed to set Standby temp for tool T%s: %s. %s" % (str(self.tool_id), str(e)), 
+                 ("For loaded virtual tool T%s" % str(self.last_virtual_tool_using_physical_timer) ) 
+                 if  self.last_virtual_tool_using_physical_timer != self.tool_id else "")
 
-        nextwake = self.reactor.NEVER
+        self.nextwake = self.reactor.NEVER
         if self.repeat:
-            nextwake = eventtime + self.duration
+            self.nextwake = eventtime + self.duration
+            self.counting_down = True
         self.inside_timer = self.repeat = False
-        return nextwake
+        return self.nextwake
 
-    def set_timer(self, duration):
-        self.log.trace(str(self.timer_handler) + ".set_timer: T" + str(self.tool_id) + "; temp_type:" + str(self.temp_type) + "; duration:" + str(duration) + ".")
+    def set_timer(self, duration, actual_tool_calling):
+        actual_tool_calling = actual_tool_calling
+        self.log.trace(str(self.timer_handler) + ".set_timer: T%s; temp_type:%s ; duration:%s. %s" % (
+            str(self.tool_id), str(self.temp_type), str(duration), 
+            ("for virtual T%s" % str(actual_tool_calling)) if actual_tool_calling != self.tool_id else ""))
         self.duration = float(duration)
+        self.last_virtual_tool_using_physical_timer = actual_tool_calling
         if self.inside_timer:
             self.repeat = (self.duration != 0.)
         else:
             waketime = self.reactor.NEVER
             if self.duration:
                 waketime = self.reactor.monotonic() + self.duration
+                self.nextwake = waketime
             self.reactor.update_timer(self.timer_handler, waketime)
+            self.counting_down = True
 
     def get_status(self, eventtime= None):
         status = {
-            "tool": self.tool,
+            # "tool": self.tool,
             "temp_type": self.temp_type,
-            "duration": self.duration
+            "duration": self.duration,
+            "counting_down": self.counting_down,
+            "next_wake": self._time_left()
+
         }
         return status
+
+    def _time_left(self):
+        if self.nextwake == self.reactor.NEVER:
+            return "never"
+        else:
+            return str( self.nextwake - self.reactor.monotonic() )
+
 
     # Todo: 
     # Inspired by https://github.com/jschuh/klipper-macros/blob/main/layers.cfg

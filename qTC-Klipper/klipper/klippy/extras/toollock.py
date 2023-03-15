@@ -285,13 +285,13 @@ class ToolLock:
 
         if tool_id is None:
             tool_id = self.tool_current
-        elif int(tool_id) < 0:
+        if not int(tool_id) > self.TOOL_UNLOCKED:
             self.log.always("_get_tool_id_from_gcmd: Tool " + str(tool_id) + " is not valid.")
             return None
         else:
             # Check if the requested tool has been remaped to another one.
             tool_is_remaped = self.tool_is_remaped(int(tool_id))
-            if tool_is_remaped > -1:
+            if tool_is_remaped > self.TOOL_UNLOCKED:
                 tool_id = tool_is_remaped
         return tool_id
 
@@ -329,13 +329,24 @@ class ToolLock:
         if actv_tmp is not None:
             set_heater_cmd["heater_active_temp"] = int(actv_tmp)
         if stdb_timeout is not None:
-            set_heater_cmd["heater_standby_temp"] = stdb_timeout
+            set_heater_cmd["idle_to_standby_time"] = stdb_timeout
         if shtdwn_timeout is not None:
             set_heater_cmd["idle_to_powerdown_time"] = shtdwn_timeout
         if chng_state is not None:
             tool.set_heater(heater_state= chng_state)
         if len(set_heater_cmd) > 0:
             tool.set_heater(**set_heater_cmd)
+        else:
+            # Print out the current set of temperature settings for the tool if no changes are provided.
+            msg = "T%s Current Temperature Settings" % str(tool_id)
+            msg += "\n Active temperature %s - %d*C - Active to Standby timer: %d seconds" % ( "*" if tool.heater_state == 2 else " ", tool.heater_active_temp, tool.idle_to_standby_time)
+            msg += "\n Standby temperature %s - %d*C - Standby to Off timer: %d seconds" % ( "*" if tool.heater_state == 1 else " ", tool.heater_standby_temp, tool.idle_to_powerdown_time)
+            if tool.heater_state != 3:
+                if tool.timer_idle_to_standby.get_status()["next_wake"] == True:
+                    msg += "\n Will go to standby temperature in in %s seconds." % tool.timer_idle_to_standby.get_status()["next_wake"]
+                if tool.timer_idle_to_powerdown.get_status()["counting_down"] == True:
+                    msg += "\n Will power down in %s seconds." % tool.timer_idle_to_powerdown.get_status()["next_wake"]
+            gcmd.respond_info(msg)
 
     cmd_KTCC_SET_ALL_TOOL_HEATERS_OFF_help = "Turns off all heaters and saves changes made to be resumed by KTCC_RESUME_ALL_TOOL_HEATERS."
     def cmd_KTCC_SET_ALL_TOOL_HEATERS_OFF(self, gcmd):
@@ -348,10 +359,10 @@ class ToolLock:
         try:
             for tool_name, tool in all_tools.items():
                 if tool.get_status()["extruder"] is None:
-                    self.log.trace("set_all_tool_heaters_off: T%s has no extruder! Nothing to do." % str(tool_name))
+                    # self.log.trace("set_all_tool_heaters_off: T%s has no extruder! Nothing to do." % str(tool_name))
                     continue
                 if tool.get_status()["heater_state"] == 0:
-                    self.log.trace("set_all_tool_heaters_off: T%s already off! Nothing to do." % str(tool_name))
+                    # self.log.trace("set_all_tool_heaters_off: T%s already off! Nothing to do." % str(tool_name))
                     continue
                 self.log.trace("set_all_tool_heaters_off: T%s saved with heater_state: %str." % ( str(tool_name), str(tool.get_status()["heater_state"])))
                 self.changes_made_by_set_all_tool_heaters_off[tool_name] = tool.get_status()["heater_state"]
@@ -359,17 +370,21 @@ class ToolLock:
         except Exception as e:
             raise Exception('set_all_tool_heaters_off: Error: %s' % str(e))
 
-
-    
-        
     cmd_KTCC_RESUME_ALL_TOOL_HEATERS_help = "Resumes all heaters previously turned off by KTCC_SET_ALL_TOOL_HEATERS_OFF."
     def cmd_KTCC_RESUME_ALL_TOOL_HEATERS(self, gcmd):
         self.resume_all_tool_heaters()
 
     def resume_all_tool_heaters(self):
         try:
+            # Loop it 2 times, first for all heaters standby and then the active.
+
             for tool_name, v in self.changes_made_by_set_all_tool_heaters_off.items():
-                self.printer.lookup_object(str(tool_name)).set_heater(heater_state = v)
+                if v == 1:
+                    self.printer.lookup_object(str(tool_name)).set_heater(heater_state = v)
+
+            for tool_name, v in self.changes_made_by_set_all_tool_heaters_off.items():
+                if v == 2:
+                    self.printer.lookup_object(str(tool_name)).set_heater(heater_state = v)
 
         except Exception as e:
             raise Exception('set_all_tool_heaters_off: Error: %s' % str(e))

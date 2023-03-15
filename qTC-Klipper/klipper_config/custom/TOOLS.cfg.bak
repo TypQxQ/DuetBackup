@@ -40,13 +40,13 @@ tool_unlock_gcode:
     # RESTORE_GCODE_STATE NAME=tool_lock_state MOVE=0                                 # Restore gcode state
 
 [toolgroup 0]
-is_virtual: True            # If True then must have a physical_parent declared and shares extruder, hotend and fan with the physical_parent
-physical_parent: 0          # Tool used as a Physical parent for all toos of this group. Only used if the tool i virtual.
-virtual_toolload_gcode:
-  SUB_VIRTUALTOOL_LOAD T={myself.name}
-virtual_toolunload_gcode:
-  SUB_VIRTUALTOOL_UNLOAD T={myself.name}
-unload_virtual_at_dropoff: 0
+#is_virtual: True            # If True then must have a physical_parent declared and shares extruder, hotend and fan with the physical_parent
+#physical_parent: 0          # Tool used as a Physical parent for all toos of this group. Only used if the tool i virtual.
+#virtual_toolload_gcode:
+#  SUB_VIRTUALTOOL_LOAD T={myself.name}
+#virtual_toolunload_gcode:
+#  SUB_VIRTUALTOOL_UNLOAD T={myself.name}
+#unload_virtual_at_dropoff: 0
 #idle_to_standby_time: 30
 #idle_to_powerdown_time: 600
 
@@ -66,7 +66,7 @@ extruder: extruder
 fan: partfan_t0
 zone: 555,200, 0
 park: 598,200, 0
-offset: 11.663,5.255,3.10  #12.151,4.271,3.10
+offset: 11.663,5.255,3.16  #12.151,4.271,3.10
 #####
 ##### Following can be inherited from ToolGroup if not specified for this tool or inherited from a Physical parent.
 #physical_parent:                  # Defaults to None.
@@ -89,22 +89,22 @@ dropoff_gcode:
   SUB_TOOL_DROPOFF_START T={myself.name}
   SUB_TOOL_DROPOFF_END T={myself.name}
 
-[tool 1]
-tool_group: 0
-[tool 2]
-tool_group: 0
-[tool 3]
-tool_group: 0
-[tool 4]
-tool_group: 0
-[tool 5]
-tool_group: 0
-[tool 6]
-tool_group: 0
-[tool 7]
-tool_group: 0
-[tool 8]
-tool_group: 0
+#[tool 1]
+#tool_group: 0
+#[tool 2]
+#tool_group: 0
+#[tool 3]
+#tool_group: 0
+#[tool 4]
+#tool_group: 0
+#[tool 5]
+#tool_group: 0
+#[tool 6]
+#tool_group: 0
+#[tool 7]
+#tool_group: 0
+#[tool 8]
+#tool_group: 0
 
 # End of Tool 0 virtual tools.
 
@@ -114,7 +114,7 @@ extruder: extruder1
 fan: partfan_t9
 zone: 555,100,0
 park: 598,100,0
-offset: -1.055,0.055,-1.51
+offset: -1.055,0.055,-1.42
 meltzonelength: 14
 idle_to_standby_time: 0.1
 pickup_gcode: 
@@ -130,7 +130,7 @@ extruder: extruder2
 fan: partfan_t10
 zone: 555,5,0
 park: 598,5,0
-offset: 11.555,4.775,3.43
+offset: 11.555,4.775,3.36
 meltzonelength: 14
 idle_to_standby_time: 0.1
 pickup_gcode: 
@@ -145,7 +145,7 @@ extruder: extruder3
 fan: partfan_t11
 zone: 555,280,0
 park: 598,280,0
-offset: 11.973,5.586,3.26
+offset: 11.973,5.586,3.28
 meltzonelength: 14
 idle_to_standby_time: 0.1
 pickup_gcode: 
@@ -205,6 +205,19 @@ gcode:
   ##############  Move out to zone  ##############
   G0 X{myself.zone[0]} F6000                                           # Slow Move to the zone position for tool.
 
+
+[gcode_macro SUB_TST_VIRTUAL]
+description: Internal subroutine. Do not use!
+# Tnnn: Tool to pickup
+gcode:
+  {% set myself = printer['tool '~params.T] %}
+  {% set pp_virtual_loaded = printer['tool '~myself.physical_parent_id].virtual_loaded %}
+  {% if pp_virtual_loaded|default(-1) > -1 %} # If the tool is not virtual:
+    {action_respond_info("SUB_TST_VIRTUAL: "~pp_virtual_loaded) }
+  {% endif %}
+
+
+
 [gcode_macro SUB_TOOL_PICKUP_END]
 description: Internal subroutine. Do not use!
 # Tnnn: Tool to pickup
@@ -234,7 +247,7 @@ gcode:
 #  RESPOND MSG="First if:{myself.extruder|default("none")|lower}"
 
     ##############  Prime the filament, asume it was retracted as per e3d Revo documentation  ##############
-  {% if myself.is_virtual|default("false")|lower == 'false' %} # If the tool is not virtual:
+#  {% if myself.is_virtual|default("false")|lower == 'false' %} # If the tool is not virtual:
     {% if myself.extruder|default("none")|lower !="none" %}       # If the tool has an extruder:
                                                                     # If can extrude and global purge is active:
       {% if printer[myself.extruder].can_extrude|default("false")|lower == 'true' and printer.toollock.purge_on_toolchange %}
@@ -243,7 +256,7 @@ gcode:
         G1 E2 F400                                                    # DeRetract filament from meltzone
       {% endif %}
     {% endif %}
-  {% endif %}
+#  {% endif %}
   RESTORE_GCODE_STATE NAME=TOOL_PICKUP2_T{myself.name}                          # Restore state after priming nozzle
   G1 F30000
   RESTORE_ACCELERATION                                           # Restore saved acceleration value.
@@ -265,7 +278,7 @@ gcode:
     ##############  Retract the filament as per e3d Revo documentation  ##############
   {% if myself.extruder|default("none")|lower !="none" %}       # If the tool has an extruder:
     M568 P{myself.name} A1                                        # Put tool heater in standby
-    {% if myself.is_virtual|default("false")|lower == 'false' %} # If the tool is not virtual:
+#    {% if myself.is_virtual|default("false")|lower == 'false' %} # If the tool is not virtual:
                                                                     # If can extrude and global purge is active:
       {% if printer[myself.extruder].can_extrude|default("false")|lower == 'true' and printer.toollock.purge_on_toolchange %}
         M83                                                           # Relative extrusion
@@ -273,7 +286,7 @@ gcode:
         G1 E2 F800                                                    # Extrude slightly to form a tip
         G1 E-{myself.meltzonelength|int - 2} F800                     # Retract filament from meltzone
       {% endif %}
-    {% endif %}
+ #   {% endif %}
   {% endif %}
 
   SET_GCODE_OFFSET X=0 Y=0                                      # Set XY offset to 0 so we park the tool right.
