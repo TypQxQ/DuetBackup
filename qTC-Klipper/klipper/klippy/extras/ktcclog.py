@@ -507,7 +507,7 @@ class KtccLog:
         except Exception as e:
             self.debug("Exception whilst tracking tool stats: %s" % str(e))
             self.debug("_set_tool_statistics: Error while tool: %s provided to record tool stats while key: %s and value: %s" % (tool_id, str(key), str(value)))
-        self.trace("_set_tool_statistics: Tool: %s provided to record tool stats while key: %s and value: %s" % (tool_id, str(key), str(value)))
+        # self.trace("_set_tool_statistics: Tool: %s provided to record tool stats while key: %s and value: %s" % (tool_id, str(key), str(value)))
 
     def _set_tool_statistics_time_diff(self, tool_id, final_time_key, start_time_key):
         try:

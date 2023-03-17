@@ -333,7 +333,8 @@ class ToolLock:
         if shtdwn_timeout is not None:
             set_heater_cmd["idle_to_powerdown_time"] = shtdwn_timeout
         if chng_state is not None:
-            tool.set_heater(heater_state= chng_state)
+            set_heater_cmd["heater_state"] = chng_state
+            # tool.set_heater(heater_state= chng_state)
         if len(set_heater_cmd) > 0:
             tool.set_heater(**set_heater_cmd)
         else:

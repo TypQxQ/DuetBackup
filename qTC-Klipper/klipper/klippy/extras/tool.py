@@ -46,6 +46,9 @@ class Tool:
         self.virtual_toolload_gcode = None  # The plain gcode string is to load for virtual tool having this tool as parent. This is for loading the virtual tool.
         self.virtual_toolunload_gcode = None# The plain gcode string is to unload for virtual tool having this tool as parent. This is for unloading the virtual tool.
 
+#        self.timer_idle_to_standby = None
+#        self.timer_idle_to_powerdown = None
+
         self.requires_pickup_for_virtual_load = None   # May be needed for a filament swap to prevent ooze but not for a pen.
         self.requires_pickup_for_virtual_unload = None # May be needed for a filament swap to prevent ooze but not for a pen. Used when forcing unload.
         self.unload_virtual_at_dropoff = None          # If it takes long time to unload/load it may be faster to leave it loaded and force unload at end of print.
@@ -182,7 +185,7 @@ class Tool:
                 self.idle_to_standby_time = self.toolgroup.idle_to_standby_time
 
             self.idle_to_powerdown_time = self.config.getfloat(
-                "idle_to_powerdown_time", self.pp.requireidle_to_powerdown_times_pickup_for_virtual_load)
+                "idle_to_powerdown_time", self.pp.idle_to_powerdown_time)
             if self.idle_to_powerdown_time is None:
                 self.idle_to_powerdown_time = self.toolgroup.idle_to_powerdown_time
 
@@ -510,11 +513,17 @@ class Tool:
                 self.offset[2] = float(self.offset[2]) + float(kwargs[i])
 
         self.log.always("T%d offset now set to: %f, %f, %f." % (int(self.name), float(self.offset[0]), float(self.offset[1]), float(self.offset[2])))
-        
+
+    def _set_state(self, heater_state):
+        self.heater_state = heater_state
+
+
     def set_heater(self, **kwargs):
         if self.extruder is None:
             self.log.debug("set_heater: T%d has no extruder! Nothing to do." % self.name )
             return None
+
+        self.log.info("T%d heater is at begingin %s." % (self.name, self.heater_state ))
 
         heater = self.printer.lookup_object(self.extruder).get_heater()
         curtime = self.printer.get_reactor().monotonic()
@@ -546,8 +555,12 @@ class Tool:
         if int(self.heater_state) == self.HEATER_STATE_STANDBY and changing_timer:
             if self.timer_idle_to_powerdown.get_status()["counting_down"] == True:
                 self.timer_idle_to_powerdown.set_timer(self.idle_to_powerdown_time, self.name)
+                if self.idle_to_powerdown_time > 2:
+                    self.log.info("T%d heater will shut down in %s seconds." % (self.name, self.log._seconds_to_human_string(self.idle_to_powerdown_time) ))
             if self.timer_idle_to_standby.get_status()["counting_down"] == True:
                 self.timer_idle_to_standby.set_timer(self.idle_to_standby_time, self.name)
+                if self.idle_to_standby_time > 2:
+                    self.log.info("T%d heater will go in standby in %s seconds." % (self.name, self.log._seconds_to_human_string(self.idle_to_standby_time) ))
 
 
         # Change Active mode, Continuing with part two of temp changing.:
@@ -580,11 +593,16 @@ class Tool:
                 if int(self.heater_state) == self.HEATER_STATE_ACTIVE and int(self.heater_standby_temp) < int(heater.get_status(curtime)["temperature"]):
                     self.timer_idle_to_standby.set_timer(self.idle_to_standby_time, self.name)
                     self.timer_idle_to_powerdown.set_timer(self.idle_to_powerdown_time, self.name)
+                    if self.idle_to_standby_time > 2:
+                        self.log.always("T%d heater will go in standby in %s seconds." % (self.name, self.log._seconds_to_human_string(self.idle_to_standby_time) ))
                 else:                                                                                   # Else (Standby temperature is lower than the current temperature)
                     self.log.trace("set_heater: T%d standbytemp:%d;heater_state:%d; current_temp:%d." % (self.name, int(self.heater_state), int(self.heater_standby_temp), int(heater.get_status(curtime)["temperature"])))
                     self.timer_idle_to_standby.set_timer(0.1, self.name)
                     self.timer_idle_to_powerdown.set_timer(self.idle_to_powerdown_time, self.name)
             self.heater_state = chng_state
+            if self.idle_to_powerdown_time > 2:
+                self.log.always("T%d heater will shut down in %s seconds." % (self.name, self.log._seconds_to_human_string(self.idle_to_powerdown_time)))
+
 
     def get_timer_to_standby(self):
         return self.timer_idle_to_standby
@@ -662,27 +680,34 @@ class ToolStandbyTempTimer:
             self.log.trace(
                 "_standby_tool_temp_timer_event: Running for T%s. temp_type:%s. %s" % 
                 (str(self.tool_id), 
-                 "Time to shutdown" if self.temp_type == 0 else "Time to standby"), 
+                 "Time to shutdown" if self.temp_type == 0 else "Time to standby", 
                  ("For loaded virtual tool T%s" % str(self.last_virtual_tool_using_physical_timer) ) 
-                 if  self.last_virtual_tool_using_physical_timer != self.tool_id else "")
+                 if  self.last_virtual_tool_using_physical_timer != self.tool_id else ""))
 
             temperature = 0
+            heater = self.printer.lookup_object(tool.extruder).get_heater()
             if self.temp_type == self.TIMER_TO_STANDBY:
                 temperature = tool.get_status()["heater_standby_temp"]
                 self.log.track_standby_heater_start(tool.name)                                                # Set the standby as started in statistics.
-                heater = self.printer.lookup_object(tool.extruder).get_heater()
                 heater.set_temp(temperature)
                 self.log.trace("_standby_tool_temp_timer_event: Running heater.set_temp(%s)" % str(temperature))
             else:
                 self.log.track_standby_heater_end(tool.name)                                                # Set the standby as finishes in statistics.
                 self.log.track_active_heater_end(tool.name)                                                 # Set the active as finishes in statistics.
-                tool.set_heater(heater_state= Tool.HEATER_STATE_OFF)
+
+                tool.get_timer_to_standby().set_timer(0, self.last_virtual_tool_using_physical_timer)        # Stop Standby timer.
+                #tool.get_timer_to_powerdown().set_timer(0, self.last_virtual_tool_using_physical_timer)        # Stop Poweroff timer. (Already off)
+                tool._set_state = 0        # Set off state.
+                heater.set_temp(0)        # Set temperature to 0.
+
+
+                # tool.set_heater(Tool.HEATER_STATE_OFF)
             self.log.track_active_heater_end(self.tool_id)                                               # Set the active as finishes in statistics.
 
         except Exception as e:
-            raise Exception("Failed to set Standby temp for tool T%s: %s. %s" % (str(self.tool_id), str(e)), 
-                 ("For loaded virtual tool T%s" % str(self.last_virtual_tool_using_physical_timer) ) 
-                 if  self.last_virtual_tool_using_physical_timer != self.tool_id else "")
+            raise Exception("Failed to set Standby temp for tool T%s: %s. %s" % (str(self.tool_id), 
+                                                                                 ("for virtual T%s" % str(self.last_virtual_tool_using_physical_timer)),
+                                                                                 str(e)))  # if actual_tool_calling != self.tool_id else ""
 
         self.nextwake = self.reactor.NEVER
         if self.repeat:
@@ -693,9 +718,9 @@ class ToolStandbyTempTimer:
 
     def set_timer(self, duration, actual_tool_calling):
         actual_tool_calling = actual_tool_calling
-        self.log.trace(str(self.timer_handler) + ".set_timer: T%s; temp_type:%s ; duration:%s. %s" % (
+        self.log.trace(str(self.timer_handler) + ".set_timer: T%s, temp_type:%s, duration:%s. %s" % (
             str(self.tool_id), str(self.temp_type), str(duration), 
-            ("for virtual T%s" % str(actual_tool_calling)) if actual_tool_calling != self.tool_id else ""))
+            ("for virtual T%s" % str(actual_tool_calling)) if actual_tool_calling != self.tool_id else ""))  
         self.duration = float(duration)
         self.last_virtual_tool_using_physical_timer = actual_tool_calling
         if self.inside_timer:
