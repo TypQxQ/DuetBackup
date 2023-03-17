@@ -534,7 +534,6 @@ class Tool:
         # First set state if changed, so we set correct temps.
         if "heater_state" in kwargs:
             chng_state = kwargs["heater_state"]
-
         for i in kwargs:
             if i == "heater_active_temp":
                 self.heater_active_temp = kwargs[i]
@@ -579,8 +578,8 @@ class Tool:
                 self.log.trace("set_heater: T%d heater state now OFF." % self.name )
                 self.timer_idle_to_standby.set_timer(0, self.name)
                 self.timer_idle_to_powerdown.set_timer(0.1, self.name)
-                self.log.track_standby_heater_end(self.name)                                                # Set the standby as finishes in statistics.
-                self.log.track_active_heater_end(self.name)                                                # Set the active as finishes in statistics.
+                # self.log.track_standby_heater_end(self.name)                                                # Set the standby as finishes in statistics.
+                # self.log.track_active_heater_end(self.name)                                                # Set the active as finishes in statistics.
             elif chng_state == self.HEATER_STATE_ACTIVE:                                                                       # Else If Active
                 self.log.trace("set_heater: T%d heater state now ACTIVE." % self.name )
                 self.timer_idle_to_standby.set_timer(0, self.name)
@@ -599,9 +598,9 @@ class Tool:
                     self.log.trace("set_heater: T%d standbytemp:%d;heater_state:%d; current_temp:%d." % (self.name, int(self.heater_state), int(self.heater_standby_temp), int(heater.get_status(curtime)["temperature"])))
                     self.timer_idle_to_standby.set_timer(0.1, self.name)
                     self.timer_idle_to_powerdown.set_timer(self.idle_to_powerdown_time, self.name)
+                if self.idle_to_powerdown_time > 2:
+                    self.log.always("T%d heater will shut down in %s seconds." % (self.name, self.log._seconds_to_human_string(self.idle_to_powerdown_time)))
             self.heater_state = chng_state
-            if self.idle_to_powerdown_time > 2:
-                self.log.always("T%d heater will shut down in %s seconds." % (self.name, self.log._seconds_to_human_string(self.idle_to_powerdown_time)))
 
 
     def get_timer_to_standby(self):
@@ -681,7 +680,7 @@ class ToolStandbyTempTimer:
                 "_standby_tool_temp_timer_event: Running for T%s. temp_type:%s. %s" % 
                 (str(self.tool_id), 
                  "Time to shutdown" if self.temp_type == 0 else "Time to standby", 
-                 ("For loaded virtual tool T%s" % str(self.last_virtual_tool_using_physical_timer) ) 
+                 ("For virtual tool T%s" % str(self.last_virtual_tool_using_physical_timer) ) 
                  if  self.last_virtual_tool_using_physical_timer != self.tool_id else ""))
 
             temperature = 0
@@ -693,16 +692,15 @@ class ToolStandbyTempTimer:
                 self.log.trace("_standby_tool_temp_timer_event: Running heater.set_temp(%s)" % str(temperature))
             else:
                 self.log.track_standby_heater_end(tool.name)                                                # Set the standby as finishes in statistics.
-                self.log.track_active_heater_end(tool.name)                                                 # Set the active as finishes in statistics.
 
                 tool.get_timer_to_standby().set_timer(0, self.last_virtual_tool_using_physical_timer)        # Stop Standby timer.
                 #tool.get_timer_to_powerdown().set_timer(0, self.last_virtual_tool_using_physical_timer)        # Stop Poweroff timer. (Already off)
-                tool._set_state = 0        # Set off state.
+                tool._set_state(Tool.HEATER_STATE_OFF)        # Set off state.
                 heater.set_temp(0)        # Set temperature to 0.
 
 
                 # tool.set_heater(Tool.HEATER_STATE_OFF)
-            self.log.track_active_heater_end(self.tool_id)                                               # Set the active as finishes in statistics.
+            self.log.track_active_heater_end(self.last_virtual_tool_using_physical_timer)                                               # Set the active as finishes in statistics.
 
         except Exception as e:
             raise Exception("Failed to set Standby temp for tool T%s: %s. %s" % (str(self.tool_id), 
@@ -718,9 +716,11 @@ class ToolStandbyTempTimer:
 
     def set_timer(self, duration, actual_tool_calling):
         actual_tool_calling = actual_tool_calling
-        self.log.trace(str(self.timer_handler) + ".set_timer: T%s, temp_type:%s, duration:%s. %s" % (
-            str(self.tool_id), str(self.temp_type), str(duration), 
-            ("for virtual T%s" % str(actual_tool_calling)) if actual_tool_calling != self.tool_id else ""))  
+        self.log.trace(str(self.timer_handler) + ".set_timer: T%s %s, temp_type:%s, duration:%s." % (
+            str(self.tool_id), 
+            ("for virtual T%s" % str(actual_tool_calling)) if actual_tool_calling != self.tool_id else "",
+            ("Standby" if self.temp_type == 1 else "OFF"), 
+            str(duration)))
         self.duration = float(duration)
         self.last_virtual_tool_using_physical_timer = actual_tool_calling
         if self.inside_timer:

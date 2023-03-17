@@ -310,7 +310,7 @@ class KtccLog:
         self.trace("track_mount_end: Running for Tool: %s." % (tool_id))
         start_time = self.tool_statistics[str(tool_id)]['tracked_mount_start_time']
         if start_time is not None and start_time != 0:
-            self.trace("track_mount_end: start_time is not None for Tool: %s." % (tool_id))
+            # self.trace("track_mount_end: start_time is not None for Tool: %s." % (tool_id))
             time_spent = time.time() - start_time
             self.increase_tool_statistics(tool_id, 'total_time_spent_mounting', time_spent)
             self.total_time_spent_mounting += time_spent
@@ -326,7 +326,7 @@ class KtccLog:
         self.trace("track_unmount_end: Running for Tool: %s." % (tool_id))
         start_time = self.tool_statistics[str(tool_id)]['tracked_unmount_start_time']
         if start_time is not None and start_time != 0:
-            self.trace("track_unmount_end: start_time is not None for Tool: %s." % (tool_id))
+            # self.trace("track_unmount_end: start_time is not None for Tool: %s." % (tool_id))
             time_spent = time.time() - start_time
             self.increase_tool_statistics(tool_id, 'total_time_spent_unmounting', time_spent)
             self.total_time_spent_unmounting += time_spent
@@ -483,12 +483,12 @@ class KtccLog:
             if str(tool_id) in self.tool_statistics:
                 if self.tool_statistics[str(tool_id)][key] is None:
                     self.tool_statistics[str(tool_id)][key]=0
-                self.trace("increase_tool_statistics: Before running for Tool: %s. Key: %s is: %s" % (tool_id, str(key), str(self.tool_statistics[str(tool_id)][key])))
+                # self.trace("increase_tool_statistics: Before running for Tool: %s. Key: %s is: %s" % (tool_id, str(key), str(self.tool_statistics[str(tool_id)][key])))
                 if isinstance(count, float):
                     self.tool_statistics[str(tool_id)][key] = round(self.tool_statistics[str(tool_id)][key] + count, 3)
                 else:
                     self.tool_statistics[str(tool_id)][key] += count
-                self.trace("increase_tool_statistics: After running for Tool: %s. Key: %s is: %s" % (tool_id, str(key), str(self.tool_statistics[str(tool_id)][key])))
+                # self.trace("increase_tool_statistics: After running for Tool: %s. Key: %s is: %s" % (tool_id, str(key), str(self.tool_statistics[str(tool_id)][key])))
             else:
                 self.debug("increase_tool_statistics: Unknown tool provided to record tool stats: %s" % tool_id)
                 # self.debug(str(self.tool_statistics))
@@ -514,7 +514,7 @@ class KtccLog:
             if str(tool_id) in self.tool_statistics:
                 tool_stat= self.tool_statistics[str(tool_id)]
                 if tool_stat[start_time_key] is not None and tool_stat[start_time_key] != 0:
-                    self.trace("_set_tool_statistics_time_diff: Tool: %s value before running: final_time_key: %s=%s, start_time_key: %s=%s." % (tool_id, final_time_key, str(tool_stat[final_time_key]), start_time_key, str(tool_stat[start_time_key])))
+                    # self.trace("_set_tool_statistics_time_diff: Tool: %s value before running: final_time_key: %s=%s, start_time_key: %s=%s." % (tool_id, final_time_key, str(tool_stat[final_time_key]), start_time_key, str(tool_stat[start_time_key])))
                     if tool_stat[final_time_key] is not None and tool_stat[final_time_key] != 0:
                         tool_stat[final_time_key] += time.time() - tool_stat[start_time_key]
                     else:
@@ -525,8 +525,7 @@ class KtccLog:
         except Exception as e:
             self.debug("Exception whilst tracking tool stats: %s" % str(e))
             self.debug("_set_tool_statistics_time_diff: Error while tool: %s provided to record tool stats while final_time_key: %s and start_time_key: %s" % (tool_id, str(final_time_key), str(start_time_key)))
-        self.trace("_set_tool_statistics_time_diff: Tool: %s value after running: final_time_key: %s=%s, start_time_key: %s=%s." % (tool_id, final_time_key, str(tool_stat[final_time_key]), start_time_key, str(tool_stat[start_time_key])))
-        # self.trace("_set_tool_statistics_time_diff: Tool: %s provided to record tool stats while final_time_key: %s=%d and start_time_key: %s" % (tool_id, str(final_time_key), tool_stat[final_time_key], str(start_time_key)))
+        # self.trace("_set_tool_statistics_time_diff: Tool: %s value after running: final_time_key: %s=%s, start_time_key: %s=%s." % (tool_id, final_time_key, str(tool_stat[final_time_key]), start_time_key, str(tool_stat[start_time_key])))
 
 ### LOGGING AND STATISTICS FUNCTIONS GCODE FUNCTIONS
 
