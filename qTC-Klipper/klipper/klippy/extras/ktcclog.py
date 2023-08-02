@@ -119,11 +119,11 @@ class KtccLog:
 
     cmd_KTCC_G28_help = "Homing axes."
     def cmd_KTCC_G28(self, gcmd):
-        self.always("Starting G28")
+        # self.trace("Starting G28")
         self.save_active = False                    # Don't try to use SAVE_VARIABLE commands.
         self.prev_G28(gcmd)
         self.save_active = True                     # Resume to use SAVE_VARIABLE commands.
-        self.always("Ending G28")
+        # self.trace("Ending G28")
 
     def _save_changes_timer_event(self, eventtime):
         try:
@@ -332,6 +332,7 @@ class KtccLog:
             self.total_time_spent_unmounting += time_spent
             self._set_tool_statistics(tool_id, 'tracked_unmount_start_time', 0)
             self.increase_tool_statistics(tool_id, 'toolunmounts_completed')
+            self.increase_statistics('total_toolunmounts')
             self.changes_to_save = True
 
 
@@ -354,6 +355,8 @@ class KtccLog:
     def track_selected_tool_start(self, tool_id):
         self.trace("track_selected_tool_start: Running for Tool: %s." % (tool_id))
         self._set_tool_statistics(tool_id, 'tracked_start_time_selected', time.time())
+        self.increase_statistics('total_toolmounts')
+        self.increase_tool_statistics(tool_id, 'toolmounts_completed')
 
     def track_selected_tool_end(self, tool_id):
         self.trace("track_selected_tool_end: Running for Tool: %s." % (tool_id))
@@ -424,13 +427,20 @@ class KtccLog:
             msg += "\n------------\n"
 
             msg += "Tool Statistics:\n"
-            for tool_id in self.tool_statistics:
-                # self.trace(str(tool))
+
+            # First convert to int so we get right order.
+            res = {int(k):v for k,v in self.tool_statistics.items()}
+            for tid in res:
+                tool_id= str(tid)
                 msg += "Tool#%s:\n" % (tool_id)
                 msg += "Completed %d out of %d mounts in %s. Average of %s per toolmount.\n" % (self.tool_statistics[tool_id]['toolmounts_completed'], self.tool_statistics[tool_id]['toolmounts_started'], self._seconds_to_human_string(self.tool_statistics[tool_id]['total_time_spent_mounting']), self._seconds_to_human_string(self._division(self.tool_statistics[tool_id]['total_time_spent_mounting'], self.tool_statistics[tool_id]['toolmounts_completed'])))
                 msg += "Completed %d out of %d unmounts in %s. Average of %s per toolunmount.\n" % (self.tool_statistics[tool_id]['toolunmounts_completed'], self.tool_statistics[tool_id]['toolunmounts_started'], self._seconds_to_human_string(self.tool_statistics[tool_id]['total_time_spent_unmounting']), self._seconds_to_human_string(self._division(self.tool_statistics[tool_id]['total_time_spent_unmounting'], self.tool_statistics[tool_id]['toolunmounts_completed'])))
-                msg += "%s spent selected. %s with active heater and %s with standby heater.\n" % (self._seconds_to_human_string(self.tool_statistics[tool_id]['time_selected']), self._seconds_to_human_string(self.tool_statistics[tool_id]['time_heater_active']), self._seconds_to_human_string(self.tool_statistics[tool_id]['time_heater_standby']))
-                msg += "------------\n"
+                msg += "%s spent selected." % self._seconds_to_human_string(self.tool_statistics[tool_id]['time_selected'])
+                tool = self.printer.lookup_object("tool " + str(tool_id))
+                if tool.is_virtual != True or tool.name==tool.physical_parent_id:
+                    if tool.extruder is not None:
+                        msg += " %s with active heater and %s with standby heater." % (self._seconds_to_human_string(self.tool_statistics[tool_id]['time_heater_active']), self._seconds_to_human_string(self.tool_statistics[tool_id]['time_heater_standby']))
+                msg += "\n------------\n"
                 
 
         self.always(msg)
@@ -442,8 +452,11 @@ class KtccLog:
             msg += "\n------------\n"
 
             msg += "Tool Statistics for this print:\n"
-            for tool_id in self.tool_statistics:
-                # self.trace(str(tool))
+
+            # First convert to int so we get right order.
+            res = {int(k):v for k,v in self.tool_statistics.items()}
+            for tid in res:
+                tool_id= str(tid)
                 ts = self.tool_statistics[tool_id]
                 pts = self.print_tool_statistics[tool_id]
                 msg += "Tool#%s:\n" % (tool_id)
@@ -531,9 +544,18 @@ class KtccLog:
 
     cmd_KTCC_RESET_STATS_help = "Reset the KTCC statistics"
     def cmd_KTCC_RESET_STATS(self, gcmd):
-        self._reset_statistics()
-        self.changes_to_save = True
-        self._dump_statistics(True)
+        param = gcmd.get('SURE', "no")
+        if param.lower() == "yes":
+            self._reset_statistics()
+            self._reset_print_statistics()
+            self.changes_to_save = True
+            self._dump_statistics(True)
+            self.always("Statistics RESET.")
+        else:
+            message = "Are you sure you want to reset KTCC statistics?\n"
+            message += "If so, run with parameter SURE=YES:\n"
+            message += "KTCC_RESET_STATS SURE=YES"
+            self.gcode.respond_info(message)
 
     cmd_KTCC_DUMP_STATS_help = "Dump the KTCC statistics"
     def cmd_KTCC_DUMP_STATS(self, gcmd):

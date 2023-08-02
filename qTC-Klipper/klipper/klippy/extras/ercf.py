@@ -112,6 +112,7 @@ class Ercf:
 
     # ercf_vars.cfg variables
     VARS_ERCF_CALIB_CLOG_LENGTH      = "ercf_calib_clog_length"
+    VARS_ERCF_ENABLE_ENDLESS_SPOOL   = "ercf_state_enable_endless_spool"
     VARS_ERCF_ENDLESS_SPOOL_GROUPS   = "ercf_state_endless_spool_groups"
     VARS_ERCF_TOOL_TO_GATE_MAP       = "ercf_state_tool_to_gate_map"
     VARS_ERCF_GATE_STATUS            = "ercf_state_gate_status"
@@ -177,6 +178,7 @@ class Ercf:
         self.selector_offsets = config.getfloatlist('colorselector')
         self.bypass_offset = config.getfloat('bypass_selector', 0)
         self.timeout_pause = config.getint('timeout_pause', 72000)
+        self.timeout_unlock = config.getint('timeout_unlock', -1)
         self.disable_heater = config.getint('disable_heater', 600)
         self.min_temp_extruder = config.getfloat('min_temp_extruder', 180.)
         self.calibration_bowden_length = config.getfloat('calibration_bowden_length')
@@ -204,7 +206,7 @@ class Ercf:
         self.homing_method = config.getint('homing_method', 0, minval=0, maxval=1)
         self.sensorless_selector = config.getint('sensorless_selector', 0, minval=0, maxval=1)
         self.enable_clog_detection = config.getint('enable_clog_detection', 2, minval=0, maxval=2)
-        self.enable_endless_spool = config.getint('enable_endless_spool', 0, minval=0, maxval=1)
+        self.default_enable_endless_spool = config.getint('enable_endless_spool', 0, minval=0, maxval=1)
         self.default_endless_spool_groups = list(config.getintlist('endless_spool_groups', []))
         self.default_tool_to_gate_map = list(config.getintlist('tool_to_gate_map', []))
         self.default_gate_status = list(config.getintlist('gate_status', []))
@@ -222,6 +224,7 @@ class Ercf:
         # The following lists are the defaults (when reset) and will be overriden by values in ercf_vars.cfg
 
         # Endless spool groups
+        self.enable_endless_spool = self.default_enable_endless_spool
         if len(self.default_endless_spool_groups) > 0:
             if self.enable_endless_spool == 1 and len(self.default_endless_spool_groups) != len(self.selector_offsets):
                 raise self.config.error("endless_spool_groups has a different number of values than the number of gates")
@@ -514,6 +517,9 @@ class Ercf:
         # Sanity check to see that ercf_vars.cfg is included
         if self.variables == {}:
             raise self.config.error("Calibration settings in ercf_vars.cfg not found.  Did you include it in your klipper config directory?")
+        # Remember user setting of idle_timeout so it can be restored (if not overridden)
+        if self.timeout_unlock < 0:
+            self.timeout_unlock = self.printer.lookup_object("idle_timeout").idle_timeout
 
         # Configure encoder
         self.encoder_sensor.set_logger(self._log_debug)
@@ -592,6 +598,7 @@ class Ercf:
                 ignored_state = True
 
         if self.persistence_level >= 1:
+            self.enable_endless_spool = self.variables.get(self.VARS_ERCF_ENABLE_ENDLESS_SPOOL, self.enable_endless_spool)
             endless_spool_groups = self.variables.get(self.VARS_ERCF_ENDLESS_SPOOL_GROUPS, self.endless_spool_groups)
             if len(endless_spool_groups) == num_gates:
                 self.endless_spool_groups = endless_spool_groups
@@ -665,10 +672,11 @@ class Ercf:
                 'is_locked': self.is_paused_locked,
                 'is_homed': self.is_homed,
                 'tool': self.tool_selected,
+                'gate': self.gate_selected,
+                'material': self.gate_material[self.gate_selected] if self.gate_selected >= 0 else '',
                 'next_tool': self._next_tool,
                 'last_tool': self._last_tool,
                 'last_toolchange': self._last_toolchange,
-                'gate': self.gate_selected,
                 'clog_detection': self.enable_clog_detection,
                 'endless_spool': self.enable_endless_spool,
                 'filament': "Loaded" if self.loaded_status == self.LOADED_STATUS_FULL else
@@ -762,8 +770,8 @@ class Ercf:
         msg += "\n%s spent paused (total pauses: %d)" % (self._seconds_to_human_string(self.time_spent_paused), self.total_pauses)
         return msg
 
-    def _dump_statistics(self, report=False):
-        if self.log_statistics or report:
+    def _dump_statistics(self, report=False, quiet=False):
+        if (self.log_statistics or report) and not quiet:
             self._log_always(self._swap_statistics_to_human_string())
             self._dump_gate_statistics()
         # This is good place to update the persisted stats...
@@ -780,7 +788,9 @@ class Ercf:
             unload_slip_percent = (rounded['unload_delta'] / rounded['unload_distance']) * 100 if rounded['unload_distance'] != 0. else 0.
             # Give the gate a reliability grading based on slippage
             grade = load_slip_percent + unload_slip_percent
-            if grade < 2.:
+            if rounded['load_distance'] + rounded['unload_distance'] == 0.:
+                status = "n/a"
+            elif grade < 2.:
                 status = "Good"
             elif grade < 4.:
                 status = "Marginal"
@@ -815,10 +825,15 @@ class Ercf:
             }
         self.gcode.run_script_from_command("SAVE_VARIABLE VARIABLE=%s VALUE=\"%s\"" % (self.VARS_ERCF_SWAP_STATISTICS, swap_stats))
 
-    def _persist_gap_map(self):
+    def _persist_gate_map(self):
         self.gcode.run_script_from_command("SAVE_VARIABLE VARIABLE=%s VALUE='%s'" % (self.VARS_ERCF_GATE_STATUS, self.gate_status))
-        self.gcode.run_script_from_command("SAVE_VARIABLE VARIABLE=%s VALUE='%s'" % (self.VARS_ERCF_GATE_MATERIAL, map(lambda x: ("\'%s\'" %x), self.gate_material)))
-        self.gcode.run_script_from_command("SAVE_VARIABLE VARIABLE=%s VALUE='%s'" % (self.VARS_ERCF_GATE_COLOR, map(lambda x: ("\'%s\'" %x), self.gate_color)))
+        self.gcode.run_script_from_command("SAVE_VARIABLE VARIABLE=%s VALUE='%s'" % (self.VARS_ERCF_GATE_MATERIAL, list(map(lambda x: ("\'%s\'" %x), self.gate_material))))
+        self.gcode.run_script_from_command("SAVE_VARIABLE VARIABLE=%s VALUE='%s'" % (self.VARS_ERCF_GATE_COLOR, list(map(lambda x: ("\'%s\'" %x), self.gate_color))))
+
+    def _log_error(self, message):
+        if self.ercf_logger:
+            self.ercf_logger.info(message)
+        self.gcode.respond_raw("!! %s" % message)
 
     def _log_always(self, message):
         if self.ercf_logger:
@@ -928,14 +943,14 @@ class Ercf:
     def cmd_ERCF_RESET_STATS(self, gcmd):
         if self._check_is_disabled(): return
         self._reset_statistics()
-        self._dump_statistics(True)
+        self._dump_statistics(report=True)
         self._persist_swap_statistics()
         self._persist_gate_statistics()
 
     cmd_ERCF_DUMP_STATS_help = "Dump the ERCF statistics"
     def cmd_ERCF_DUMP_STATS(self, gcmd):
         if self._check_is_disabled(): return
-        self._dump_statistics(True)
+        self._dump_statistics(report=True)
 
     cmd_ERCF_SET_LOG_LEVEL_help = "Set the log level for the ERCF"
     def cmd_ERCF_SET_LOG_LEVEL(self, gcmd):
@@ -1422,9 +1437,7 @@ class Ercf:
             extra = ""
 
         self._servo_up()
-        self.gcode.respond_raw("!! %s\n%s" % (msg, reason))
-        if self.ercf_logger:
-            self.ercf_logger.info("%s\n%s" % (msg, reason))
+        self._log_error("%s\n%s" % (msg, reason))
         if extra != "":
             self._log_always(extra)
         if run_pause:
@@ -1437,6 +1450,7 @@ class Ercf:
             self._log_info("Enabling extruder heater (%.1f)" % self.paused_extruder_temp)
         self.gcode.run_script_from_command("M104 S%.1f" % self.paused_extruder_temp)
         self.encoder_sensor.reset_counts()    # Encoder 0000
+        self.gcode.run_script_from_command("SET_IDLE_TIMEOUT TIMEOUT=%d" % self.timeout_unlock)
         self._track_pause_end()
         self.is_paused_locked = False
         self._disable_encoder_sensor() # Precautionary, should already be disabled
@@ -1555,14 +1569,17 @@ class Ercf:
 
     def _set_above_min_temp(self, temp=-1):
         if temp == -1:
-            if not self.printer.lookup_object("extruder").heater.can_extrude:
-                temp = self.min_temp_extruder
-                self._log_info("Heating extruder to minimum temp (%.1f)" % temp)
-                self.gcode.run_script_from_command("M109 S%.1f" % temp)
+            if self.printer.lookup_object("extruder").heater.can_extrude:
+                return
+            temp = self.min_temp_extruder
+            self._log_info("Heating extruder to minimum temp (%.1f)" % temp)
         else:
-            if self.printer.lookup_object("extruder").heater.target_temp < temp:
+            if self.printer.lookup_object("extruder").heater.target_temp < temp and temp > 40:
                 self._log_info("Heating extruder to desired temp (%.1f)" % temp)
-                self.gcode.run_script_from_command("M109 S%.1f" % temp)
+            else:
+                return
+        self.gcode.run_script_from_command("SET_HEATER_TEMPERATURE HEATER=extruder TARGET=%.1f" % temp)
+        self.gcode.run_script_from_command("TEMPERATURE_WAIT SENSOR=extruder MINIMUM=%.1f MAXIMUM=%.1f" % (temp-1, temp+1))
 
     def _set_loaded_status(self, state, silent=False):
         self.loaded_status = state
@@ -1630,6 +1647,8 @@ class Ercf:
     cmd_ERCF_RESET_help = "Forget persisted state and re-initialize defaults"
     def cmd_ERCF_RESET(self, gcmd):
         self._initialize_state()
+        self.enable_endless_spool = self.default_enable_endless_spool
+        self.gcode.run_script_from_command("SAVE_VARIABLE VARIABLE=%s VALUE=%d" % (self.VARS_ERCF_ENABLE_ENDLESS_SPOOL, self.enable_endless_spool))
         self.endless_spool_groups = list(self.default_endless_spool_groups)
         self.gcode.run_script_from_command("SAVE_VARIABLE VARIABLE=%s VALUE='%s'" % (self.VARS_ERCF_ENDLESS_SPOOL_GROUPS, self.endless_spool_groups))
         self.tool_to_gate_map = list(self.default_tool_to_gate_map)
@@ -1637,7 +1656,7 @@ class Ercf:
         self.gate_status = list(self.default_gate_status)
         self.gate_material = list(self.default_gate_material)
         self.gate_color = list(self.default_gate_color)
-        self._persist_gap_map()
+        self._persist_gate_map()
         self.gcode.run_script_from_command("SAVE_VARIABLE VARIABLE=%s VALUE=%d" % (self.VARS_ERCF_GATE_SELECTED, self.gate_selected))
         self.gcode.run_script_from_command("SAVE_VARIABLE VARIABLE=%s VALUE=%d" % (self.VARS_ERCF_TOOL_SELECTED, self.tool_selected))
         self.gcode.run_script_from_command("SAVE_VARIABLE VARIABLE=%s VALUE=%d" % (self.VARS_ERCF_LOADED_STATUS, self.loaded_status))
@@ -2031,7 +2050,7 @@ class Ercf:
 
             if check_state or self.loaded_status == self.LOADED_STATUS_UNKNOWN:
                 # Let's determine where filament is and reset state before continuing
-                self._log_info("Unknown filament position, recovering state...")
+                self._log_error("Unknown filament position, recovering state...")
                 self._recover_loaded_state()
 
             if self.loaded_status == self.LOADED_STATUS_UNLOADED:
@@ -2112,8 +2131,8 @@ class Ercf:
 
         # Goal is to exit extruder. Two strategies depending on availability of toolhead sensor
         out_of_extruder = False
-        safety_margin = 5.
         if self._has_toolhead_sensor():
+            safety_margin = 5.
             #step = self.toolhead_homing_step # Too slow
             step = 3.
             max_length = self._get_home_position_to_nozzle() + safety_margin
@@ -2137,7 +2156,7 @@ class Ercf:
             # Back up around 15mm at a time until either the encoder doesn't see any movement
             # Do this until we have traveled more than the length of the extruder 
             step = self.encoder_move_step_size
-            max_length = self._get_home_position_to_nozzle() + safety_margin
+            max_length = self._get_home_position_to_nozzle() + step
             speed = self.nozzle_unload_speed * 0.5 # First pull slower just in case we don't have tip
             self._log_debug("Trying to exit the extruder, up to %.1fmm in %.1fmm steps" % (max_length, step))
             for i in range(int(math.ceil(max_length / step))):
@@ -2175,7 +2194,7 @@ class Ercf:
                 self._log_debug("Moving the gear motor for %.1fmm" % -initial_move) 
                 delta = self._trace_filament_move("Unload", -initial_move, speed=self.sync_unload_speed, motor="gear", track=True)
 
-            if delta > max(initial_move * 0.2, 1): # 20% slippage
+            if delta > max(initial_move * 0.5, 1): # 50% slippage
                 self._log_always("Error unloading filament - not enough detected at encoder. Suspect servo not properly down. Retrying...")
                 self._track_gate_statistics('servo_retries', self.gate_selected)
                 self._servo_up()
@@ -2184,7 +2203,7 @@ class Ercf:
                     delta = self._trace_filament_move("Retrying sync unload move after servo reset", -delta, speed=self.sync_unload_speed, motor="both")
                 else:
                     delta = self._trace_filament_move("Retrying unload move after servo reset", -delta, speed=self.sync_unload_speed, motor="gear", track=True)
-                if delta > max(initial_move * 0.2, 1): # 20% slippage
+                if delta > max(initial_move * 0.5, 1): # 50% slippage
                     # Actually we are likely still stuck in extruder
                     self._set_loaded_status(self.LOADED_STATUS_PARTIAL_IN_EXTRUDER)
                     raise ErcfError("Too much slippage (%.1fmm) detected during the sync unload from extruder. Maybe still stuck in extruder" % delta)
@@ -2358,7 +2377,7 @@ class Ercf:
                     self._unload_sequence(self._get_calibration_ref(), check_state=True)
                 except ErcfError as ee:
                     # Add some more context to the error and re-raise
-                    raise ErcfError("Selector recovery failed because: %s" % (tool, str(ee)))
+                    raise ErcfError("Selector recovery failed because: %s" % (str(ee)))
                 
                 # Ok, now check if selector can now reach proper target
                 self._home_selector()
@@ -2414,6 +2433,12 @@ class Ercf:
         self.gcode.run_script_from_command("M117 %s" % m117_msg)
         self._log_always(msg)
 
+        # Check TTG map. We might be mapped to same gate
+        if self.tool_to_gate_map[tool] == self.gate_selected and self.loaded_status == self.LOADED_STATUS_FULL:
+            self._select_tool(tool)
+            self.gcode.run_script_from_command("M117 T%s" % tool)
+            return
+
         # Identify the start up use case and make it easy for user
         if not self.is_homed and self.tool_selected == self.TOOL_UNKNOWN:
             self._log_info("ERCF not homed, homing it before continuing...")
@@ -2424,7 +2449,7 @@ class Ercf:
             self._unload_tool(skip_tip=skip_tip)
         self._select_and_load_tool(tool)
         self._track_swap_completed()
-        self._dump_statistics()
+        self.gcode.run_script_from_command("M117 T%s" % tool)
 
     def _unselect_tool(self):
         self._servo_up()
@@ -2532,7 +2557,20 @@ class Ercf:
                 self._select_tool(tool)
             else:
                 self._select_gate(gate)
-                self.tool_selected = self.TOOL_UNKNOWN
+                # Find the first tool that maps to this gate or current tool if it maps
+                # (Remember multiple tools can map to the same gate)
+                if self.tool_selected >= 0 and self.tool_to_gate_map[self.tool_selected] == gate:
+                    pass
+                else:
+                    tool_found = False
+                    for tool in range(len(self.tool_to_gate_map)):
+                        if self.tool_to_gate_map[tool] == gate:
+                            self._set_tool_selected(tool, silent=True)
+                            self._log_info("Tool T%d enabled%s" % (tool, (" on gate #%d" % gate) if tool != gate else ""))
+                            tool_found = True
+                            break
+                    if not tool_found:
+                        self._set_tool_selected(self.TOOL_UNKNOWN, silent=True)
         except ErcfError as ee:
             self._pause(str(ee))
 
@@ -2541,17 +2579,19 @@ class Ercf:
         if self._check_is_disabled(): return
         if self._check_is_paused(): return
         if self._check_in_bypass(): return
+        quiet = gcmd.get_int('QUIET', 0, minval=0, maxval=1)
         tool = gcmd.get_int('TOOL', minval=0, maxval=len(self.selector_offsets)-1)
         standalone = bool(gcmd.get_int('STANDALONE', 0, minval=0, maxval=1))
         skip_tip = self._is_in_print() and not standalone
         if self.loaded_status == self.LOADED_STATUS_UNKNOWN and self.is_homed: # Will be done later if not homed
-            self._log_info("Unknown filament position, recovering state...")
+            self._log_error("Unknown filament position, recovering state...")
             self._recover_loaded_state()
         try:
             restore_encoder = self._disable_encoder_sensor(update_clog_detection_length=True) # Don't want runout accidently triggering during tool change
             self._last_tool = self.tool_selected
             self._next_tool = tool
             self._change_tool(tool, skip_tip)
+            self._dump_statistics(quiet=quiet)
             self._enable_encoder_sensor(restore_encoder)
         except ErcfError as ee:
             self._pause("%s.\nOccured when changing tool: %s" % (str(ee), self._last_toolchange))
@@ -3076,7 +3116,7 @@ class Ercf:
         return msg
 
     def _gate_map_to_human_string(self):
-        msg = ""
+        msg = "ERCF Filaments:\n"
         num_gates = len(self.selector_offsets)
         for g in range(num_gates):
             material = self.gate_material[g] if self.gate_material[g] != "" else "n/a"
@@ -3100,7 +3140,7 @@ class Ercf:
         self.gate_status = self.default_gate_status
         self.gate_material = self.default_gate_material
         self.gate_color = self.default_gate_color
-        self._persist_gap_map()
+        self._persist_gate_map()
 
     def _validate_color(self, color):
         color = color.lower()
@@ -3151,9 +3191,22 @@ class Ercf:
     cmd_ERCF_REMAP_TTG_help = "Remap a tool to a specific gate and set gate availability"
     def cmd_ERCF_REMAP_TTG(self, gcmd):
         if self._check_is_disabled(): return
+        quiet = gcmd.get_int('QUIET', 0, minval=0, maxval=1)
         reset = gcmd.get_int('RESET', 0, minval=0, maxval=1)
+        ttg_map = gcmd.get('MAP', "")
         if reset == 1:
             self._reset_ttg_mapping()
+        elif ttg_map != "":
+            ttg_map = gcmd.get('MAP').split(",")
+            if len(ttg_map) != len(self.selector_offsets):
+                self._log_always("The number of map values (%d) is not the same as number of gates (%d)" % (len(ttg_map), len(self.selector_offsets)))
+                return
+            self.tool_to_gate_map = []
+            for gate in ttg_map:
+                if gate.isdigit():
+                    self.tool_to_gate_map.append(int(gate))
+                else:
+                    self.tool_to_gate_map.append(0)
         else:
             tool = gcmd.get_int('TOOL', -1, minval=0, maxval=len(self.selector_offsets)-1)
             gate = gcmd.get_int('GATE', minval=0, maxval=len(self.selector_offsets)-1)
@@ -3164,10 +3217,13 @@ class Ercf:
                 self._set_gate_status(gate, available)
             else:
                 self._remap_tool(tool, gate, available)
-        self._log_info(self._tool_to_gate_map_to_human_string())
+
+        if not quiet:
+            self._log_info(self._tool_to_gate_map_to_human_string())
 
     cmd_ERCF_SET_GATE_MAP_help = "Define the type and color of filaments on each gate"
     def cmd_ERCF_SET_GATE_MAP(self, gcmd):
+        quiet = gcmd.get_int('QUIET', 0, minval=0, maxval=1)
         reset = gcmd.get_int('RESET', 0, minval=0, maxval=1)
         dump = gcmd.get_int('DISPLAY', 0, minval=0, maxval=1)
         if reset == 1:
@@ -3180,28 +3236,38 @@ class Ercf:
             gate = gcmd.get_int('GATE', minval=0, maxval=len(self.selector_offsets)-1)
             material = "".join(gcmd.get('MATERIAL').split()).replace('#', '').upper()[:10]
             color = "".join(gcmd.get('COLOR').split()).replace('#', '').lower()
-            available = gcmd.get_int('AVAILABLE', 1, minval=0, maxval=1)
+            available = gcmd.get_int('AVAILABLE', self.gate_status[gate], minval=0, maxval=1)
             if not self._validate_color(color):
                 raise gcmd.error("Color specification must be in form 'rrggbb' hexadecimal value (no '#') or valid color name or empty string")
             self.gate_material[gate] = material
             self.gate_color[gate] = color
             self.gate_status[gate] = available
-            self._persist_gap_map()
+            self._persist_gate_map()
 
-        self._log_info(self._gate_map_to_human_string())
+        if not quiet:
+            self._log_info(self._gate_map_to_human_string())
 
     cmd_ERCF_ENDLESS_SPOOL_help = "Redefine the EndlessSpool groups"
     def cmd_ERCF_ENDLESS_SPOOL(self, gcmd):
         if self._check_is_disabled(): return
+        quiet = gcmd.get_int('QUIET', 0, minval=0, maxval=1)
+        enabled = gcmd.get_int('ENABLE', -1, minval=0, maxval=1)
+        reset = gcmd.get_int('RESET', 0, minval=0, maxval=1)
+        dump = gcmd.get_int('DISPLAY', 0, minval=0, maxval=1)
+        if enabled >= 0:
+            self.enable_endless_spool = enabled
+            self.gcode.run_script_from_command("SAVE_VARIABLE VARIABLE=%s VALUE=%d" % (self.VARS_ERCF_ENABLE_ENDLESS_SPOOL, self.enable_endless_spool))
         if not self.enable_endless_spool:
             self._log_always("EndlessSpool is disabled")
-            return
-        reset = gcmd.get_int('RESET', 0, minval=0, maxval=1)
         if reset == 1:
             self._log_debug("Resetting EndlessSpool groups")
+            self.enable_endless_spool = self.default_enable_endless_spool
             self.endless_spool_groups = self.default_endless_spool_groups
+        elif dump == 1:
+            self._log_info(self._tool_to_gate_map_to_human_string())
+            return
         else:
-            groups = gcmd.get('GROUPS').split(",")
+            groups = gcmd.get('GROUPS', ",".join(map(str, self.endless_spool_groups))).split(",")
             if len(groups) != len(self.selector_offsets):
                 self._log_always("The number of group values (%d) is not the same as number of gates (%d)" % (len(groups), len(self.selector_offsets)))
                 return
@@ -3212,7 +3278,9 @@ class Ercf:
                 else:
                     self.endless_spool_groups.append(0)
         self.gcode.run_script_from_command("SAVE_VARIABLE VARIABLE=%s VALUE='%s'" % (self.VARS_ERCF_ENDLESS_SPOOL_GROUPS, self.endless_spool_groups))
-        self._log_info(self._tool_to_gate_map_to_human_string())
+
+        if not quiet:
+            self._log_info(self._tool_to_gate_map_to_human_string())
 
     cmd_ERCF_CHECK_GATES_help = "Automatically inspects gate(s), parks filament and marks availability"
     def cmd_ERCF_CHECK_GATES(self, gcmd):
@@ -3221,6 +3289,7 @@ class Ercf:
         if self._check_in_bypass(): return
         if self._check_is_loaded(): return
 
+        quiet = gcmd.get_int('QUIET', 0, minval=0, maxval=1)
         # These three parameters are mutually exclusive so we only process one
         tools = gcmd.get('TOOLS', "!")
         tool = gcmd.get_int('TOOL', -1, minval=0, maxval=len(self.selector_offsets)-1)
@@ -3303,7 +3372,8 @@ class Ercf:
         except ErcfError as ee:
             self._log_always("Failure re-selecting Tool %d: %s" % (tool_selected, str(ee)))
 
-        self._log_info(self._tool_to_gate_map_to_human_string(summary=True))
+        if not quiet:
+            self._log_info(self._tool_to_gate_map_to_human_string(summary=True))
 
     cmd_ERCF_PRELOAD_help = "Preloads filament at specified or current gate"
     def cmd_ERCF_PRELOAD(self, gcmd):

@@ -292,7 +292,7 @@ class Tool:
 
 
         if self.extruder is not None:               # If the new tool to be selected has an extruder prepare warmup before actual tool change so all unload commands will be done while heating up.
-            self.set_heater(heater_state = 2)
+            self.set_heater(heater_state = self.HEATER_STATE_ACTIVE)
 
         # If optional RESTORE_POSITION_TYPE parameter is passed as 1 or 2 then save current position and restore_position_on_toolchange_type as passed. Otherwise do not change either the restore_position_on_toolchange_type or saved_position. This makes it possible to call SAVE_POSITION or SAVE_CURRENT_POSITION before the actual T command.
         if param is not None:
@@ -349,16 +349,24 @@ class Tool:
                 if pp_virtual_loaded > self.TOOL_UNLOCKED:
                     if pp_virtual_loaded != self.name:
                         self.log.info("cmd_SelectTool: T" + str(pp_virtual_loaded) + "- Virtual - Running UnloadVirtual")
-                        self.printer.lookup_object('tool ' + str(pp_virtual_loaded)).UnloadVirtual()
+
+                        uv= self.printer.lookup_object('tool ' + str(pp_virtual_loaded))
+                        if uv.extruder is not None:               # If the new tool to be selected has an extruder prepare warmup before actual tool change so all unload commands will be done while heating up.
+                            curtime = self.printer.get_reactor().monotonic()
+                            # heater = self.printer.lookup_object(self.extruder).get_heater()
+
+                            uv.set_heater(heater_state = self.HEATER_STATE_ACTIVE)
+                            # if int(self.heater_state) == self.HEATER_STATE_ACTIVE and int(self.heater_standby_temp) < int(heater.get_status(curtime)["temperature"]):
+                            self.toollock._Temperature_wait_with_tolerance(curtime, self.extruder, 2)
+                        uv.UnloadVirtual()
+                        self.set_heater(heater_state = self.HEATER_STATE_ACTIVE)
+
 
                 self.log.trace("cmd_SelectTool: T" + str(self.name) + "- Virtual - Picked up physical tool and now Loading virtual tool.")
                 self.LoadVirtual()
 
         self.toollock.SaveCurrentTool(self.name)
-
         self.log.track_selected_tool_start(self.name)
-        self.log.increase_statistics('total_toolmounts')
-        self.log.increase_statistics('toolmounts_completed')
 
 
     def Pickup(self):
@@ -523,13 +531,19 @@ class Tool:
             self.log.debug("set_heater: T%d has no extruder! Nothing to do." % self.name )
             return None
 
-        self.log.info("T%d heater is at begingin %s." % (self.name, self.heater_state ))
+        # self.log.info("T%d heater is at begingin %s." % (self.name, self.heater_state ))
 
         heater = self.printer.lookup_object(self.extruder).get_heater()
         curtime = self.printer.get_reactor().monotonic()
         changing_timer = False
         
-        # self is always pointing to abstract tool but its timers and extruder are always pointing to the physical tool.
+        # self is always pointing to virtual tool but its timers and extruder are always pointing to the physical tool. When changing multiple virtual tools heaters the statistics can remain open when changing by timers of the parent if another one got in between.
+        # Therefore it's important for all heater statistics to only point to physical parent.
+
+        if self.is_virtual == True:
+            tool_for_tracking_heater = self.physical_parent_id
+        else:
+            tool_for_tracking_heater = self.name
 
         # First set state if changed, so we set correct temps.
         if "heater_state" in kwargs:
@@ -585,8 +599,8 @@ class Tool:
                 self.timer_idle_to_standby.set_timer(0, self.name)
                 self.timer_idle_to_powerdown.set_timer(0, self.name)
                 heater.set_temp(self.heater_active_temp)
-                self.log.track_standby_heater_end(self.name)                                                # Set the standby as finishes in statistics.
-                self.log.track_active_heater_start(self.name)                                               # Set the active as started in statistics.
+                self.log.track_standby_heater_end(tool_for_tracking_heater)                                                # Set the standby as finishes in statistics.
+                self.log.track_active_heater_start(tool_for_tracking_heater)                                               # Set the active as started in statistics.
             elif chng_state == self.HEATER_STATE_STANDBY:                                                                       # Else If Standby
                 self.log.trace("set_heater: T%d heater state now STANDBY." % self.name )
                 if int(self.heater_state) == self.HEATER_STATE_ACTIVE and int(self.heater_standby_temp) < int(heater.get_status(curtime)["temperature"]):
@@ -676,6 +690,13 @@ class ToolStandbyTempTimer:
                 raise Exception("last_virtual_tool_using_physical_timer is < None")
 
             tool = self.printer.lookup_object("tool " + str(self.last_virtual_tool_using_physical_timer))
+            if tool.is_virtual == True:
+                tool_for_tracking_heater = tool.physical_parent_id
+            else:
+                tool_for_tracking_heater = tool.name
+
+
+
             self.log.trace(
                 "_standby_tool_temp_timer_event: Running for T%s. temp_type:%s. %s" % 
                 (str(self.tool_id), 
@@ -686,12 +707,12 @@ class ToolStandbyTempTimer:
             temperature = 0
             heater = self.printer.lookup_object(tool.extruder).get_heater()
             if self.temp_type == self.TIMER_TO_STANDBY:
+                self.log.track_standby_heater_start(self.tool_id)                                                # Set the standby as started in statistics.
                 temperature = tool.get_status()["heater_standby_temp"]
-                self.log.track_standby_heater_start(tool.name)                                                # Set the standby as started in statistics.
                 heater.set_temp(temperature)
-                self.log.trace("_standby_tool_temp_timer_event: Running heater.set_temp(%s)" % str(temperature))
+                # self.log.trace("_standby_tool_temp_timer_event: Running heater.set_temp(%s)" % str(temperature))
             else:
-                self.log.track_standby_heater_end(tool.name)                                                # Set the standby as finishes in statistics.
+                self.log.track_standby_heater_end(self.tool_id)                                                # Set the standby as finishes in statistics.
 
                 tool.get_timer_to_standby().set_timer(0, self.last_virtual_tool_using_physical_timer)        # Stop Standby timer.
                 #tool.get_timer_to_powerdown().set_timer(0, self.last_virtual_tool_using_physical_timer)        # Stop Poweroff timer. (Already off)
@@ -700,7 +721,7 @@ class ToolStandbyTempTimer:
 
 
                 # tool.set_heater(Tool.HEATER_STATE_OFF)
-            self.log.track_active_heater_end(self.last_virtual_tool_using_physical_timer)                                               # Set the active as finishes in statistics.
+            self.log.track_active_heater_end(self.tool_id)                                               # Set the active as finishes in statistics.
 
         except Exception as e:
             raise Exception("Failed to set Standby temp for tool T%s: %s. %s" % (str(self.tool_id), 
