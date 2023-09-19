@@ -169,7 +169,7 @@ pickup_gcode:
 description: Internal subroutine. Do not use!
 # Tnnn: Tool to pickup
 gcode:
-  {%set myself = printer['tool '~params.T]%}
+  {%set myself = printer['ktcc_tool '~params.T]%}
 
   M568 P{myself.name} A2                                               # Put tool heater in Active mode
 
@@ -210,8 +210,8 @@ gcode:
 description: Internal subroutine. Do not use!
 # Tnnn: Tool to pickup
 gcode:
-  {% set myself = printer['tool '~params.T] %}
-  {% set pp_virtual_loaded = printer['tool '~myself.physical_parent_id].virtual_loaded %}
+  {% set myself = printer['ktcc_tool '~params.T] %}
+  {% set pp_virtual_loaded = printer['ktcc_tool '~myself.physical_parent_id].virtual_loaded %}
   {% if pp_virtual_loaded|default(-1) > -1 %} # If the tool is not virtual:
     {action_respond_info("SUB_TST_VIRTUAL: "~pp_virtual_loaded) }
   {% endif %}
@@ -222,7 +222,7 @@ gcode:
 description: Internal subroutine. Do not use!
 # Tnnn: Tool to pickup
 gcode:
-  {%set myself = printer['tool '~params.T]%}
+  {%set myself = printer['ktcc_tool '~params.T]%}
     ##############  Move out to Safe position  ##############
   G0 X500 F40000                                                       # Fast Move to the safe position for tools.
 
@@ -241,7 +241,7 @@ gcode:
 
     ##############  Return to saved position  ##############
   G1 F40000
-  RESTORE_POSITION
+  KTCC_RESTORE_POSITION
 
   SAVE_GCODE_STATE NAME=TOOL_PICKUP2_T{myself.name}                    # Save state for priming nozzle
 #  RESPOND MSG="First if:{myself.extruder|default("none")|lower}"
@@ -266,7 +266,7 @@ gcode:
 description: Internal subroutine. Do not use!
 # Tnnn: Tool to pickup
 gcode:
-  {%set myself = printer['tool '~params.T]%}
+  {%set myself = printer['ktcc_tool '~params.T]%}
 
   SAVE_ACCELERATION                                            # Save current acceleration value.
   M204 S8000                                                   # Set high acceleration for toolchanging
@@ -312,7 +312,7 @@ gcode:
 description: Internal subroutine. Do not use!
 # Tnnn: Tool to pickup
 gcode:
-  {%set myself = printer['tool '~params.T]%}
+  {%set myself = printer['ktcc_tool '~params.T]%}
 
   M400                                # Wait for current moves to finish
   TOOL_UNLOCK                         # Unlock the tool

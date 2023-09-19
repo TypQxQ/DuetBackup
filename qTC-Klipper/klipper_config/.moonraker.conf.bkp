@@ -48,17 +48,18 @@ origin = https://github.com/TypQxQ/Klipper_ToolChanger.git
 install_script = install.sh
 is_system_service = False
 
-[update_manager ercf-happy_hare]
-type = git_repo
-path = ~/ERCF-Software-V3
-origin = https://github.com/moggieuk/ERCF-Software-V3.git
-install_script = install.sh
-managed_services = klipper
-
 [update_manager timelapse]
 type = git_repo
 primary_branch = main
 path = ~/moonraker-timelapse
 origin = https://github.com/mainsail-crew/moonraker-timelapse.git
 managed_services = klipper moonraker
+
+[update_manager happy-hare]
+type = git_repo
+path = ~/Happy-Hare
+origin = https://github.com/moggieuk/Happy-Hare.git
+primary_branch = main
+install_script = install.sh
+managed_services = klipper
 

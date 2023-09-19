@@ -62,9 +62,7 @@ class KtccMultiLineFormatter(logging.Formatter):
         lines = super(KtccMultiLineFormatter, self).format(record)
         return lines.replace('\n', '\n' + indent)
 
-class KtccLog:
-    TOOL_UNKNOWN = -2
-    TOOL_UNLOCKED = -1
+class Ktcc_Log:
     EMPTY_TOOL_STATS = {'toolmounts_completed': 0, 'toolunmounts_completed': 0, 'toolmounts_started': 0, 'toolunmounts_started': 0, 'time_selected': 0, 'time_heater_active': 0, 'time_heater_standby': 0, 'tracked_start_time_selected':0, 'tracked_start_time_active':0, 'tracked_start_time_standby':0, 'total_time_spent_unmounting':0, 'total_time_spent_mounting':0}
     KTCC_TOOL_STATISTICS_PREFIX = "ktcc_statistics_tool"
 
@@ -193,7 +191,7 @@ class KtccLog:
             self._reset_statistics()
 
         self.tool_statistics = {}
-        for tool in self.printer.lookup_objects('tool'):
+        for tool in self.printer.lookup_objects('ktcc_tool'):
             try:
                 toolname=str(tool[0])
                 toolname=toolname[toolname.rindex(' ')+1:]
@@ -286,7 +284,7 @@ class KtccLog:
         self.total_toolunmounts = 0
 
         self.tool_statistics = {}
-        for tool in self.printer.lookup_objects('tool'):
+        for tool in self.printer.lookup_objects('ktcc_tool'):
             try:
                 toolname=str(tool[0])
                 toolname=toolname[toolname.rindex(' ')+1:]
@@ -436,7 +434,7 @@ class KtccLog:
                 msg += "Completed %d out of %d mounts in %s. Average of %s per toolmount.\n" % (self.tool_statistics[tool_id]['toolmounts_completed'], self.tool_statistics[tool_id]['toolmounts_started'], self._seconds_to_human_string(self.tool_statistics[tool_id]['total_time_spent_mounting']), self._seconds_to_human_string(self._division(self.tool_statistics[tool_id]['total_time_spent_mounting'], self.tool_statistics[tool_id]['toolmounts_completed'])))
                 msg += "Completed %d out of %d unmounts in %s. Average of %s per toolunmount.\n" % (self.tool_statistics[tool_id]['toolunmounts_completed'], self.tool_statistics[tool_id]['toolunmounts_started'], self._seconds_to_human_string(self.tool_statistics[tool_id]['total_time_spent_unmounting']), self._seconds_to_human_string(self._division(self.tool_statistics[tool_id]['total_time_spent_unmounting'], self.tool_statistics[tool_id]['toolunmounts_completed'])))
                 msg += "%s spent selected." % self._seconds_to_human_string(self.tool_statistics[tool_id]['time_selected'])
-                tool = self.printer.lookup_object("tool " + str(tool_id))
+                tool = self.printer.lookup_object('ktcc_tool ' + str(tool_id))
                 if tool.is_virtual != True or tool.name==tool.physical_parent_id:
                     if tool.extruder is not None:
                         msg += " %s with active heater and %s with standby heater." % (self._seconds_to_human_string(self.tool_statistics[tool_id]['time_heater_active']), self._seconds_to_human_string(self.tool_statistics[tool_id]['time_heater_standby']))
@@ -671,5 +669,5 @@ class KtccLog:
     #     self._log_always(msg)
 
 def load_config(config):
-    return KtccLog(config)
+    return Ktcc_Log(config)
 

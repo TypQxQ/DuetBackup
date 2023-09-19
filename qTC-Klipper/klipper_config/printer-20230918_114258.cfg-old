@@ -38,9 +38,7 @@ pins: PG6, PG9 #, toolboard:P1.28
 [pause_resume]
 recover_velocity: 300.0
 
-# Happy Hare
-[include mmu/base/*.cfg]
-[include mmu/optional/client_macros.cfg]
+# ERCF
 
 [printer]
 #buffer_time_high: 10
