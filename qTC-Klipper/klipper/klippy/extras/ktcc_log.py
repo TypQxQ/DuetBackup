@@ -571,8 +571,8 @@ class Ktcc_Log:
     def cmd_KTCC_SET_LOG_LEVEL(self, gcmd):
         self.log_level = gcmd.get_int('LEVEL', self.log_level, minval=0, maxval=4)
         self.logfile_level = gcmd.get_int('LOGFILE', self.logfile_level, minval=0, maxval=4)
-        self.log_visual = gcmd.get_int('VISUAL', self.log_visual, minval=0, maxval=2)
-        self.log_statistics = gcmd.get_int('STATISTICS', self.log_statistics, minval=0, maxval=1)
+        # self.log_visual = gcmd.get_int('VISUAL', self.log_visual, minval=0, maxval=2)
+        # self.log_statistics = gcmd.get_int('STATISTICS', self.log_statistics, minval=0, maxval=1)
 
     cmd_KTCC_LOG_ALWAYS_help = "Log allways MSG"
     def cmd_KTCC_LOG_ALWAYS(self, gcmd):
