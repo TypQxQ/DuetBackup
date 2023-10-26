@@ -1,4 +1,4 @@
-# Config order: ToolGroups must come before tools that use them. Tool that are used as physical_parent must be configured before other virtual tools that use that as parent.
+# Config order: ToolGroups must come before tools that use them. Tool that are used as parent_tool must be configured before other virtual tools that use that as parent.
 
 
 # Enables saving of variables between powerdown of machine. Must be configured before [toollock].
@@ -40,8 +40,8 @@ tool_unlock_gcode:
     # RESTORE_GCODE_STATE NAME=tool_lock_state MOVE=0                                 # Restore gcode state
 
 [toolgroup 0]
-#is_virtual: True            # If True then must have a physical_parent declared and shares extruder, hotend and fan with the physical_parent
-#physical_parent: 0          # Tool used as a Physical parent for all toos of this group. Only used if the tool i virtual.
+#is_virtual: True            # If True then must have a parent_tool declared and shares extruder, hotend and fan with the parent_tool
+#parent_tool: 0          # Tool used as a Physical parent for all toos of this group. Only used if the tool i virtual.
 #virtual_toolload_gcode:
 #  SUB_VIRTUALTOOL_LOAD T={myself.name}
 #virtual_toolunload_gcode:
@@ -53,7 +53,7 @@ tool_unlock_gcode:
 
 # Used to group several tools with similar settings.
 [toolgroup 1]
-is_virtual: False            # If True then must have a physical_parent declared and shares extruder, hotend and fan with the physical_parent
+is_virtual: False            # If True then must have a parent_tool declared and shares extruder, hotend and fan with the parent_tool
 dropoff_gcode:
   SUB_TOOL_DROPOFF_START T={myself.name}
   SUB_TOOL_DROPOFF_END T={myself.name}
@@ -69,7 +69,7 @@ park: 598,200, 0
 offset: 11.663,5.255,3.16  #12.151,4.271,3.10
 #####
 ##### Following can be inherited from ToolGroup if not specified for this tool or inherited from a Physical parent.
-#physical_parent:                  # Defaults to None.
+#parent_tool:                  # Defaults to None.
 #is_virtual: False                 # Defaults to False
 meltzonelength: 14                 # Defaults to 0
 #####
@@ -211,7 +211,7 @@ description: Internal subroutine. Do not use!
 # Tnnn: Tool to pickup
 gcode:
   {% set myself = printer['ktcc_tool '~params.T] %}
-  {% set pp_virtual_loaded = printer['ktcc_tool '~myself.physical_parent_id].virtual_loaded %}
+  {% set pp_virtual_loaded = printer['ktcc_tool '~myself.parent_tool_id].virtual_loaded %}
   {% if pp_virtual_loaded|default(-1) > -1 %} # If the tool is not virtual:
     {action_respond_info("SUB_TST_VIRTUAL: "~pp_virtual_loaded) }
   {% endif %}

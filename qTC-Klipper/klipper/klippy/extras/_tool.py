@@ -11,7 +11,7 @@ class Tool:
         self.name = None
         self.toolgroup = None               # defaults to 0. Check if tooltype is defined.
         self.is_virtual = None
-        self.physical_parent_id = None      # Parent tool is used as a Physical parent for all tools of this group. Only used if the tool i virtual. None gets remaped to -1.
+        self.parent_tool = None      # Parent tool is used as a Physical parent for all tools of this group. Only used if the tool i virtual. None gets remaped to -1.
         self.extruder = None                # Name of extruder connected to this tool. Defaults to None.
         self.fan = None                     # Name of general fan configuration connected to this tool as a part fan. Defaults to "none".
         self.meltzonelength = None          # Length of the meltzone for retracting and inserting filament on toolchange. 18mm for e3d Revo
@@ -78,19 +78,19 @@ class Tool:
                                             tg_status["is_virtual"])
 
         ##### Physical Parent #####
-        self.physical_parent_id = config.getint('physical_parent', 
-                                                tg_status["physical_parent_id"])
-        if self.physical_parent_id is None:
-            self.physical_parent_id = -1
+        self.parent_tool = config.getint('physical_parent', 
+                                                tg_status["parent_tool"])
+        if self.parent_tool is None:
+            self.parent_tool = -1
 
         # Used as sanity check for tools that are virtual with same physical as themselves.
-        if self.is_virtual and self.physical_parent_id == -1:
+        if self.is_virtual and self.parent_tool == -1:
             raise config.error(
                     "Section Tool '%s' cannot be virtual without a valid physical_parent. If Virtual and Physical then use itself as parent."
                     % (config.get_name()))
         
-        if self.physical_parent_id >= 0 and not self.physical_parent_id == self.name:
-            pp = self.printer.lookup_object("tool " + str(self.physical_parent_id))
+        if self.parent_tool >= 0 and not self.parent_tool == self.name:
+            pp = self.printer.lookup_object("tool " + str(self.parent_tool))
         else:
             pp = Tool()     # Initialize physical parent as a dummy object.
 
@@ -134,7 +134,7 @@ class Tool:
 
         ##### Standby settings #####
         if self.extruder is not None:
-            if self.physical_parent_id < 0 or self.physical_parent_id == self.name:
+            if self.parent_tool < 0 or self.parent_tool == self.name:
                 self.idle_to_standby_time = config.getfloat(
                     'idle_to_standby_time', tg_status['idle_to_standby_time'], minval = 0.1)
                 self.timer_idle_to_standby = ToolStandbyTempTimer(self.printer, self.name, 1)
@@ -190,12 +190,12 @@ class Tool:
             current_tool = self.printer.lookup_object('tool ' + str(current_tool_id))
                                                         # If the next tool is not another virtual tool on the same physical tool.
             
-            self.gcode.respond_info("self.physical_parent_id:" + str(self.physical_parent_id) + ".")
-            self.gcode.respond_info("current_tool.get_status()['physical_parent_id']:" + str(current_tool.get_status()["physical_parent_id"]) + ".")
+            self.gcode.respond_info("self.parent_tool:" + str(self.parent_tool) + ".")
+            self.gcode.respond_info("current_tool.get_status()['parent_tool']:" + str(current_tool.get_status()["parent_tool"]) + ".")
 
-            if int(self.physical_parent_id ==  -1 or
-                        self.physical_parent_id) !=  int( 
-                        current_tool.get_status()["physical_parent_id"]
+            if int(self.parent_tool ==  -1 or
+                        self.parent_tool) !=  int( 
+                        current_tool.get_status()["parent_tool"]
                         ):
                 self.gcode.respond_info("Will Dropoff():")
                 current_tool.Dropoff()
@@ -210,7 +210,7 @@ class Tool:
             if current_tool_id >= 0:                 # If still has a selected tool: (This tool is a virtual tool with same physical tool as the last)
                 current_tool = self.printer.lookup_object('tool ' + str(current_tool_id))
                 self.gcode.respond_info("cmd_SelectTool: T" + str(self.name) + "- Virtual - Tool is not Dropped - ")
-                if self.physical_parent_id >= 0 and self.physical_parent_id == current_tool.get_status()["physical_parent_id"]:
+                if self.parent_tool >= 0 and self.parent_tool == current_tool.get_status()["parent_tool"]:
                     self.gcode.respond_info("cmd_SelectTool: T" + str(self.name) + "- Virtual - Same physical tool - Pickup")
                     current_tool.UnloadVirtual()
                     self.LoadVirtual()
@@ -304,8 +304,8 @@ class Tool:
             self.gcode.respond_info("set_heater: T%d has no extruder! Nothing to do." % self.name )
             return None
 
-        #if self.physical_parent_id >= 0 and self.physical_parent_id != self.name:
-        #    physical_tool = self.physical_parent_id
+        #if self.parent_tool >= 0 and self.parent_tool != self.name:
+        #    physical_tool = self.parent_tool
         #else:
         #    physical_tool = self
 
@@ -362,7 +362,7 @@ class Tool:
         status = {
             "name": self.name,
             "is_virtual": self.is_virtual,
-            "physical_parent_id": self.physical_parent_id,
+            "parent_tool": self.parent_tool,
             "extruder": self.extruder,
             "fan": self.fan,
             "lazy_home_when_parking": self.lazy_home_when_parking,
