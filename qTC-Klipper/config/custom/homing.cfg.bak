@@ -1,0 +1,211 @@
+# Inspired by https://github.com/vladbabii/klipper.macro.g28_override
+
+[force_move]
+enable_force_move: True
+
+[gcode_macro MAXX_DISABLE]
+gcode:
+  SET_GCODE_VARIABLE MACRO=HOMING_STATUS VARIABLE=maxx VALUE=0         # Do not use the X max as EmergencyStop.
+
+[gcode_macro MAXX_ENABLE]
+gcode:
+  SET_GCODE_VARIABLE MACRO=HOMING_STATUS VARIABLE=maxx VALUE=1         # Use the X max as EmergencyStop.
+
+[gcode_button e_stop_button]
+pin: ^PG13
+press_gcode:
+    { action_emergency_stop("e-stop button pressed.") }
+
+[gcode_button x_endstop]
+pin: !PG6
+press_gcode:
+  {% if printer['gcode_macro HOMING_STATUS'].x|int != 3 %}
+    RESPOND PREFIX="info" MSG="X-endstop pressed while not homing."
+    PAUSE
+    #{ action_emergency_stop("x-endstop pressed while not homing.") }
+  {% endif %}
+
+# Might cause a MCU timeout?
+#[gcode_button y_endstop]
+#pin: ^PG9
+#press_gcode:
+#  {% if printer['gcode_macro HOMING_STATUS'].y|int != 3 %}
+#    RESPOND PREFIX="info" MSG="Y-endstop pressed while not homing."
+#    { action_respond_info("Y-endstop pressed while not homing.") }
+#    PAUSE
+    #{ action_emergency_stop("Y-endstop pressed while not homing.") }
+#  {% endif %}
+
+[gcode_button z_endstop]
+#pin: ^toolboard1:PG12
+#pin: toolboard:P1.27
+pin: ^toolboard:P1.26
+press_gcode:
+#  {% if printer['gcode_macro HOMING_STATUS'].x|int != 3 %}
+  { action_emergency_stop("Z-endstop pressed.") }
+#  {% endif %}
+
+[gcode_button xmax_endstop]
+#pin: ^toolboard1:PG6
+pin: ^toolboard:P1.24
+press_gcode:
+  {% if printer['gcode_macro HOMING_STATUS'].maxx|int == 1 %}
+    { action_emergency_stop("x-max Endstop pressed.") }
+  {% endif %}
+
+[gcode_macro HOMING_STATUS]
+variable_x: 0
+variable_y: 0
+variable_z: 0
+variable_u: 0
+variable_maxx: 1    # If shutdown on maxX trigger. 0 = False, 1 = True
+gcode:
+  RESPOND PREFIX="info" MSG="Homing status: 0=not homed, 1=real homed, 2=fake home, 3= homing now"
+  RESPOND PREFIX="info" MSG=" X: {printer['gcode_macro HOMING_STATUS'].x}"
+  RESPOND PREFIX="info" MSG=" Y: {printer['gcode_macro HOMING_STATUS'].y}"
+  RESPOND PREFIX="info" MSG=" Z: {printer['gcode_macro HOMING_STATUS'].z}"
+  RESPOND PREFIX="info" MSG=" Z: {printer['gcode_macro HOMING_STATUS'].u}"
+
+[gcode_macro G28]
+rename_existing: G990028
+variable_do_x: 0
+variable_do_y: 0
+variable_do_z: 0
+gcode:
+  #KTCC_SUSPEND_SAVE_STATE
+  { action_respond_info("G28 running: "~rawparams) }
+
+  {% set do_x = 0 %}
+  {% set do_y = 0 %}
+  {% set do_z = 0 %}
+
+  {% if params.Y is defined %}
+    ## for y home just y
+    {% set do_y = 1 %} 
+  {% endif %}
+
+  {% if params.X is defined %}
+    ## for x home y first then X
+    {% set do_x = 1 %} 
+  {% endif %}
+
+  {% if params.Z is defined %}
+    ## for z home just z
+    {% set do_z = 1 %} 
+  {% endif %}
+
+
+  {% if do_y == 1 %}
+    RESPOND PREFIX="info" MSG="Home > Todo: Y"
+  {% endif %}
+  {% if do_x == 1 %}
+    RESPOND PREFIX="info" MSG="Home > Todo: X"
+  {% endif %}
+  {% if do_z == 1 %}
+    RESPOND PREFIX="info" MSG="Home > Todo: Z"
+  {% endif %}
+
+  {% if do_x == 0 and do_y == 0 and do_z == 0 %}
+    {% set do_x = 1 %} 
+    {% set do_y = 1 %} 
+    {% set do_z = 1 %} 
+    RESPOND PREFIX="info" MSG="Home > Doing all XYZ"
+  {% endif %}
+
+  {% if do_y == 1 %}
+    RESPOND PREFIX="info" MSG="Home > Y"
+    SET_GCODE_VARIABLE MACRO=HOMING_STATUS VARIABLE=y VALUE=3
+    G90
+    G990028 Y0
+    G91
+    G0 Y5 F2000
+    G90
+    SET_GCODE_VARIABLE MACRO=HOMING_STATUS VARIABLE=y VALUE=1
+  {% endif %}
+
+  {% if do_x == 1 %}
+    RESPOND PREFIX="info" MSG="Homing > X"
+    SET_GCODE_VARIABLE MACRO=HOMING_STATUS VARIABLE=x VALUE=3
+    SET_GCODE_VARIABLE MACRO=HOMING_STATUS VARIABLE=maxx VALUE=0         # Do not use the X max as EmergencyStop.
+    G90
+    G990028 X0
+    G91
+    G0 X5 F2000
+    G90
+    SET_GCODE_VARIABLE MACRO=HOMING_STATUS VARIABLE=maxx VALUE=1         # Use the X max as EmergencyStop.
+    SET_GCODE_VARIABLE MACRO=HOMING_STATUS VARIABLE=x VALUE=1
+  {% endif %}
+
+  {% if do_z == 1 %}
+    RESPOND PREFIX="info" MSG="Homing > Z"
+    HOME_Z
+    #Z_TILT_ADJUST
+#    SET_GCODE_VARIABLE MACRO=HOMING_STATUS VARIABLE=z VALUE=3
+#    SET_KINEMATIC_POSITION Z=0
+#    SET_GCODE_VARIABLE MACRO=HOMING_STATUS VARIABLE=z VALUE=2
+#    G90
+#    G990028 Z0
+#    G91
+#    G0 Z20
+#    G90
+  {% endif %}
+  RESPOND PREFIX="info" MSG="Homing > Done"
+  #KTCC_RESUME_SAVE_STATE
+
+[gcode_macro HOME_Z]
+gcode:
+  # To home Z, we first must home X and Y.
+  {% if printer['gcode_macro HOMING_STATUS'].y != 1 %}
+    G28 Y
+  {% endif %}
+  {% if printer['gcode_macro HOMING_STATUS'].x != 1 %}
+    G28 X
+  {% endif %}
+#    RESPOND PREFIX="info" MSG="Homing > Z"
+    SET_KINEMATIC_POSITION Z=0
+    SET_GCODE_VARIABLE MACRO=HOMING_STATUS VARIABLE=z VALUE=3
+    T49     # Load Z-switch tool. Willdo Z+10 first
+    G90
+    G0 X250 Y250 F34000
+    G990028 Z0
+    G0 Z10
+    SET_GCODE_VARIABLE MACRO=HOMING_STATUS VARIABLE=z VALUE=1
+
+[gcode_macro CG28]
+gcode:
+    {% if "x" not in printer.toolhead.homed_axes or "y" not in printer.toolhead.homed_axes or "z" not in printer.toolhead.homed_axes %}
+    G28
+    {% endif %}
+
+[gcode_macro SET_KINEMATIC_POSITION]
+rename_existing: REAL_SET_KINEMATIC_POSITION
+gcode:
+  {% if params.X is defined %}
+    RESPOND PREFIX="info" MSG="SET_KINEMATIC_POSITION > X={params.X}"
+    REAL_SET_KINEMATIC_POSITION X={params.X}
+    SET_GCODE_VARIABLE MACRO=HOMING_STATUS VARIABLE=x VALUE=2
+  {% endif %}
+  
+  {% if params.Y is defined %}
+    RESPOND PREFIX="info" MSG="SET_KINEMATIC_POSITION > Y={params.Y}"
+    REAL_SET_KINEMATIC_POSITION Y={params.Y}
+    SET_GCODE_VARIABLE MACRO=HOMING_STATUS VARIABLE=y VALUE=2
+  {% endif %}
+  
+  {% if params.Z is defined %}
+    RESPOND PREFIX="info" MSG="SET_KINEMATIC_POSITION > Z={params.Z}"
+    REAL_SET_KINEMATIC_POSITION Z={params.Z}
+    SET_GCODE_VARIABLE MACRO=HOMING_STATUS VARIABLE=z VALUE=2
+  {% endif %}
+
+[gcode_macro FakeHomeXYZ]
+gcode:
+  SET_KINEMATIC_POSITION Z=0 X=0 Y=0
+  SET_GCODE_VARIABLE MACRO=HOMING_STATUS VARIABLE=z VALUE=2
+
+
+
+[gcode_macro FakeHomeZ]
+gcode:
+  SET_KINEMATIC_POSITION Z=0
+  SET_GCODE_VARIABLE MACRO=HOMING_STATUS VARIABLE=z VALUE=2

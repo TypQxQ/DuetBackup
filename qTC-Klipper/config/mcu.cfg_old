@@ -1,0 +1,496 @@
+# This file contains common pin mappings for the BigTreeTech Octopus.
+# To use this config, the firmware should be compiled for the
+# STM32F446 with a "32KiB bootloader" and a "12MHz crystal" clock reference.
+
+[mcu]
+#serial: /dev/serial/by-id/usb-Klipper_stm32f446xx_43001A000A50534E4E313120-if00
+serial: /dev/serial/by-id/usb-Klipper_stm32h723xx_470032001651303531313638-if00
+
+# See docs/Config_Reference.md for a description of parameters.
+[stepper_x]
+step_pin: PF13
+dir_pin: PF12
+enable_pin: !PF14
+microsteps: 32
+rotation_distance: 39.977 #40
+full_steps_per_rotation: 400
+endstop_pin: !PG6
+position_endstop: -3
+position_min: -3
+position_max: 600
+homing_speed: 50
+second_homing_speed: 6
+
+[tmc5160 stepper_x]
+cs_pin: PC4
+#spi_software_mosi_pin: PA7
+#spi_software_miso_pin: PA6
+#spi_software_sclk_pin: PA5
+run_current: 1.188
+spi_bus: spi1
+interpolate: False
+#stealthchop_threshold: 9999
+driver_TBL: 1
+driver_TOFF: 3
+driver_HSTRT: 4
+driver_HEND: 3
+
+[stepper_x1]
+step_pin: PG0
+dir_pin: PG1
+enable_pin: !PF15
+microsteps: 32
+rotation_distance: 39.977 #40
+full_steps_per_rotation: 400
+
+[tmc5160 stepper_x1]
+cs_pin: PD11
+#spi_software_mosi_pin: PA7
+#spi_software_miso_pin: PA6
+#spi_software_sclk_pin: PA5
+spi_bus: spi1
+run_current: 1.188
+#stealthchop_threshold: 9999
+interpolate: False
+driver_TBL: 1
+driver_TOFF: 3
+driver_HSTRT: 4
+driver_HEND: 3
+
+
+[stepper_y]
+step_pin: PF11
+dir_pin: !PG3
+enable_pin: !PG5
+microsteps: 32
+rotation_distance: 39.964 #40
+full_steps_per_rotation: 400
+endstop_pin: ^PG9
+position_endstop: -6
+position_min: -6
+position_max: 515
+homing_speed: 50
+second_homing_speed: 6
+
+[tmc5160 stepper_y]
+cs_pin: PC6
+#spi_software_mosi_pin: PA7
+#spi_software_miso_pin: PA6
+#spi_software_sclk_pin: PA5
+spi_bus: spi1
+run_current: 1.188
+#stealthchop_threshold: 9999
+interpolate: False
+driver_TBL: 1
+driver_TOFF: 3
+driver_HSTRT: 4
+driver_HEND: 3
+
+[stepper_y1]
+step_pin: PG4
+dir_pin: PC1
+enable_pin: !PA0
+microsteps: 32
+rotation_distance: 39.964 #40
+full_steps_per_rotation: 400
+
+[tmc5160 stepper_y1]
+cs_pin: PC7
+#spi_software_mosi_pin: PA7
+#spi_software_miso_pin: PA6
+#spi_software_sclk_pin: PA5
+spi_bus: spi1
+run_current: 1.188
+#stealthchop_threshold: 9999
+interpolate: False
+driver_TBL: 1
+driver_TOFF: 3
+driver_HSTRT: 4
+driver_HEND: 3
+
+[manual_stepper tool_lock]
+step_pin: PF9
+dir_pin: !PF10
+enable_pin: !PG2
+endstop_pin: ^PG10
+microsteps: 16
+rotation_distance: 70
+#OMC-STEPPERONLINE 14HS13-0804S-PG5
+#full_steps_per_rotation: 1028.57
+# 0.35 degree step angle. 360/0.35= 1028.57 full_steps_per_rotation 
+# Rotation distance of 360 for 360 degree around the axis.
+
+[tmc2209 manual_stepper tool_lock]
+uart_pin: PF2
+run_current: 0.707
+#stealthchop_threshold: 999999
+interpolate: false
+hold_current: 0.707
+
+
+#[tmc2130 manual_stepper tool_lock]
+#cs_pin: PF2
+#spi_software_mosi_pin: PA7
+#spi_software_miso_pin: PA6
+#spi_software_sclk_pin: PA5
+#spi_bus: spi1
+#run_current: 0.707
+#stealthchop_threshold: 9999
+#stealthchop_threshold: 0
+#interpolate: false
+#driver_TPFD: 0 #4
+#hold_current: 0.707
+#driver_TBL: 1
+#driver_TOFF: 4
+#driver_HSTRT: 0
+#driver_HEND: 2
+
+#[tmc5160 manual_stepper tool_lock]
+#cs_pin: PF2
+#spi_software_mosi_pin: PA7
+#spi_software_miso_pin: PA6
+#spi_software_sclk_pin: PA5
+#run_current: 0.7
+#stealthchop_threshold: 0
+#interpolate: False
+#driver_TPFD: 0 #4
+
+# Drive5 - Front Right
+[stepper_z]
+step_pin: PC13
+dir_pin: PF0
+enable_pin: !PF1
+microsteps: 16
+rotation_distance: 2
+full_steps_per_rotation: 400
+#position_endstop: 0 # not to be used when using virtual endstop.
+position_max: 500
+homing_speed: 6
+second_homing_speed: 1
+position_min: -5
+endstop_pin: probe:z_virtual_endstop  #^PG11
+
+[tmc5160 stepper_z]
+cs_pin: PE4
+#spi_software_mosi_pin: PA7
+#spi_software_miso_pin: PA6
+#spi_software_sclk_pin: PA5
+spi_bus: spi1
+run_current: 1.188
+stealthchop_threshold: 0
+interpolate: False
+#driver_TPFD: 0 #4
+driver_TBL: 1
+driver_TOFF: 3
+driver_HSTRT: 2
+driver_HEND: 3
+
+# Driver6 - Left
+[stepper_z1]
+step_pin: PE2
+dir_pin: PE3
+enable_pin: !PD4
+microsteps: 16
+rotation_distance: 2
+full_steps_per_rotation: 400
+
+[tmc5160 stepper_z1]
+cs_pin: PE1
+#spi_software_mosi_pin: PA7
+#spi_software_miso_pin: PA6
+#spi_software_sclk_pin: PA5
+spi_bus: spi1
+run_current: 1.188
+stealthchop_threshold: 0
+interpolate: False
+#driver_TPFD: 0 #4
+driver_TBL: 1
+driver_TOFF: 3
+driver_HSTRT: 2
+driver_HEND: 3
+
+# Driver7 - Rear Right
+[stepper_z2]
+step_pin: PE6
+dir_pin: !PA14
+enable_pin: !PE0
+microsteps: 16
+rotation_distance: 2
+full_steps_per_rotation: 400
+
+[tmc5160 stepper_z2]
+cs_pin: PD3
+#spi_software_mosi_pin: PA7
+#spi_software_miso_pin: PA6
+#spi_software_sclk_pin: PA5
+spi_bus: spi1
+run_current: 1.188
+stealthchop_threshold: 0
+interpolate: False
+#driver_TPFD: 0 #4
+driver_TBL: 1
+driver_TOFF: 3
+driver_HSTRT: 2
+driver_HEND: 3
+
+# Ring thermistor on the aluminium bed.
+[thermistor NTCALUG01A103F]
+temperature1: 25.
+resistance1: 10000.
+beta: 3984
+
+[heater_bed]
+heater_pin: PA2
+sensor_pin: PF3
+sensor_type: NTCALUG01A103F
+control: pid #watermark
+min_temp: 0
+#min_temp=-273.15
+max_temp: 120
+# PID tuned 17/02/2022
+#pid_Kp: 49.891
+#pid_Ki: 0.118
+#pid_Kd: 5290.981
+# PID tuned 04/12/2022
+pid_Kp:52.226
+pid_Ki:0.141 
+pid_Kd:4843.293
+pwm_cycle_time: 0.02 # PWM 1Hz (Default 100), Recommended is up to 10Hz for SSR.  Can be up to 120Hz according to... Should be 0.02 (50Hz for Sweden).
+
+[temperature_sensor heated_bed_silicone]
+gcode_id:bed2
+sensor_pin: PF4
+sensor_type: EPCOS 100K B57560G104F
+min_temp: 0
+#min_temp=-273.15
+max_temp: 125
+
+
+#[heater_fan heater_fan_t0]
+#pin: PA8 # FAN0 on main MCU will change later...
+#heater: extruder
+#heater_temp: 50.0
+
+#[fan_generic partfan_t0]
+#pin: PE5 # FAN1 on main MCU. will change later...
+
+
+#[filament_switch_sensor material_2]
+#switch_pin: PG14
+
+#[heater_fan fan3]
+#pin: PD13 # FAN3
+
+#[heater_fan fan4]
+#pin: PD14 # FAN4
+
+#[heater_fan fan5]
+#pin: PD15 # FAN5
+
+
+########################################
+# TMC5160 configuration
+########################################
+
+#[tmc5160 stepper_x]
+#cs_pin: PC4
+#spi_bus: spi1
+#interpolate: False
+#   If true, enable step interpolation (the driver will internally
+#   step at a rate of 256 micro-steps). The default is True.
+#run_current: 1.2
+#   The amount of current (in amps RMS) to configure the driver to use
+#   during stepper movement. This parameter must be provided.
+#hold_current:
+#   The amount of current (in amps RMS) to configure the driver to use
+#   when the stepper is not moving. Setting a hold_current is not
+#   recommended (see TMC_Drivers.md for details). The default is to
+#   not reduce the current.
+#sense_resistor: 0.075
+#   The resistance (in ohms) of the motor sense resistor. The default
+#   is 0.075 ohms.
+#stealthchop_threshold: 0
+#   The velocity (in mm/s) to set the "stealthChop" threshold to. When
+#   set, "stealthChop" mode will be enabled if the stepper motor
+#   velocity is below this value. The default is 0, which disables
+#   "stealthChop" mode.
+#driver_IHOLDDELAY: 6
+#driver_TPOWERDOWN: 10
+#driver_TBL: 2
+#driver_TOFF: 3
+#driver_HEND: 2
+#driver_HSTRT: 5
+#driver_FD3: 0
+#driver_TPFD: 0 #4
+#driver_CHM: 0
+#driver_VHIGHFS: 0
+#driver_VHIGHCHM: 0
+#driver_DISS2G: 0
+#driver_DISS2VS: 0
+#driver_PWM_AUTOSCALE: True
+#driver_PWM_AUTOGRAD: True
+#driver_PWM_FREQ: 0
+#driver_FREEWHEEL: 0
+#driver_PWM_GRAD: 0
+#driver_PWM_OFS: 30
+#driver_PWM_REG: 4
+#driver_PWM_LIM: 12
+#driver_SGT: 0
+#driver_SEMIN: 0
+#driver_SEUP: 0
+#driver_SEMAX: 0
+#driver_SEDN: 0
+#driver_SEIMIN: 0
+#driver_SFILT: 0
+#   Set the given register during the configuration of the TMC5160
+#   chip. This may be used to set custom motor parameters. The
+#   defaults for each parameter are next to the parameter name in the
+#   above list.
+#diag0_pin:
+#diag1_pin:
+#   The micro-controller pin attached to one of the DIAG lines of the
+#   TMC5160 chip. Only a single diag pin should be specified. The pin
+#   is "active low" and is thus normally prefaced with "^!". Setting
+#   this creates a "tmc5160_stepper_x:virtual_endstop" virtual pin
+#   which may be used as the stepper's endstop_pin. Doing this enables
+#   "sensorless homing". (Be sure to also set driver_SGT to an
+#   appropriate sensitivity value.) The default is to not enable
+#   sensorless homing.
+
+#[tmc5160 stepper_x1]
+#cs_pin: PD11
+#spi_bus: spi1
+#interpolate: False
+#run_current: 1.2
+#stealthchop_threshold: 0
+#driver_tpfd=0
+
+#[tmc5160 stepper_y]
+#cs_pin: PC6
+#spi_bus: spi1
+#interpolate: False
+#run_current: 1.2
+#stealthchop_threshold: 0
+#driver_tpfd=0
+
+#[tmc5160 stepper_y1]
+#cs_pin: PC7
+#spi_bus: spi1
+#interpolate: False
+#run_current: 1.2
+#stealthchop_threshold: 0
+#driver_tpfd=0
+
+#[tmc5160 manual_stepper tool_lock]
+#cs_pin: PF2
+#spi_bus: spi1
+#interpolate: False
+#run_current: 0.7     # Rated 1A RMS so running at 70% except when locking.
+#stealthchop_threshold: 0
+#driver_tpfd=0
+
+#[tmc5160 stepper_z]
+#cs_pin: PE4
+#spi_bus: spi1
+#interpolate: False
+#run_current: 1.2
+#stealthchop_threshold: 0
+#driver_tpfd=0
+
+#[tmc5160 stepper_z1]
+#cs_pin: PE1
+#spi_bus: spi1
+#interpolate: False
+#run_current: 1.2
+#stealthchop_threshold: 0
+#driver_tpfd=0
+
+#[tmc5160 stepper_z2]
+#cs_pin: PD3
+#spi_bus: spi1
+#interpolate: False
+#run_current: 1.2
+#stealthchop_threshold: 0
+#driver_tpfd=0
+
+[probe]
+pin: ^PG11  
+#   Probe detection pin. If the pin is on a different microcontroller
+#   than the Z steppers then it enables "multi-mcu homing". This
+#   parameter must be provided.
+deactivate_on_each_sample: False
+#   This determines if Klipper should execute deactivation gcode
+#   between each probe attempt when performing a multiple probe
+#   sequence. The default is True.
+z_offset: 0
+speed: 4.0
+#   Speed (in mm/s) of the Z axis when probing. The default is 5mm/s.
+samples: 2
+#   The number of times to probe each point. The probed z-values will
+#   be averaged. The default is to probe 1 time.
+sample_retract_dist: 2.0
+#   The distance (in mm) to lift the toolhead between each sample (if
+#   sampling more than once). The default is 2mm.
+lift_speed: 10
+#   Speed (in mm/s) of the Z axis when lifting the probe between
+#   samples. The default is to use the same value as the 'speed'
+#   parameter.
+samples_tolerance: 0.02
+#   The maximum Z distance (in mm) that a sample may differ from other
+#   samples. If this tolerance is exceeded then either an error is
+#   reported or the attempt is restarted (see
+#   samples_tolerance_retries). The default is 0.100mm.
+samples_tolerance_retries: 3
+#   The number of times to retry if a sample is found that exceeds
+#   samples_tolerance. On a retry, all current samples are discarded
+#   and the probe attempt is restarted. If a valid set of samples are
+#   not obtained in the given number of retries then an error is
+#   reported. The default is zero which causes an error to be reported
+#   on the first sample that exceeds samples_tolerance.
+#activate_gcode:
+#   A list of G-Code commands to execute prior to each probe attempt.
+#   See docs/Command_Templates.md for G-Code format. This may be
+#   useful if the probe needs to be activated in some way. Do not
+#   issue any commands here that move the toolhead (eg, G1). The
+#   default is to not run any special G-Code commands on activation.
+#deactivate_gcode:
+#   A list of G-Code commands to execute after each probe attempt
+#   completes. See docs/Command_Templates.md for G-Code format. Do not
+#   issue any commands here that move the toolhead. The default is to
+#   not run any special G-Code commands on deactivation.
+
+[knobprobe]
+pin: ^PG12
+deactivate_on_each_sample: False
+z_offset: 0
+speed: 4.0
+samples: 3
+sample_retract_dist: 2.0
+lift_speed: 10
+samples_tolerance: 0.02
+samples_tolerance_retries: 5
+
+########################################
+# EXP1 / EXP2 (display) pins
+########################################
+
+
+[board_pins]
+aliases:
+    # EXP1 header
+    EXP1_1=PE8, EXP1_2=PE7,
+    EXP1_3=PE9, EXP1_4=PE10,
+    EXP1_5=PE12, EXP1_6=PE13,    # Slot in the socket on this side
+    EXP1_7=PE14, EXP1_8=PE15,
+    EXP1_9=<GND>, EXP1_10=<5V>,
+
+    # EXP2 header
+    EXP2_1=PA6, EXP2_2=PA5,
+    EXP2_3=PB1, EXP2_4=PA4,
+    EXP2_5=PB2, EXP2_6=PA7,      # Slot in the socket on this side
+    EXP2_7=PC15, EXP2_8=<RST>,
+    EXP2_9=<GND>, EXP2_10=PC5
+
+
+[temperature_sensor mcu_temp]
+sensor_type: temperature_mcu
