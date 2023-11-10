@@ -6,13 +6,17 @@ import requests
 from requests.exceptions import InvalidURL, HTTPError, RequestException, ConnectionError
 
 class CVTools:
-    def __init__(self):
-        # self.detector = self._create_detector() # Old detector, not used anymore /Q 9/11/2023
-        
+    def __init__(self, config):
+        # Load used objects. Mainly to log stuff.
+        self.printer = config.get_printer()
+        self.gcode = self.printer.lookup_object('gcode')
+        self.log = self.printer.lookup_object('ktcc_log')
+
         # This is the last successful algorithm used by the nozzle detection. Should be reset at tool change. Will have to change.
         self.__algorithm = None
         # TAMV has 2 detectors, one for standard and one for relaxed
         self.createDetectors()
+        
 
     def get_average_positions(self, positions):
         avg_positions = {}
@@ -86,32 +90,6 @@ class CVTools:
         qy = oy + math.sin(angle) * (px - ox) + math.cos(angle) * (py - oy)
         return qx, qy
     
-    # # Taken straight from TAMV: https://github.com/DanalEstes/TAMV/blob/master/TAMV.py#L149
-    # def _create_detector(self, t1=20, t2=200, all=0.5, area=200):
-    #     params = cv2.SimpleBlobDetector_Params()
-        
-    #     params.minThreshold = t1
-    #     params.maxThreshold = t2
-        
-    #     params.filterByArea = True
-    #     params.minArea = area
-        
-    #     params.filterByCircularity = True
-    #     params.minCircularity = all
-        
-    #     params.filterByConvexity = True
-    #     params.minConvexity = all
-        
-    #     params.filterByInertia = True
-    #     params.minInertiaRatio = all
-        
-    #     params.filterByColor = False
-
-    #     params.minDistBetweenBlobs = 2
-        
-    #     detector = cv2.SimpleBlobDetector_create(params)
-    #     return detector
-
     def detect_nozzles(self, image):
         # gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         # blur = cv2.medianBlur(gray, 5)
@@ -120,9 +98,14 @@ class CVTools:
 
         keypoints, nozzleDetectFrame = self.nozzleDetection(image)
 
+        if (keypoints is None):
+            return None
+
         if len(keypoints) < 1:
             return None
 
+        self.log.trace("Nozzle detected %i circles" % (len(keypoints)))
+        
         data = []
         for point in keypoints:
             pos = np.around(point.pt)
@@ -136,9 +119,10 @@ class CVTools:
     
 
     def save_image(self, image, keypoints):
-        image_with_keypoints = cv2.drawKeypoints(image, keypoints, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
-        home_dir = os.path.expanduser('~')
-        cv2.imwrite(home_dir + "/frame.jpg", image_with_keypoints)
+        # image_with_keypoints = cv2.drawKeypoints(image, keypoints, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+        # home_dir = os.path.expanduser('~')
+        # success = cv2.imwrite(home_dir + "/frame.jpg", image_with_keypoints)
+        # self.log.trace("Saved image: " + str(success))
         return
 
 
@@ -246,9 +230,10 @@ class CVTools:
         keypoints = None
         center = (None, None)
         # check which algorithm worked previously
-        if(self.__algorithm is None):
+        if 1==1: #(self.__algorithm is None):
             preprocessorImage0 = self.preprocessImage(frameInput=nozzleDetectFrame, algorithm=0)
             preprocessorImage1 = self.preprocessImage(frameInput=nozzleDetectFrame, algorithm=1)
+            preprocessorImage2 = self.preprocessImage(frameInput=nozzleDetectFrame, algorithm=2)
 
             # apply combo 1 (standard detector, preprocessor 0)
             keypoints = self.detector.detect(preprocessorImage0)
@@ -265,9 +250,16 @@ class CVTools:
                         # apply combo 4 (standard detector, preprocessor 1)
                         keypoints = self.relaxedDetector.detect(preprocessorImage1)
                         keypointColor = (39,127,255)
+
                         if(len(keypoints) != 1):
-                            # failed to detect a nozzle, correct return value object
-                            keypoints = None
+                            # apply combo 4 (standard detector, preprocessor 1)
+                            keypoints = self.superRelaxedDetector.detect(preprocessorImage2)
+                            keypointColor = (39,255,127)
+                            if(len(keypoints) != 1):
+                                # failed to detect a nozzle, correct return value object
+                                keypoints = None
+                            else:
+                                self.__algorithm = 5
                         else:
                             self.__algorithm = 4
                     else:
@@ -292,6 +284,13 @@ class CVTools:
             preprocessorImage1 = self.preprocessImage(frameInput=nozzleDetectFrame, algorithm=1)
             keypoints = self.relaxedDetector.detect(preprocessorImage1)
             keypointColor = (39,127,255)
+            
+        if keypoints is not None:
+            self.log.trace("Nozzle detected %i circles with algorithm: %s" % (len(keypoints), str(self.__algorithm)))
+        else:
+            self.log.trace("Nozzle detection failed.")
+            
+            
         # process keypoint
         if(keypoints is not None and len(keypoints) >= 1):
             # create center object
@@ -349,4 +348,8 @@ class CVTools:
             thr_val, outputFrame = cv2.threshold(outputFrame, 127, 255, cv2.THRESH_BINARY|cv2.THRESH_TRIANGLE )
             outputFrame = cv2.GaussianBlur( outputFrame, (7,7), 6 )
             outputFrame = cv2.cvtColor( outputFrame, cv2.COLOR_GRAY2BGR )
+        elif(algorithm == 2):
+            gray = cv2.cvtColor(frameInput, cv2.COLOR_BGR2GRAY)
+            outputFrame = cv2.medianBlur(gray, 5)
+
         return(outputFrame)

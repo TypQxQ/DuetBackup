@@ -6,6 +6,7 @@ import requests
 from requests.exceptions import InvalidURL, HTTPError, RequestException, ConnectionError
 from . import ktcc_log, ktcc_toolchanger , gcode_macro
 from . import cvTools
+# from ..toolhead import ToolHead
 
 class CVToolheadCalibration:
     def __init__(self, config):
@@ -17,7 +18,7 @@ class CVToolheadCalibration:
         self.calib_iterations = config.getint('calib_iterations', 1, minval=1, maxval=25)
         self.calib_value = config.getfloat('calib_value', 1.0, above=0.25)
 
-        self.printer = config.get_printer()
+        # self.printer = config.get_printer()
         self.config = config
 
         if not config.has_section('ktcc_log'):
@@ -25,7 +26,7 @@ class CVToolheadCalibration:
 
         self.streamer = MjpegStreamReader(self.camera_address)
 
-        self.cv_tools = cvTools.CVTools()
+        self.cv_tools = cvTools.CVTools(config)
 
         # Load used objects.
         self.printer = config.get_printer()
@@ -39,7 +40,17 @@ class CVToolheadCalibration:
         self.gcode.register_command('CV_SIMPLE_NOZZLE_POSITION', self.cmd_SIMPLE_NOZZLE_POSITION, desc=self.cmd_SIMPLE_NOZZLE_POSITION_help)
         self.gcode.register_command('CV_CALIB_NOZZLE_PX_MM', self.cmd_CALIB_NOZZLE_PX_MM, desc=self.cmd_CALIB_NOZZLE_PX_MM_help)
         self.gcode.register_command('CV_CALIB_OFFSET', self.cmd_CALIB_OFFSET, desc=self.cmd_CALIB_OFFSET_help)
+        self.gcode.register_command('CV_SET_CENTER', self.cmd_SET_CENTER, desc=self.cmd_SET_CENTER_help)
         
+    cmd_SET_CENTER_help = "Tests if the CVNozzleCalib extension works"
+    def cmd_SET_CENTER(self, gcmd):
+        self._set_camera_center_to_current_position()
+        
+    def _set_camera_center_to_current_position(self):
+        gcode_position = self._get_gcode_position()
+        self.camera_position = (float(gcode_position.x), float(gcode_position.y))
+        self.log.trace("Set camera position to: %s" % str(self.camera_position))
+
     cmd_SIMPLE_TEST_help = "Tests if the CVNozzleCalib extension works"
     def cmd_SIMPLE_TEST(self, gcmd):
         # I don't think it's usefull because if OpenCV is not functioning then the init would error out.
@@ -257,8 +268,10 @@ class CVToolheadCalibration:
         if not skip_move_toolhead_to_center:
             self._center_toolhead()
 
-        toolhead = self.printer.lookup_object('toolhead')
-        starting_pos = toolhead.get_position()
+        # toolhead = self.printer.lookup_object('toolhead')
+        # starting_pos = toolhead.get_position()
+        self._set_camera_center_to_current_position()
+        starting_pos = self._get_gcode_position()
         start_x = starting_pos[0]
         start_y = starting_pos[1]
 
@@ -278,28 +291,26 @@ class CVToolheadCalibration:
         positions = {}
 
         # Itterations is most likely not needed for the same reason as mentioned for calib_points
-        for _ in range(iterations):
-            for calib_point in calib_points:
+        for iteration in range(iterations):
+            for i, calib_point in enumerate(calib_points):
                 # Go to calib point and get a position
                 # new_pos = toolhead.get_position()
                 # new_pos[0] = calib_point[0]
                 # new_pos[1] = calib_point[1]
                 # toolhead.move(new_pos, self.speed)
-                toolhead.move(calib_point, self.speed)
-                toolhead.wait_moves()
+                
+                self.log.trace("Moving to calib point no.%i: %s" % ( iteration, str(calib_point)))
+                
+                # Move the toolhead to the calibration point but using the tool's offset.
+                self._move_tool(calib_point)
 
                 nozzle_pos = self._recursively_find_nozzle_position()
                 if nozzle_pos:
                     positions.setdefault(calib_point,[]).append(nozzle_pos)
                 else:
-                    raise self.gcode.error("No nozzle detected for this position (%d, %d)" % calib_point)
+                    raise self.gcode.error("No nozzle detected for position %i: (%.3f, %.3f). Iteration: %i" % (i ,calib_point[0],calib_point[1], iteration))
 
-                # Go back to center and get a position
-                new_pos = toolhead.get_position()
-                new_pos[0] = start_x
-                new_pos[1] = start_y
-                toolhead.manual_move(new_pos, self.speed)
-                toolhead.wait_moves()
+                self._move_tool((start_x, start_y))
 
                 nozzle_pos = self._recursively_find_nozzle_position()
                 if nozzle_pos:
@@ -329,14 +340,15 @@ class CVToolheadCalibration:
         toolhead.wait_moves()
 
     def _center_toolhead(self):
-        toolhead = self.printer.lookup_object('toolhead')
-        starting_pos = toolhead.get_position()
-        if starting_pos[0] != self.camera_position[0] or starting_pos[1] != self.camera_position[1]:
-            center_pos = starting_pos
-            center_pos[0] = self.camera_position[0]
-            center_pos[1] = self.camera_position[1]
-            toolhead.move(center_pos, self.speed)
-            toolhead.wait_moves()
+        self._move_tool(self.camera_position)
+        # toolhead = self.printer.lookup_object('toolhead')
+        # starting_pos = toolhead.get_position()
+        # if starting_pos[0] != self.camera_position[0] or starting_pos[1] != self.camera_position[1]:
+        #     center_pos = starting_pos
+        #     center_pos[0] = self.camera_position[0]
+        #     center_pos[1] = self.camera_position[1]
+        #     toolhead.move(center_pos, self.speed)
+        # toolhead.wait_moves()
 
     def _find_nozzle_positions(self):
         image = self.streamer.get_single_frame()
@@ -347,7 +359,7 @@ class CVToolheadCalibration:
     def _recursively_find_nozzle_position(self):
         start_time = time.time()  # Get the current time
 
-        CV_TIME_OUT = 5 # If no nozzle found in this time, timeout the function
+        CV_TIME_OUT = 20 #5 # If no nozzle found in this time, timeout the function
         CV_MIN_MATCHES = 3 # Minimum amount of matches to confirm toolhead position after a move
 
         last_pos = (0,0)
@@ -357,22 +369,48 @@ class CVToolheadCalibration:
             if not positions:
                 continue
 
-            # This checks first nozzle position, but if there are more detected nozzles it will be ignored
             pos = positions[0]
             # Only compare XY position, not radius...
             # "If `pos` and `last_pos` are both not `None` or `False`, and the first elements of `pos` and `last_pos` are equal, and the second elements of `pos` and `last_pos` are equal, then proceed with the code inside the `if` block."
             if pos and last_pos and pos[0] == last_pos[0] and pos[1] and last_pos[1]:
+
                 # self.gcode.respond_info("Found %i positions. First one: X%.3f Y%.3f, radius %.3f" % (positions.__len__(), pos[0], pos[1], pos[2]))
                 self.log.trace("Found %i positions. First one: X%.3f Y%.3f, radius %.3f" % (positions.__len__(), pos[0], pos[1], pos[2]))
                 pos_matches += 1
                 if pos_matches >= CV_MIN_MATCHES:
                     return pos
             else:
+                self.log.trace("Position found does not match last position. Last position: %s, current position: %s" % (str(last_pos), str(pos)))
                 pos_matches = 0
 
             last_pos = pos
         return None
+    
+    # Using G1 command to move the toolhead to the position instead of using the toolhead.move() function because G1 will use the tool's offset.
+    def _move_tool(self, pos_array, speed = None):
+        if speed is None:
+            speed = self.speed
+            
+        gcode = "G1 "
+        for i in range(len(pos_array)):
+            if i == 0:
+                gcode += "X%s " % (pos_array[i])
+            elif i == 1:
+                gcode += "Y%s " % (pos_array[i])
+            elif i == 2:
+                gcode += "Z%s " % (pos_array[i])
+        gcode += "F%s " % (speed)
+        
+        # self.log.trace("G1 command: %s" % gcode)
+        self.gcode.run_script_from_command(gcode)
+        toolhead = self.printer.lookup_object('toolhead')
+        toolhead.wait_moves()
 
+    def _get_gcode_position(self):
+        gcode_move = self.printer.lookup_object('gcode_move')
+        gcode_position = gcode_move.get_status()['gcode_position']
+        self.log.trace("Gcode position: %s" % str(gcode_position))
+        return gcode_position
 
 class MjpegStreamReader:
     def __init__(self, camera_address):
