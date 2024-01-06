@@ -6,6 +6,12 @@ import requests
 from requests.exceptions import InvalidURL, HTTPError, RequestException, ConnectionError
 from . import ktcc_log, ktcc_toolchanger , gcode_macro
 from . import cvTools
+from PIL import Image, ImageDraw, ImageFont, ImageFile
+
+import logging
+from .ktcc import ktcc_parse_restore_type
+from . import ktcc_toolchanger, ktcc_log
+
 # from ..toolhead import ToolHead
 
 class CVToolheadCalibration:
@@ -31,9 +37,9 @@ class CVToolheadCalibration:
         # Load used objects.
         self.printer = config.get_printer()
         self.gcode = self.printer.lookup_object('gcode')
-        self.gcode_macro : gcode_macro.GCodeMacro = self.printer.load_object(config, 'gcode_macro')
-        self.toollock : ktcc_toolchanger.ktcc_toolchanger = self.printer.lookup_object('ktcc_toolchanger')
-        self.log : ktcc_log.Ktcc_Log = self.printer.lookup_object('ktcc_log')
+        # self.gcode_macro : gcode_macro.GCodeMacro = self.printer.load_object(config, 'gcode_macro')
+        # self.toollock : ktcc_toolchanger.ktcc_toolchanger = self.printer.lookup_object('ktcc_toolchanger')
+        self.log :ktcc_log = self.printer.lookup_object('ktcc_log')
 
         self.gcode.register_command('CV_TEST', self.cmd_SIMPLE_TEST, desc=self.cmd_SIMPLE_TEST_help)
         self.gcode.register_command('CV_CENTER_TOOLHEAD', self.cmd_center_toolhead, desc=self.cmd_center_toolhead_help)
@@ -62,21 +68,95 @@ class CVToolheadCalibration:
 
     cmd_SIMPLE_NOZZLE_POSITION_help = "Detects if a nozzle is found in the current image"
     def cmd_SIMPLE_NOZZLE_POSITION(self, gcmd):
-        self.streamer.open_stream()
-        position = self._recursively_find_nozzle_position()
-        if position:
-            gcmd.respond_info("Found nozzle")
-            # position = position[0]
-            gcmd.respond_info("X%.3f Y%.3f, radius %.3f" % (position[0], position[1], position[2]))
-        else:
-            gcmd.respond_info("No nozzles found")
-        self.streamer.close_stream()
+        try:
+            self.log.always("Running SIMPLE_NOZZLE_POSITION")
+            self.streamer.open_stream()
+            position = self._recursively_find_nozzle_position()
+            if position:
+                gcmd.respond_info("Found nozzle")
+                # position = position[0]
+                gcmd.respond_info("X%.3f Y%.3f, radius %.3f" % (position[0], position[1], position[2]))
+            else:
+                gcmd.respond_info("No nozzles found")
+            self.streamer.close_stream()
+        except Exception as e:
+            if self.streamer is not None:
+                self.streamer.close_stream()
+            raise Exception("SIMPLE_NOZZLE_POSITION failed %s" % str(e))
+
+            
+
+    # def _calibrate_tool(self, toolindex):
+    #     # Switch to T1 and move to center above camera
+    #     self.changeTool(toolindex)
+    #     self._center_toolhead()
+
+    #     # Find initial tool position to caluclate offset from
+    #     tool_nozzle_pos = self._recursively_find_nozzle_position()
+    #     if tool_nozzle_pos is None:
+    #         self.log.trace("Did not find nozzle after initial T%s move to center, aborting" % str(toolindex))   
+    #         self.streamer.close_stream()
+    #         return
+
+    #     pos = (int(tool_nozzle_pos[0]), int(tool_nozzle_pos[1]))
+    #     rotated_position = self.cv_tools.rotate_around_origin(self.calibrated_center_point, pos, self.calibrated_angle)
+
+    #     # TODO: If t1_nozzle_pos nozzle radius differs a lot from T0 nozzle radius there will be issues
+
+    #     # Calculate the X and Y offsets
+    #     x_offset_px = t0_nozzle_pos[0]-rotated_position[0]
+    #     y_offset_px = t0_nozzle_pos[1]-rotated_position[1]
+
+    #     # Convert the px offset values to real world mm
+    #     x_offset_mm = x_offset_px/px_mm
+    #     y_offset_mm = y_offset_px/px_mm
+
+    #     # TODO: Add early return if movement is bigger then some we can assume is outside of the cameras vision
+    #     new_pos_t1 = toolhead.get_position()
+    #     new_pos_t1[0] = center_point[0]+x_offset_mm
+    #     new_pos_t1[1] = center_point[1]+y_offset_mm
+
+    #     # Move T1 to "center" + offsets
+    #     toolhead.move(new_pos_t1, self.speed)
+    #     toolhead.wait_moves()
+
+    #     second_t1_pos = self._recursively_find_nozzle_position()
+    #     if second_t1_pos is None:
+    #         gcmd.respond_info("Tried to use MM offsets X%.4f Y%.4f, but did not find T1 nozzle after move..." % (x_offset_mm, y_offset_mm))
+    #         self.streamer.close_stream()
+    #         return
+
+    #     # TODO: Add early return if resulting virtual offset is not within spec
+
+    #     gcmd.respond_info("""
+    #         Done calibrating! 
+    #         Using MM offsets X%.4f Y%.4f got:
+    #         Initial virtual offset: X%d Y%d
+    #         Resulting virtual offset: X%d Y%d
+    #     """ % (
+    #         x_offset_mm, 
+    #         y_offset_mm, 
+    #         (t0_nozzle_pos[0]-t1_nozzle_pos[0]), # Initial virtual offset between t0 and t1
+    #         (t0_nozzle_pos[1]-t1_nozzle_pos[1]), # Initial virtual offset between t0 and t1
+    #         (t0_nozzle_pos[0]-second_t1_pos[0]), # Calibrated virtual offset between t0 and t1
+    #         (t0_nozzle_pos[1]-second_t1_pos[1]) # Calibrated virtual offset between t0 and t1
+    #     ))
+
+    #     self.streamer.close_stream()
+
+    #     self._x_home_current_toolhead()
+    #     # Restore state to t0
+    #     self.changeTool(0)
+
+
+
+
 
     cmd_CALIB_OFFSET_help = "Calibraties T0 and T1 XY offsets based on the configured center point"
     def cmd_CALIB_OFFSET(self, gcmd):
         self.streamer.open_stream()
-        # Ensure we are using T0
-        self.changeTool(0)
+        # Ensure we are using T10 for testing
+        self.changeTool(10)
 
         skip_center = gcmd.get('SKIP_CENTER', False)
         calib_value = gcmd.get_float('CALIB_VALUE', self.calib_value)
@@ -263,6 +343,8 @@ class CVToolheadCalibration:
         """ % (avg_points[self.camera_position][0], avg_points[self.camera_position][1], center_deviation[0], center_deviation[1], px_mm, ang))
 
         self.streamer.close_stream()
+        self.calibrated_center_point = point_center
+        self.calibrated_angle = ang
 
     def calibrate_toolhead_movement(self, skip_move_toolhead_to_center=False, calib_value=1.0, iterations=1):
         if not skip_move_toolhead_to_center:
@@ -293,15 +375,8 @@ class CVToolheadCalibration:
         # Itterations is most likely not needed for the same reason as mentioned for calib_points
         for iteration in range(iterations):
             for i, calib_point in enumerate(calib_points):
-                # Go to calib point and get a position
-                # new_pos = toolhead.get_position()
-                # new_pos[0] = calib_point[0]
-                # new_pos[1] = calib_point[1]
-                # toolhead.move(new_pos, self.speed)
-                
-                self.log.trace("Moving to calib point no.%i: %s" % ( iteration, str(calib_point)))
-                
                 # Move the toolhead to the calibration point but using the tool's offset.
+                # self.log.trace("Moving to calib point no.%i: %s" % ( iteration, str(calib_point)))
                 self._move_tool(calib_point)
 
                 nozzle_pos = self._recursively_find_nozzle_position()
@@ -351,9 +426,12 @@ class CVToolheadCalibration:
         # toolhead.wait_moves()
 
     def _find_nozzle_positions(self):
-        image = self.streamer.get_single_frame()
+        self.log.always("Finding nozzle positions")
+        image, size = self.streamer.get_single_frame()
         if image is None:
+            self.log.always("No image found")
             return None
+
         return self.cv_tools.detect_nozzles(image)
 
     def _recursively_find_nozzle_position(self):
@@ -361,6 +439,7 @@ class CVToolheadCalibration:
 
         CV_TIME_OUT = 20 #5 # If no nozzle found in this time, timeout the function
         CV_MIN_MATCHES = 3 # Minimum amount of matches to confirm toolhead position after a move
+        CV_XY_TOLERANCE = 1 # If the nozzle position is within this tolerance, it's considered a match. 1.0 would be 1 pixel. Only whole numbers are supported.
 
         last_pos = (0,0)
         pos_matches = 0
@@ -371,16 +450,13 @@ class CVToolheadCalibration:
 
             pos = positions[0]
             # Only compare XY position, not radius...
-            # "If `pos` and `last_pos` are both not `None` or `False`, and the first elements of `pos` and `last_pos` are equal, and the second elements of `pos` and `last_pos` are equal, then proceed with the code inside the `if` block."
-            if pos and last_pos and pos[0] == last_pos[0] and pos[1] and last_pos[1]:
-
-                # self.gcode.respond_info("Found %i positions. First one: X%.3f Y%.3f, radius %.3f" % (positions.__len__(), pos[0], pos[1], pos[2]))
-                self.log.trace("Found %i positions. First one: X%.3f Y%.3f, radius %.3f" % (positions.__len__(), pos[0], pos[1], pos[2]))
+            if abs(pos[0] - last_pos[0]) <= CV_XY_TOLERANCE and abs(pos[1] - last_pos[1]) <= CV_XY_TOLERANCE:
                 pos_matches += 1
                 if pos_matches >= CV_MIN_MATCHES:
                     return pos
             else:
                 self.log.trace("Position found does not match last position. Last position: %s, current position: %s" % (str(last_pos), str(pos)))
+                self.log.trace("Difference: X%.3f Y%.3f" % (abs(pos[0] - last_pos[0]), abs(pos[1] - last_pos[1])))
                 pos_matches = 0
 
             last_pos = pos
@@ -409,7 +485,7 @@ class CVToolheadCalibration:
     def _get_gcode_position(self):
         gcode_move = self.printer.lookup_object('gcode_move')
         gcode_position = gcode_move.get_status()['gcode_position']
-        self.log.trace("Gcode position: %s" % str(gcode_position))
+        # self.log.trace("Gcode position: %s" % str(gcode_position))
         return gcode_position
 
 class MjpegStreamReader:
@@ -436,26 +512,36 @@ class MjpegStreamReader:
     def get_single_frame(self):
         if self.session is None: 
             # TODO: Raise error: stream is not running
-            return None
+            return None, None
 
-        with self.session.get(self.camera_address, stream=True) as stream:
-            if stream.ok:
-                chunk_size = 1024
-                bytes_ = b''
-                for chunk in stream.iter_content(chunk_size=chunk_size):
-                    bytes_ += chunk
-                    a = bytes_.find(b'\xff\xd8')
-                    b = bytes_.find(b'\xff\xd9')
-                    if a != -1 and b != -1:
-                        jpg = bytes_[a:b+2]
-                        return cv2.imdecode(np.frombuffer(jpg, dtype=np.uint8), cv2.IMREAD_COLOR)
-
-        return None
+        try:
+            with self.session.get(self.camera_address, stream=True) as stream:
+                if stream.ok:
+                    chunk_size = 1024
+                    bytes_ = b''
+                    for chunk in stream.iter_content(chunk_size=chunk_size):
+                        bytes_ += chunk
+                        a = bytes_.find(b'\xff\xd8')
+                        b = bytes_.find(b'\xff\xd9')
+                        if a != -1 and b != -1:
+                            jpg = bytes_[a:b+2]
+                            # Read the image from the byte array with OpenCV
+                            image = cv2.imdecode(np.frombuffer(jpg, dtype=np.uint8), cv2.IMREAD_COLOR)
+                            # Save the image dimensions as class variables. TODO Not sure which one is the best way to do it.
+                            # self._cameraHeight, self._cameraWidth, _ = image.shape
+                            # self.cvtools._cameraHeight, self.cvtools._cameraWidth, _ = image.shape
+                            # Return the image
+                            return image, image.shape
+            return None, None
+        except Exception as e:
+            self.log.always("Failed to get single frame from stream %s" % str(e))
+            # raise Exception("Failed to get single frame from stream %s" % str(e))
 
     def close_stream(self):
         if self.session is not None:
             self.session.close()
             self.session = None
+
 
 def load_config(config):
     return CVToolheadCalibration(config)

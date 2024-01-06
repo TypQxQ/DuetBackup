@@ -16,11 +16,11 @@ M550 PqHEVO                      ; Set machine name
 M552 S1                          ; Enable network
 ;M587 S"event" P"sundsparlan"       ; Configure access point. You can delete this line once connected
 M586 P0 S1                       ; Enable HTTP
-M586 P1 S0                       ; Disable FTP
+M586 P1 S1                       ; Disable FTP
 M586 P2 S0                       ; Disable Telnet
 
-; Set drive mapping
-M584 X0 Y6 Z1:9:2 E5 U3 V7 W4 A8  ; 1=LeftZ(marked Y on Duet) 9=RearZ (Last on Duex), 2=RightZ (marked Z on Duet), 0=marked X, 3=marked E0, 4=marked E1
+; Set drive mapping and parameters
+M98 P"/sys/stallsettingshome.g"
 
 ; Drives
 M569 P0 S1                       ; Drive 0 goes forwards X
@@ -34,30 +34,10 @@ M569 P7 S1                       ; Drive 7 goes forwards U
 M569 P8 S0                       ; Drive 8 goes backwards A
 M569 P9 S1                       ; Drive 9 goes forwards Z
 
-M350 X16 Y16 U16 V16 W16 A16 Z16 E16 I1          ; Configure microstepping with interpolation
-M92 X80 Y80 U80 V80 W80 A80 Z1600 E830       ; Set steps per mm (BMG = 415) on 1.8* Stepper
-
-;M350 X64 Y64 U64 V64 W64 A64 Z16 E128 I1          ; Configure microstepping test
-
-; Load speed settings for homing.
-M98 P"/sys/speeds4probing.g"
-
-; Changing XY to 1500=89%. UV stays same for sensorless homing. Z to 1100=82% 06/04/2019
-M906 X1500 Y1500 U1500 V1500 W1500 A1500 Z1000:1000:1000 E900 I30 ; Set motor currents (mA) and motor idle factor in per cent 
-; M906 X1700 Y1700 U1700 V1700 W1700 A1700 Z1000:1000:1000 E900 I30 ; Set motor currents (mA) and motor idle factor in per cent 
-				 ; E3D High Torq and slim but powerfull= 1,68A - e3d Lead Screw Motor= 1,33A - Pankake = 0,7A - LDO HT pankake = 1,4A - Moons = 2A
-
-M84 S30											; Set idle timeout
-
-M915 X Y U V E W A S8 R1 F1						; Log  axis stall
+M84 S30							 ; Set idle timeout
 
 ; Axis Limits
 M208 X0:290 Y0:295 U0:290 V0:295 W0:290 A0:295 Z0:300	; Set axis minima:maxima -  Can be -15 if endstop is at -15
-
-; Endstops
-M574 X1 P"xstop" S1								; Set active high endstops for X
-M574 Y1 P"ystop" S1								; Set active high endstops for Y
-M574 U1 V1 W1 A1 S3								; Set endstops controlled by motor load detection for U and V
 
 ; Filament Monitor
 M591 D0 C"e1stop" P2 S1							; Filament Sensor on E1 endstop (low signal when filament present) Active
@@ -104,9 +84,9 @@ T0								; Select First tool
 
 
 ; Other temp sensors
-M308 S2 P"duex.e2temp" Y"thermistor" T100000 A"HotEnd level stepper"
-M308 S3 P"duex.e3temp" Y"thermistor" T100000 A"Extruder level stepper"
-M308 S4 P"duex.e4temp" Y"thermistor" T100000 A"Dynamic level stepper"
+M308 S2 P"duex.e2temp" Y"thermistor" T100000 A"HotEnd lvl stepper"
+M308 S3 P"duex.e3temp" Y"thermistor" T100000 A"Extr lvl stepper"
+M308 S4 P"duex.e4temp" Y"thermistor" T100000 A"Dyn lvl stepper"
 ;M308 S5 P"duex.e5temp" Y"thermistor" T100000 A"Extruder stepper"
 ;M308 S6 P"duex.e6temp" Y"thermistor" T100000 A"Chamber"
 
@@ -114,8 +94,8 @@ M308 S4 P"duex.e4temp" Y"thermistor" T100000 A"Dynamic level stepper"
 ; Fans
 M950 F3 C"duex.fan4"			; Output Fan
 M106 P3 S0 H-1 C"Output Fan"	; Set zero speed and Thermostatic control is disabled
-M950 F3 C"duex.fan8"			; DriverCooler on Fan8
-M106 P3 S1 H-1 C"DriverCooler"	; Set Full speed and Thermostatic control is disabled
+M950 F4 C"duex.fan8"			; DriverCooler on Fan8
+M106 P4 S1 H-1 C"DriverCooler"	; Set Full speed and Thermostatic control is disabled
 ;M106 P6 H103 T70 C"HotEnd lvl Y Fan"
 ;M106 P5 H103 T70 C"HotEnd lvl Y Fan"
 

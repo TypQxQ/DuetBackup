@@ -1,5 +1,5 @@
- M117 Not Implemented. Use G28 / Home All
- M291 P"Homing" R"Not Implemented. Use G28 / Home All" T5 ; Display new message
+ M117 X Not Implemented. Use G28 / Home All
+ M291 P"Homing X" R"X Not Implemented. Use G28 / Home All" T5 ; Display new message
 
 ; M400                     ; make sure everything has stopped before we make changes
 ; M98 Pstallsettingshome.g ; Set stallsettings for homing.

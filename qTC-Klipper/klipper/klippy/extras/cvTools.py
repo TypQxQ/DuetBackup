@@ -4,18 +4,27 @@ import numpy as np
 import math
 import requests
 from requests.exceptions import InvalidURL, HTTPError, RequestException, ConnectionError
+from PIL import Image, ImageDraw, ImageFont, ImageFile
+
 
 class CVTools:
     def __init__(self, config):
         # Load used objects. Mainly to log stuff.
         self.printer = config.get_printer()
         self.gcode = self.printer.lookup_object('gcode')
-        self.log = self.printer.lookup_object('ktcc_log')
+        self.log = self.printer.load_object(config, 'ktcc_log')
 
         # This is the last successful algorithm used by the nozzle detection. Should be reset at tool change. Will have to change.
         self.__algorithm = None
         # TAMV has 2 detectors, one for standard and one for relaxed
         self.createDetectors()
+
+        # Create the WebCamServer
+        # self.webCamServer = Flask(__name__)
+        # self.process = None
+        # q = HelloWorldServer()
+        # q.start_server()
+        # q.run()
         
 
     def get_average_positions(self, positions):
@@ -83,19 +92,26 @@ class CVTools:
         return None
 
     def rotate_around_origin(self, origin, point, angle):
-        ox, oy = (int(origin[0]), int(origin[1]))
-        px, py = (int(point[0]), int(point[1]))
+            """
+            Rotate a point around a given origin by a given angle.
 
-        qx = ox + math.cos(angle) * (px - ox) - math.sin(angle) * (py - oy)
-        qy = oy + math.sin(angle) * (px - ox) + math.cos(angle) * (py - oy)
-        return qx, qy
+            Args:
+                origin (tuple): The origin point as a tuple of (x, y) coordinates.
+                point (tuple): The point to be rotated as a tuple of (x, y) coordinates.
+                angle (float): The angle of rotation in radians.
+
+            Returns:
+                tuple: The rotated point as a tuple of (x, y) coordinates.
+            """
+            ox, oy = (int(origin[0]), int(origin[1]))
+            px, py = (int(point[0]), int(point[1]))
+
+            qx = ox + math.cos(angle) * (px - ox) - math.sin(angle) * (py - oy)
+            qy = oy + math.sin(angle) * (px - ox) + math.cos(angle) * (py - oy)
+            return qx, qy
     
     def detect_nozzles(self, image):
-        # gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        # blur = cv2.medianBlur(gray, 5)
-
-        # keypoints = self.detector.detect(blur)
-
+        
         keypoints, nozzleDetectFrame = self.nozzleDetection(image)
 
         if (keypoints is None):
@@ -104,8 +120,6 @@ class CVTools:
         if len(keypoints) < 1:
             return None
 
-        self.log.trace("Nozzle detected %i circles" % (len(keypoints)))
-        
         data = []
         for point in keypoints:
             pos = np.around(point.pt)
@@ -114,17 +128,8 @@ class CVTools:
 
         self.save_image(nozzleDetectFrame, keypoints)
         
+        
         return data
-
-    
-
-    def save_image(self, image, keypoints):
-        # image_with_keypoints = cv2.drawKeypoints(image, keypoints, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
-        # home_dir = os.path.expanduser('~')
-        # success = cv2.imwrite(home_dir + "/frame.jpg", image_with_keypoints)
-        # self.log.trace("Saved image: " + str(success))
-        return
-
 
     def slope(self, p1, p2):
         a1 = p2[1]-p1[1]
@@ -137,6 +142,47 @@ class CVTools:
 
     def angle(self,  s1, s2):
         return math.degrees(math.atan((s2-s1)/(1+(s2*s1))))
+
+
+    def save_image(self, image, keypoints):
+        image_with_keypoints = cv2.drawKeypoints(image, keypoints, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+        home_dir = os.path.expanduser('~')
+        _ = cv2.imwrite(home_dir + "/frame.jpg", image_with_keypoints)
+        # self.log.trace("Saved image: " + str(success))
+        
+        date_now = datetime.datetime.strftime(datetime.datetime.now(), "%a %b %d %H:%M:%S %Y")        
+        # self.textOnFrame(image_with_keypoints, date_now)
+        
+        # Convert image to JPEG format
+        _, jpeg_image = cv2.imencode('.jpg', image_with_keypoints)
+        
+        try:
+            # Send image to server
+            _, jpeg_image = cv2.imencode('.jpg', image)
+            url = 'http://192.168.1.192:8082/upload'
+            files = {'image.jpeg': jpeg_image.tobytes()}
+            response = requests.post(url, files=files)
+            if response.status_code == 200:
+                self.log.trace('Image sent successfully')
+            else:
+                self.log.always('Error sending image: %s' % response.text)
+        except Exception as e:
+            self.log.always("Failed to send image to server: %s" % str(e))  
+        return
+
+    def textOnFrame(self, image, text):
+        usedFrame = copy.deepcopy(image)
+        
+        # Create a draw object
+        draw = ImageDraw.Draw(usedFrame)
+
+        # Choose a font
+        font = ImageFont.truetype("arial.ttf", 32)
+        
+        # Draw the date on the image
+        draw.text((10, 10), text, font=font, fill=(255, 255, 255))
+
+        return usedFrame
 
 
 
@@ -243,16 +289,16 @@ class CVTools:
                 keypoints = self.detector.detect(preprocessorImage1)
                 keypointColor = (0,255,0)
                 if(len(keypoints) != 1):
-                    # apply combo 3 (standard detector, preprocessor 0)
+                    # apply combo 3 (relaxed detector, preprocessor 0)
                     keypoints = self.relaxedDetector.detect(preprocessorImage0)
                     keypointColor = (255,0,0)
                     if(len(keypoints) != 1):
-                        # apply combo 4 (standard detector, preprocessor 1)
+                        # apply combo 4 (relaxed detector, preprocessor 1)
                         keypoints = self.relaxedDetector.detect(preprocessorImage1)
                         keypointColor = (39,127,255)
 
                         if(len(keypoints) != 1):
-                            # apply combo 4 (standard detector, preprocessor 1)
+                            # apply combo 5 (superrelaxed detector, preprocessor 2)
                             keypoints = self.superRelaxedDetector.detect(preprocessorImage2)
                             keypointColor = (39,255,127)
                             if(len(keypoints) != 1):
@@ -336,6 +382,7 @@ class CVTools:
     def preprocessImage(self, frameInput, algorithm=0):
         try:
             outputFrame = self.adjust_gamma(image=frameInput, gamma=1.2)
+            height, width, channels = outputFrame.shape
         except: outputFrame = copy.deepcopy(frameInput)
         if(algorithm == 0):
             yuv = cv2.cvtColor(outputFrame, cv2.COLOR_BGR2YUV)
@@ -353,3 +400,23 @@ class CVTools:
             outputFrame = cv2.medianBlur(gray, 5)
 
         return(outputFrame)
+
+
+
+#  Stuff to use from TAMV
+
+
+    def normalize_coords(self, coords):
+            """
+            Normalizes the given coordinates to be between -0.5 and 0.5, based on the camera dimensions.
+
+            Args:
+                coords (tuple): A tuple of (x, y) coordinates.
+
+            Returns:
+                tuple: A tuple of normalized (x, y) coordinates.
+            """
+            xdim, ydim = self._cameraWidth, self._cameraHeight
+            returnValue = (coords[0] / xdim - 0.5, coords[1] / ydim - 0.5)
+            return returnValue
+        
