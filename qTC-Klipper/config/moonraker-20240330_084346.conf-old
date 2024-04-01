@@ -103,34 +103,3 @@ origin: https://github.com/TypQxQ/kTAMV.git
 primary_branch: main
 install_script: install.sh
 managed_services: klipper
-
-
-[update_manager Query-Endstop-Continuesly]
-type: git_repo
-path: /home/pi/Query-Endstop-Continuesly-in-Klipper
-origin: https://github.com/TypQxQ/Query-Endstop-Continuesly-in-Klipper.git
-primary_branch: main
-install_script: install.sh
-managed_services: klipper
-
-
-[update_manager KTC]
-type: git_repo
-path: /home/pi/KTC
-origin: https://github.com/TypQxQ/KTC.git
-primary_branch: main
-install_script: install.sh
-managed_services: klipper
-
-[update_manager happy-hare]
-type: git_repo
-path: ~/Happy-Hare
-origin: https://github.com/moggieuk/Happy-Hare.git
-primary_branch: main
-install_script: install.sh
-managed_services: klipper
-
-[mmu_server]
-enable_file_preprocessor: True
-enable_toolchange_next_pos: True
-

@@ -1,53 +1,24 @@
-# Configuration for Mainsail and Timelapse
-[include custom/mainsail_qtc.cfg]
-[include timelapse.cfg]
-[include custom/exclude_object.cfg]
+[include mcu.cfg]
+[include mcu_toolboard.cfg]
+[include mcu_huvud0.cfg]
+[include EBBCan.cfg]
 
-[save_variables]
-filename:  ~/variables.cfg
-
-# Hardware definitions
-[include hw/mcu.cfg]
-[include hw/mcu_mmu.cfg]
-[include hw/mcu_huvud0.cfg]
-[include hw/EBBCan.cfg]
-#[include hw/mcu2.cfg] # Second BTT Octopus
-#[include hw/resonance.cfg]
-[include hw/filament_sensors.cfg]
-
-# Xmin and Ymin are both endstops and Gcode buttons for emergency stop.
-[duplicate_pin_override]
-pins: PG6, PG9
-
-# MMU definitions
-[include mmu/base/*.cfg]
-#[include mmu/addons/mmu_erec_cutter.cfg]  # Replaced by custom MMU_CUT_TIP.cfg
-[include mmu/optional/client_macros.cfg]
-
-# Custom macros
-[include custom/homing.cfg]
-[include custom/tests.cfg]
-[include custom/KNOBPROBE.cfg]
-[include RRRF_Compability/*.cfg]
-[include custom/tool_align_macro.cfg]
-[include custom/MMU_CUT_TIP.cfg]
+[pause_resume]
+recover_velocity: 300.0
 
 [printer]
 #buffer_time_high: 10
 kinematics: corexy
 max_velocity: 400 # 600
 max_accel: 8000  #Try 8000?
-# max_accel_to_decel: 4000  #Try 4000?
+max_accel_to_decel: 4000  #Try 4000?
 square_corner_velocity: 5  #Try 20?
-minimum_cruise_ratio: 0.5
 max_z_velocity: 8
 max_z_accel: 400  #Maybe try 400 later? Was 100
 
-[input_shaper]
+
 [display_status]
 [respond]
-[pause_resume]
-recover_velocity: 300.0
 
 [idle_timeout]
 timeout: 60000 # 16h
@@ -56,21 +27,8 @@ gcode:
 #    T_1
   M84
 
-[ktamv]
-nozzle_cam_url: http://192.168.1.204/webcam2/snapshot?max_delay=0
-#server_url: http://192.168.1.192:8085
-server_url: http://127.0.0.1:8085
-move_speed: 12000
-send_frame_to_cloud: true
-detection_tolerance: 1
+[input_shaper]
 
-[include ktamv-macros.cfg]
-
-[query_endstop_continuesly]
-
-[include ktc/base/*.cfg]
-[include ktc/optional_rrf_compability/*.cfg]
-[include ktc/*.cfg]
 
 [z_tilt]
 z_positions:
