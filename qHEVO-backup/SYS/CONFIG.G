@@ -16,7 +16,7 @@ M550 PqHEVO                      ; Set machine name
 M552 S1                          ; Enable network
 ;M587 S"event" P"sundsparlan"       ; Configure access point. You can delete this line once connected
 M586 P0 S1                       ; Enable HTTP
-M586 P1 S0                       ; Disable FTP
+M586 P1 S1                       ; Disable FTP
 M586 P2 S0                       ; Disable Telnet
 
 ; Set drive mapping and parameters
