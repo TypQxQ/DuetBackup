@@ -26,18 +26,19 @@ M98 P"/sys/stallsettingshome.g"
 M569 P0 S1                       ; Drive 0 goes forwards X
 M569 P1 S1                       ; Drive 1 goes forwards Z
 M569 P2 S1                       ; Drive 2 goes forwards Z
-M569 P3 S1                       ; Drive 3 goes forwards U
-M569 P4 S0                       ; Drive 4 goes backwards W
+;M569 P3 S1                       ; Drive 3 goes forwards U
+M569 P4 S0                       ; Drive 4 goes backwards U ;W
 M569 P5 S1                       ; Drive 5 goes forward E
 M569 P6 S1                       ; Drive 6 goes forwards Y
-M569 P7 S1                       ; Drive 7 goes forwards U
-M569 P8 S0                       ; Drive 8 goes backwards A
+;M569 P7 S1                       ; Drive 7 goes forwards V
+M569 P8 S0                       ; Drive 8 goes backwards V ;A
 M569 P9 S1                       ; Drive 9 goes forwards Z
 
 M84 S30							 ; Set idle timeout
 
 ; Axis Limits
-M208 X0:290 Y0:295 U0:290 V0:295 W0:290 A0:295 Z0:300	; Set axis minima:maxima -  Can be -15 if endstop is at -15
+;M208 X0:290 Y0:295 U0:290 V0:295 W0:290 A0:295 Z0:300	; Set axis minima:maxima -  Can be -15 if endstop is at -15
+M208 X0:290 Y0:295 U0:290 V0:295 Z0:300	; Set axis minima:maxima -  Can be -15 if endstop is at -15
 
 ; Filament Monitor
 M591 D0 C"e1stop" P2 S1							; Filament Sensor on E1 endstop (low signal when filament present) Active
