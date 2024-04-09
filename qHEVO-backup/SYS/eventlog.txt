@@ -23056,3 +23056,5 @@ power up + 00:00:09 [warn] HTTP client 192.168.1.192 login succeeded
 2024-04-09 21:26:16 [warn] Error: in file macro line 21: M593: parameter 'F' too low
 2024-04-09 21:30:51 [warn] HTTP client 192.168.1.192 login succeeded
 2024-04-09 21:30:53 [warn] HTTP client 192.168.1.192 login succeeded
+2024-04-09 21:31:51 [warn] HTTP client 192.168.1.192 disconnected
+2024-04-09 21:33:06 [warn] HTTP client 192.168.1.192 login succeeded
