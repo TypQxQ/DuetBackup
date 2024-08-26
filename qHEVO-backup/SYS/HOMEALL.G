@@ -1,8 +1,8 @@
 ; homeall.g
 ; called to home all axes
 
-M568 S130		 ; Start heating extruder to probing temperature
-M109 R130 		 ; Wait for extruder to reach probing before proceeding
+;M568 S130		 ; Start heating extruder to probing temperature
+;M109 R130 		 ; Wait for extruder to reach probing before proceeding
 
 M400                ; make sure everything has stopped before we make changes
 
@@ -20,7 +20,7 @@ G91                      ; relative positioning
 G1 Z5 F6000 H2           ; lift Z relative to current position
 
 M98 P"HOMEX_subset.G"    ; Call the actual homing of X
-G1 X100 F6000 		 ; Move 5mm so not WA gets upset when homing sensorless.
+;G1 X100 F6000 		 ; Move 5mm so not WA gets upset when homing sensorless.
 M98 P"HOMEY_subset.G"    ; Call the actual homing of Y
 
 M913 X100 Y100 U100 V100         ; Use full power.

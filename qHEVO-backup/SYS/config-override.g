@@ -2,7 +2,7 @@
 ; This is a system-generated file - do not edit
 ; Heater model parameters
 M307 H0 R0.315 C664.504:664.504 D6.73 S1.00 V24.4 B0 I0
-M307 H1 R4.240 C176.100:176.100 D6.73 S1.00 V24.2 B0 I0
+M307 H1 B0 R4.477 C158.3:135.7 D6.29 S1.00 V24.2
 ; Workplace coordinates
 G10 L2 P1 X0.00 Y0.00 Z0.00 U0.00 V0.00
 G10 L2 P2 X0.00 Y0.00 Z0.00 U0.00 V0.00

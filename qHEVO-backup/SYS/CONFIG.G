@@ -49,21 +49,22 @@ M581 P0 S1 R0 T0								; Invoke trigger 0 (emergency stop) when a rising edge i
 
 ; Z-Probe
 M558 P8 C"!zprobe.in" F360 T12000 R1.0 A5 H3	; Piezo
-G31 P100 X0 Y0 Z0								; Piezo - Set Z probe trigger value, offset and trigger height Default was -0.1
+G31 P100 X0 Y0 Z-0.1								; Piezo - Set Z probe trigger value, offset and trigger height Default was -0.1
 M557 X15:285 Y15:285 S20						; Define mesh grid
 
 ; Bed Heater
 M308 S0 P"bed_temp" Y"thermistor" T100000 A"Bed"	; Define bed temperature sensor
-M143 H0 S125										; Set the maximum bed temperature to 125C
 M950 H0 C"bedheat" Q1 T0							; create heater 0 - Bed Heater
 M140 H0												; map heated bed to heater 0
+M143 H0 S125										; Set the maximum bed temperature to 125C
 
 ; ------------------------ Tool ------------------------
 ; Heater
 M308 S1 P"e0temp" Y"thermistor" T100000 B4725 C7.06e-8	; define tool temperature sensor
 M950 H1 C"e0heat" T1											; create nozzle heater output on out0 and map it to temp sensor 1
 M143 H1 S300													; set temperature limit for heater 1 to 300C (e3d v6 all metal)
-M307 H1 B0 S1.00												; disable bang-bang mode for heater  and set PWM limit
+;M307 H1 B0 S1.00												; disable bang-bang mode for heater  and set PWM limit
+M307 H1 B0 R4.477 C158.3:135.7 D6.29 S1.00 V24.2				; setup heater pid
 
 ; Hotend Fan
 M950 F1 C"fan2"					; Define Hotend Fan on out6 (2pin)
@@ -100,6 +101,6 @@ M106 P4 S1 H-1 C"DriverCooler"	; Set Full speed and Thermostatic control is disa
 ;M106 P6 H103 T70 C"HotEnd lvl Y Fan"
 ;M106 P5 H103 T70 C"HotEnd lvl Y Fan"
 
-
+M556 S100 X0 Y-1,284 Z0,037     ; Skew correction
 
 M501							; Load PID tuning from override file

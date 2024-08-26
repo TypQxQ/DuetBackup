@@ -23058,3 +23058,718 @@ power up + 00:00:09 [warn] HTTP client 192.168.1.192 login succeeded
 2024-04-09 21:30:53 [warn] HTTP client 192.168.1.192 login succeeded
 2024-04-09 21:31:51 [warn] HTTP client 192.168.1.192 disconnected
 2024-04-09 21:33:06 [warn] HTTP client 192.168.1.192 login succeeded
+2024-04-09 21:43:19 [warn] HTTP client 192.168.1.192 login succeeded
+2024-04-09 21:44:48 [info] Event logging stopped
+power up + 00:00:00 [info] Event logging started at level warn
+power up + 00:00:00 [info] Running: Duet WiFi 1.02 or later: 3.4.0beta6 (2021-11-06 11:37:41)
+power up + 00:00:00 [warn] Error: Invalid number of visible axes
+power up + 00:00:00 [warn] Error: Heater 0 does not exist
+power up + 00:00:00 [warn] Warning: Heater 0 appears to be over-powered. If left on at full power, its temperature is predicted to reach 234C
+power up + 00:00:00 [warn] Warning: Heater 1 appears to be over-powered. If left on at full power, its temperature is predicted to reach 771C
+power up + 00:00:01 [warn] WiFi module started
+power up + 00:00:09 [warn] WiFi module is connected to access point Q, IP address 192.168.1.205
+power up + 00:00:09 [warn] HTTP client 192.168.1.192 login succeeded
+2024-04-09 21:45:01 [warn] Date and time set at power up + 00:00:09
+2024-04-09 21:45:01 [warn] HTTP client 192.168.1.192 login succeeded
+2024-04-09 21:45:18 [warn] HTTP client 192.168.1.66 login succeeded
+2024-04-09 21:46:22 [warn] Error: Invalid number of visible axes
+2024-04-09 21:46:49 [warn] Error: in file macro line 21: M593: parameter 'F' too low
+2024-04-09 21:48:21 [warn] Error: Invalid number of visible axes
+2024-04-09 21:49:08 [warn] Error: Invalid number of visible axes
+2024-04-09 21:49:40 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4 8
+2024-04-09 21:49:40 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4 8
+2024-04-09 21:49:42 [info] Event logging stopped
+power up + 00:00:00 [info] Event logging started at level warn
+power up + 00:00:00 [info] Running: Duet WiFi 1.02 or later: 3.4.0beta6 (2021-11-06 11:37:41)
+power up + 00:00:00 [warn] Error: Invalid number of visible axes
+power up + 00:00:00 [warn] Error: Heater 0 does not exist
+power up + 00:00:00 [warn] Warning: Heater 0 appears to be over-powered. If left on at full power, its temperature is predicted to reach 234C
+power up + 00:00:00 [warn] Warning: Heater 1 appears to be over-powered. If left on at full power, its temperature is predicted to reach 771C
+power up + 00:00:01 [warn] WiFi module started
+power up + 00:00:09 [warn] WiFi module is connected to access point Q, IP address 192.168.1.205
+power up + 00:00:09 [warn] HTTP client 192.168.1.192 login succeeded
+2024-04-09 21:49:53 [warn] Date and time set at power up + 00:00:09
+2024-04-09 21:50:13 [warn] HTTP client 192.168.1.66 login succeeded
+2024-04-09 21:50:13 [warn] HTTP client 192.168.1.192 login succeeded
+2024-04-09 21:50:14 [warn] HTTP client 192.168.1.66 login succeeded
+2024-04-09 21:50:49 [warn] Error: Invalid number of visible axes
+2024-04-09 21:56:13 [info] Event logging stopped
+power up + 00:00:00 [info] Event logging started at level warn
+power up + 00:00:00 [info] Running: Duet WiFi 1.02 or later: 3.4.0beta6 (2021-11-06 11:37:41)
+power up + 00:00:00 [warn] Error: Invalid number of visible axes
+power up + 00:00:00 [warn] Error: Heater 0 does not exist
+power up + 00:00:00 [warn] Warning: Heater 0 appears to be over-powered. If left on at full power, its temperature is predicted to reach 234C
+power up + 00:00:00 [warn] Warning: Heater 1 appears to be over-powered. If left on at full power, its temperature is predicted to reach 771C
+power up + 00:00:01 [warn] WiFi module started
+power up + 00:00:16 [warn] WiFi reported error: Wrong password while trying to connect to Q
+power up + 00:00:16 [warn] WiFi module is idle
+power up + 00:00:23 [warn] WiFi module is connected to access point Q, IP address 192.168.1.205
+power up + 00:00:23 [warn] HTTP client 192.168.1.192 login succeeded
+2024-04-09 21:56:19 [warn] Date and time set at power up + 00:00:23
+2024-04-09 21:56:19 [warn] HTTP client 192.168.1.66 login succeeded
+2024-04-09 21:56:20 [warn] HTTP client 192.168.1.66 login succeeded
+2024-04-09 21:56:20 [warn] HTTP client 192.168.1.192 login succeeded
+2024-04-09 22:10:58 [warn] Error: Invalid number of visible axes
+2024-04-09 22:12:36 [warn] Leadscrew adjustments made: -0.043 -0.051 0.187, points used 3, (mean, deviation) before (0.023, 0.099) after (-0.000, 0.000)
+2024-04-09 22:12:59 [warn] Leadscrew adjustments made: 0.004 0.080 0.029, points used 3, (mean, deviation) before (0.039, 0.023) after (0.000, 0.000)
+2024-04-09 22:13:23 [warn] Leadscrew adjustments made: -0.028 0.031 -0.012, points used 3, (mean, deviation) before (-0.002, 0.019) after (0.000, 0.000)
+2024-04-09 22:19:44 [info] Event logging stopped
+power up + 00:00:00 [info] Event logging started at level warn
+power up + 00:00:00 [info] Running: Duet WiFi 1.02 or later: 3.4.0beta6 (2021-11-06 11:37:41)
+power up + 00:00:00 [warn] Error: Invalid number of visible axes
+power up + 00:00:00 [warn] Error: Heater 0 does not exist
+power up + 00:00:00 [warn] Warning: Heater 0 appears to be over-powered. If left on at full power, its temperature is predicted to reach 234C
+power up + 00:00:00 [warn] Warning: Heater 1 appears to be over-powered. If left on at full power, its temperature is predicted to reach 771C
+power up + 00:00:01 [warn] WiFi module started
+power up + 00:00:09 [warn] WiFi module is connected to access point Q, IP address 192.168.1.205
+power up + 00:00:09 [warn] HTTP client 192.168.1.192 login succeeded
+2024-04-09 22:19:55 [warn] Date and time set at power up + 00:00:09
+2024-04-09 22:19:55 [warn] HTTP client 192.168.1.66 login succeeded
+2024-04-09 22:19:55 [warn] HTTP client 192.168.1.66 login succeeded
+2024-04-09 22:19:56 [warn] HTTP client 192.168.1.192 login succeeded
+2024-04-09 22:21:32 [warn] HTTP client 192.168.1.192 disconnected
+2024-04-09 22:21:34 [warn] HTTP client 192.168.1.192 login succeeded
+2024-04-09 22:40:55 [warn] HTTP client 192.168.1.192 login succeeded
+2024-04-09 22:40:59 [warn] HTTP client 192.168.1.192 disconnected
+power up + 00:00:00 [info] Event logging started at level warn
+power up + 00:00:00 [info] Running: Duet WiFi 1.02 or later: 3.4.0beta6 (2021-11-06 11:37:41)
+power up + 00:00:00 [warn] Error: Invalid number of visible axes
+power up + 00:00:00 [warn] Error: Heater 0 does not exist
+power up + 00:00:00 [warn] Warning: Heater 0 appears to be over-powered. If left on at full power, its temperature is predicted to reach 234C
+power up + 00:00:00 [warn] Warning: Heater 1 appears to be over-powered. If left on at full power, its temperature is predicted to reach 771C
+power up + 00:00:01 [warn] WiFi module started
+power up + 00:00:08 [warn] WiFi module is connected to access point Q, IP address 192.168.1.205
+power up + 00:00:09 [warn] HTTP client 192.168.1.192 login succeeded
+2024-04-09 22:50:47 [warn] Date and time set at power up + 00:00:09
+2024-04-09 22:50:47 [warn] HTTP client 192.168.1.66 login succeeded
+2024-04-09 22:50:47 [warn] HTTP client 192.168.1.66 login succeeded
+2024-04-09 22:50:48 [warn] HTTP client 192.168.1.192 login succeeded
+2024-04-09 22:51:21 [warn] Error: Invalid number of visible axes
+2024-04-09 23:00:27 [warn] HTTP client 192.168.1.192 login succeeded
+2024-04-09 23:00:31 [warn] HTTP client 192.168.1.192 disconnected
+2024-04-09 23:01:00 [warn] Started printing file 0:/gcodes/proj_New_Y_Endstop_Holder v4.gcode
+2024-04-09 23:01:00 [warn] Error: Invalid number of visible axes
+2024-04-09 23:01:40 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4 8
+2024-04-09 23:01:40 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4 8
+2024-04-09 23:01:47 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4 8
+2024-04-09 23:01:47 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4 8
+2024-04-09 23:01:56 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4 8
+2024-04-09 23:01:56 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4 8
+2024-04-09 23:02:03 [warn] Leadscrew adjustments made: 0.055 -0.028 -0.036, points used 3, (mean, deviation) before (-0.003, 0.032) after (-0.000, 0.000)
+2024-04-09 23:02:04 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4 8
+2024-04-09 23:02:04 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4 8
+2024-04-09 23:02:12 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4 8
+2024-04-09 23:02:12 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4 8
+2024-04-09 23:02:19 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4 8
+2024-04-09 23:02:19 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4 8
+2024-04-09 23:02:26 [warn] Leadscrew adjustments made: 0.044 -0.003 0.002, points used 3, (mean, deviation) before (0.014, 0.016) after (-0.000, 0.000)
+2024-04-09 23:02:27 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4 8
+2024-04-09 23:02:27 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4 8
+2024-04-09 23:03:03 [warn] 9 points probed, min error -0.094, max error -0.002, mean -0.033, deviation 0.032
+Height map saved to file 0:/sys/heightmap.csv
+2024-04-09 23:03:04 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4 8
+2024-04-09 23:03:04 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4 8
+2024-04-09 23:03:05 [warn] Cancelled printing file 0:/gcodes/proj_New_Y_Endstop_Holder v4.gcode, print time was 0h 2m
+2024-04-09 23:03:05 [info] Event logging stopped
+power up + 00:00:00 [info] Event logging started at level warn
+power up + 00:00:00 [info] Running: Duet WiFi 1.02 or later: 3.4.0beta6 (2021-11-06 11:37:41)
+power up + 00:00:00 [warn] Error: Invalid number of visible axes
+power up + 00:00:00 [warn] Error: Heater 0 does not exist
+power up + 00:00:00 [warn] Warning: Heater 0 appears to be over-powered. If left on at full power, its temperature is predicted to reach 234C
+power up + 00:00:00 [warn] Warning: Heater 1 appears to be over-powered. If left on at full power, its temperature is predicted to reach 771C
+power up + 00:00:01 [warn] WiFi module started
+power up + 00:00:09 [warn] WiFi module is connected to access point Q, IP address 192.168.1.205
+power up + 00:00:09 [warn] HTTP client 192.168.1.192 login succeeded
+2024-04-09 23:03:15 [warn] Date and time set at power up + 00:00:09
+2024-04-09 23:03:15 [warn] HTTP client 192.168.1.66 login succeeded
+2024-04-09 23:03:16 [warn] HTTP client 192.168.1.66 login succeeded
+2024-04-09 23:03:16 [warn] HTTP client 192.168.1.192 login succeeded
+2024-04-09 23:08:30 [warn] HTTP client 192.168.1.192 login succeeded
+2024-04-09 23:08:33 [warn] HTTP client 192.168.1.192 disconnected
+2024-04-09 23:09:45 [warn] Started printing file 0:/gcodes/proj_New_Y_Endstop_Holder v4.gcode
+2024-04-09 23:09:45 [warn] Error: Invalid number of visible axes
+power up + 00:00:00 [info] Event logging started at level warn
+power up + 00:00:00 [info] Running: Duet WiFi 1.02 or later: 3.4.0beta6 (2021-11-06 11:37:41)
+power up + 00:00:00 [warn] Error: Invalid number of visible axes
+power up + 00:00:00 [warn] Error: Heater 0 does not exist
+power up + 00:00:00 [warn] Warning: Heater 0 appears to be over-powered. If left on at full power, its temperature is predicted to reach 234C
+power up + 00:00:00 [warn] Warning: Heater 1 appears to be over-powered. If left on at full power, its temperature is predicted to reach 771C
+power up + 00:00:01 [warn] WiFi module started
+power up + 00:00:09 [warn] WiFi module is connected to access point Q, IP address 192.168.1.205
+power up + 00:00:09 [warn] HTTP client 192.168.1.192 login succeeded
+2024-04-09 23:10:11 [warn] Date and time set at power up + 00:00:09
+2024-04-09 23:10:11 [warn] HTTP client 192.168.1.192 login succeeded
+2024-04-09 23:10:15 [warn] HTTP client 192.168.1.66 login succeeded
+2024-04-09 23:10:21 [warn] Started printing file 0:/gcodes/proj_New_Y_Endstop_Holder v4.gcode
+2024-04-09 23:10:47 [warn] Error: Invalid number of visible axes
+2024-04-09 23:11:37 [warn] Leadscrew adjustments made: 0.029 -0.049 0.010, points used 3, (mean, deviation) before (-0.005, 0.025) after (0.000, 0.000)
+2024-04-09 23:11:40 [warn] HTTP client 192.168.1.66 login succeeded
+2024-04-09 23:11:40 [warn] HTTP client 192.168.1.192 login succeeded
+2024-04-09 23:11:41 [warn] HTTP client 192.168.1.192 login succeeded
+2024-04-09 23:11:43 [warn] HTTP client 192.168.1.192 login succeeded
+2024-04-09 23:12:14 [warn] 9 points probed, min error -0.070, max error 0.014, mean -0.017, deviation 0.031
+Height map saved to file 0:/sys/heightmap.csv
+2024-04-09 23:49:28 [warn] Finished printing file 0:/gcodes/proj_New_Y_Endstop_Holder v4.gcode, print time was 0h 39m
+2024-04-10 12:56:03 [warn] HTTP client 192.168.1.66 login succeeded
+2024-04-10 12:56:03 [warn] HTTP client 192.168.1.66 login succeeded
+2024-04-10 21:28:30 [warn] HTTP client 192.168.1.42 login succeeded
+2024-04-10 21:29:35 [warn] Error: Invalid number of visible axes
+2024-04-10 21:31:43 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4 8
+2024-04-10 21:31:43 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4 8
+2024-04-10 21:50:39 [warn] Error: Invalid number of visible axes
+2024-04-10 21:53:30 [warn] HTTP client 192.168.1.42 login succeeded
+power up + 00:00:00 [info] Event logging started at level warn
+power up + 00:00:00 [info] Running: Duet WiFi 1.02 or later: 3.4.0beta6 (2021-11-06 11:37:41)
+power up + 00:00:00 [warn] Error: Invalid number of visible axes
+power up + 00:00:00 [warn] Error: Heater 0 does not exist
+power up + 00:00:00 [warn] Warning: Heater 0 appears to be over-powered. If left on at full power, its temperature is predicted to reach 234C
+power up + 00:00:00 [warn] Warning: Heater 1 appears to be over-powered. If left on at full power, its temperature is predicted to reach 771C
+power up + 00:00:01 [warn] WiFi module started
+power up + 00:00:09 [warn] WiFi module is connected to access point Q, IP address 192.168.1.205
+power up + 00:00:10 [warn] HTTP client 192.168.1.42 login succeeded
+2024-04-10 21:55:53 [warn] Date and time set at power up + 00:00:10
+2024-04-10 21:55:53 [warn] HTTP client 192.168.1.42 login succeeded
+power up + 00:00:00 [info] Event logging started at level warn
+power up + 00:00:00 [info] Running: Duet WiFi 1.02 or later: 3.4.0beta6 (2021-11-06 11:37:41)
+power up + 00:00:01 [warn] Error: Invalid number of visible axes
+power up + 00:00:01 [warn] Error: Heater 0 does not exist
+power up + 00:00:01 [warn] Warning: Heater 0 appears to be over-powered. If left on at full power, its temperature is predicted to reach 234C
+power up + 00:00:01 [warn] Warning: Heater 1 appears to be over-powered. If left on at full power, its temperature is predicted to reach 771C
+power up + 00:00:02 [warn] WiFi module started
+power up + 00:00:10 [warn] WiFi module is connected to access point Q, IP address 192.168.1.205
+power up + 00:00:00 [info] Event logging started at level warn
+power up + 00:00:00 [info] Running: Duet WiFi 1.02 or later: 3.4.0beta6 (2021-11-06 11:37:41)
+power up + 00:00:00 [warn] Error: Invalid number of visible axes
+power up + 00:00:01 [warn] Error: Heater 0 does not exist
+power up + 00:00:01 [warn] Warning: Heater 0 appears to be over-powered. If left on at full power, its temperature is predicted to reach 234C
+power up + 00:00:01 [warn] Warning: Heater 1 appears to be over-powered. If left on at full power, its temperature is predicted to reach 771C
+power up + 00:00:01 [warn] WiFi module started
+power up + 00:00:08 [warn] WiFi module is connected to access point Q, IP address 192.168.1.205
+power up + 00:00:10 [warn] HTTP client 192.168.1.66 login succeeded
+2024-04-11 21:18:17 [warn] Date and time set at power up + 00:00:10
+2024-04-11 21:18:18 [warn] HTTP client 192.168.1.66 login succeeded
+2024-04-11 21:19:32 [warn] Error: Invalid number of visible axes
+2024-04-11 21:33:04 [warn] HTTP client 192.168.1.192 login succeeded
+2024-04-11 21:40:27 [info] Event logging stopped
+power up + 00:00:00 [info] Event logging started at level warn
+power up + 00:00:00 [info] Running: Duet WiFi 1.02 or later: 3.4.0beta6 (2021-11-06 11:37:41)
+power up + 00:00:00 [warn] Error: Invalid number of visible axes
+power up + 00:00:00 [warn] Error: Heater 0 does not exist
+power up + 00:00:00 [warn] Warning: Heater 0 appears to be over-powered. If left on at full power, its temperature is predicted to reach 234C
+power up + 00:00:00 [warn] Warning: Heater 1 appears to be over-powered. If left on at full power, its temperature is predicted to reach 771C
+power up + 00:00:01 [warn] WiFi module started
+power up + 00:00:09 [warn] WiFi module is connected to access point Q, IP address 192.168.1.205
+power up + 00:00:09 [warn] HTTP client 192.168.1.192 login succeeded
+2024-04-11 21:40:36 [warn] Date and time set at power up + 00:00:09
+2024-04-11 21:41:49 [warn] HTTP client 192.168.1.192 login succeeded
+2024-04-11 21:41:53 [warn] HTTP client 192.168.1.66 login succeeded
+2024-04-11 21:42:40 [warn] Error: Invalid number of visible axes
+power up + 00:00:00 [info] Event logging started at level warn
+power up + 00:00:00 [info] Running: Duet WiFi 1.02 or later: 3.4.0beta6 (2021-11-06 11:37:41)
+power up + 00:00:00 [warn] Error: Invalid number of visible axes
+power up + 00:00:00 [warn] Error: Heater 0 does not exist
+power up + 00:00:00 [warn] Warning: Heater 0 appears to be over-powered. If left on at full power, its temperature is predicted to reach 234C
+power up + 00:00:01 [warn] Warning: Heater 1 appears to be over-powered. If left on at full power, its temperature is predicted to reach 771C
+power up + 00:00:01 [warn] WiFi module started
+power up + 00:00:08 [warn] WiFi module is connected to access point Q, IP address 192.168.1.205
+power up + 00:00:18 [warn] HTTP client 192.168.1.42 login succeeded
+2024-04-12 06:17:07 [warn] Date and time set at power up + 00:00:18
+2024-04-12 06:18:13 [warn] Error: Invalid number of visible axes
+power up + 00:00:00 [info] Event logging started at level warn
+power up + 00:00:00 [info] Running: Duet WiFi 1.02 or later: 3.4.0beta6 (2021-11-06 11:37:41)
+power up + 00:00:00 [warn] Error: Invalid number of visible axes
+power up + 00:00:01 [warn] Error: Heater 0 does not exist
+power up + 00:00:01 [warn] Warning: Heater 0 appears to be over-powered. If left on at full power, its temperature is predicted to reach 234C
+power up + 00:00:01 [warn] Warning: Heater 1 appears to be over-powered. If left on at full power, its temperature is predicted to reach 771C
+power up + 00:00:02 [warn] WiFi module started
+power up + 00:00:07 [warn] WiFi module is connected to access point Q, IP address 192.168.1.205
+power up + 00:01:31 [warn] HTTP client 192.168.1.104 login succeeded
+2024-08-22 19:49:55 [warn] Date and time set at power up + 00:01:31
+2024-08-22 19:51:15 [warn] Error: Bad command: enter M564 H0
+2024-08-22 19:58:55 [info] Event logging stopped
+power up + 00:00:00 [info] Event logging started at level warn
+power up + 00:00:00 [info] Running: Duet WiFi 1.02 or later: 3.4.0beta6 (2021-11-06 11:37:41)
+power up + 00:00:00 [warn] Error: Invalid number of visible axes
+power up + 00:00:00 [warn] Error: Heater 0 does not exist
+power up + 00:00:00 [warn] Warning: Heater 0 appears to be over-powered. If left on at full power, its temperature is predicted to reach 234C
+power up + 00:00:00 [warn] Warning: Heater 1 appears to be over-powered. If left on at full power, its temperature is predicted to reach 771C
+power up + 00:00:01 [warn] WiFi module started
+power up + 00:00:09 [warn] WiFi module is connected to access point Q, IP address 192.168.1.205
+power up + 00:00:09 [warn] HTTP client 192.168.1.104 login succeeded
+2024-08-22 19:59:05 [warn] Date and time set at power up + 00:00:09
+2024-08-22 19:59:06 [warn] HTTP client 192.168.1.104 login succeeded
+2024-08-22 20:22:09 [warn] Auto tuning heater 1 completed after 3 idle and 10 tuning cycles in 448 seconds. This heater needs the following M307 command:
+ M307 H1 B0 R4.477 C158.3:135.7 D6.29 S1.00 V24.2
+2024-08-22 20:32:02 [info] Event logging stopped
+power up + 00:00:00 [info] Event logging started at level warn
+power up + 00:00:00 [info] Running: Duet WiFi 1.02 or later: 3.4.0beta6 (2021-11-06 11:37:41)
+power up + 00:00:00 [warn] Error: Invalid number of visible axes
+power up + 00:00:00 [warn] Error: Heater 0 does not exist
+power up + 00:00:00 [warn] Warning: Heater 1 appears to be over-powered. If left on at full power, its temperature is predicted to reach 733C
+power up + 00:00:00 [warn] Warning: Heater 0 appears to be over-powered. If left on at full power, its temperature is predicted to reach 234C
+power up + 00:00:00 [warn] Warning: Heater 1 appears to be over-powered. If left on at full power, its temperature is predicted to reach 733C
+power up + 00:00:01 [warn] WiFi module started
+power up + 00:00:09 [warn] WiFi module is connected to access point Q, IP address 192.168.1.205
+power up + 00:46:46 [warn] HTTP client 192.168.1.192 login succeeded
+2024-08-22 21:18:52 [warn] Date and time set at power up + 00:46:46
+2024-08-22 21:28:11 [warn] HTTP client 192.168.1.192 login succeeded
+2024-08-22 21:40:47 [warn] HTTP client 192.168.1.192 login succeeded
+2024-08-22 21:40:48 [warn] HTTP client 192.168.1.192 disconnected
+2024-08-22 21:42:23 [warn] HTTP client 192.168.1.104 login succeeded
+2024-08-22 21:42:25 [warn] HTTP client 192.168.1.104 login succeeded
+2024-08-22 21:42:29 [warn] Error: G0/G1: insufficient axes homed
+2024-08-22 21:43:07 [warn] Error: Invalid number of visible axes
+2024-08-22 21:44:31 [warn] Leadscrew adjustments made: 0.043 0.059 -0.015, points used 3, (mean, deviation) before (0.031, 0.029) after (-0.000, 0.000)
+2024-08-22 21:45:32 [warn] HTTP client 192.168.1.192 login succeeded
+2024-08-22 21:46:59 [warn] Started printing file 0:/gcodes/First_Layer_Square_0.2.gcode
+2024-08-22 21:46:59 [warn] Error: Invalid number of visible axes
+2024-08-22 21:47:18 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4 8
+2024-08-22 21:47:18 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4 8
+2024-08-22 21:47:25 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4 8
+2024-08-22 21:47:25 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4 8
+2024-08-22 21:47:32 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4 8
+2024-08-22 21:47:32 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4 8
+2024-08-22 21:47:39 [warn] Leadscrew adjustments made: -0.022 -0.040 0.002, points used 3, (mean, deviation) before (-0.021, 0.015) after (-0.000, 0.000)
+2024-08-22 21:47:40 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4 8
+2024-08-22 21:47:40 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4 6 8
+2024-08-22 21:49:21 [warn] 25 points probed, min error -0.091, max error 0.050, mean 0.001, deviation 0.039
+Height map saved to file 0:/sys/heightmap.csv
+2024-08-22 21:49:23 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4
+2024-08-22 21:49:23 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4
+2024-08-22 21:49:47 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4
+2024-08-22 21:49:47 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4
+2024-08-22 21:49:52 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4 8
+2024-08-22 21:49:52 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4 8
+2024-08-22 21:49:57 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4 8
+2024-08-22 21:49:57 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4 8
+2024-08-22 21:50:02 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4 8
+2024-08-22 21:50:02 [warn] Warning: motor phase B may be disconnected reported by driver(s) 0 4 8
+2024-08-22 21:50:07 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4 8
+2024-08-22 21:50:07 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4 8
+2024-08-22 21:50:11 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4 8
+2024-08-22 21:50:11 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4 8
+2024-08-22 21:50:16 [warn] Warning: motor phase A may be disconnected reported by driver(s) 0 4 8
+2024-08-22 21:50:16 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4 8
+2024-08-22 21:50:21 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4 8
+2024-08-22 21:50:21 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4 8
+2024-08-22 21:50:26 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4 8
+2024-08-22 21:50:26 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4 8
+2024-08-22 21:50:38 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4
+2024-08-22 21:50:38 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4
+2024-08-22 21:50:43 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4
+2024-08-22 21:50:43 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4
+2024-08-22 21:50:48 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4
+2024-08-22 21:50:48 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4
+2024-08-22 21:50:52 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4
+2024-08-22 21:50:52 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4
+2024-08-22 21:50:57 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4
+2024-08-22 21:50:57 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4
+2024-08-22 21:51:02 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4
+2024-08-22 21:51:02 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4
+2024-08-22 21:51:06 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4
+2024-08-22 21:51:06 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4
+2024-08-22 21:51:11 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4
+2024-08-22 21:51:11 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4
+2024-08-22 21:51:16 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4
+2024-08-22 21:51:16 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4
+2024-08-22 21:51:21 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4
+2024-08-22 21:51:21 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4
+2024-08-22 21:51:26 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4
+2024-08-22 21:51:26 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4
+2024-08-22 21:51:30 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4
+2024-08-22 21:51:30 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4
+2024-08-22 21:51:35 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4
+2024-08-22 21:51:35 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4
+2024-08-22 21:51:39 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4
+2024-08-22 21:51:39 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4
+2024-08-22 21:51:44 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4
+2024-08-22 21:51:44 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4
+2024-08-22 21:51:48 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4
+2024-08-22 21:51:48 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4
+2024-08-22 21:51:53 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4
+2024-08-22 21:51:53 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4
+2024-08-22 21:51:58 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4
+2024-08-22 21:51:58 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4
+2024-08-22 21:52:03 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4
+2024-08-22 21:52:03 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4
+2024-08-22 21:52:07 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4
+2024-08-22 21:52:07 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4
+2024-08-22 21:52:12 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4
+2024-08-22 21:52:12 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4
+2024-08-22 21:52:16 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4
+2024-08-22 21:52:16 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4
+2024-08-22 21:52:21 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4
+2024-08-22 21:52:21 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4
+2024-08-22 21:52:26 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4
+2024-08-22 21:52:26 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4
+2024-08-22 21:52:27 [warn] Resume state saved
+2024-08-22 21:52:33 [warn] Printing paused at X109.3 Y123.5 Z0.3
+2024-08-22 21:52:33 [warn] Cancelled printing file 0:/gcodes/First_Layer_Square_0.2.gcode, print time was 0h 5m
+2024-08-22 21:52:35 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4 8
+2024-08-22 21:52:35 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4 8
+2024-08-22 21:52:39 [warn] Warning: motor phase A may be disconnected reported by driver(s) 4 8
+2024-08-22 21:52:39 [warn] Warning: motor phase B may be disconnected reported by driver(s) 4 8
+2024-08-22 21:57:56 [warn] HTTP client 192.168.1.104 disconnected
+2024-08-22 21:58:44 [warn] HTTP client 192.168.1.104 login succeeded
+2024-08-22 21:58:54 [warn] HTTP client 192.168.1.104 disconnected
+power up + 00:00:00 [info] Event logging started at level warn
+power up + 00:00:00 [info] Running: Duet WiFi 1.02 or later: 3.4.0beta6 (2021-11-06 11:37:41)
+power up + 00:00:00 [warn] Error: Invalid number of visible axes
+power up + 00:00:00 [warn] Error: Heater 0 does not exist
+power up + 00:00:00 [warn] Warning: Heater 1 appears to be over-powered. If left on at full power, its temperature is predicted to reach 733C
+power up + 00:00:01 [warn] Warning: Heater 0 appears to be over-powered. If left on at full power, its temperature is predicted to reach 234C
+power up + 00:00:01 [warn] Warning: Heater 1 appears to be over-powered. If left on at full power, its temperature is predicted to reach 733C
+power up + 00:00:01 [warn] WiFi module started
+power up + 00:00:06 [warn] WiFi module is connected to access point Q, IP address 192.168.1.205
+power up + 00:00:07 [warn] HTTP client 192.168.1.192 login succeeded
+2024-08-23 07:12:32 [warn] Date and time set at power up + 00:00:07
+2024-08-23 07:12:53 [warn] HTTP client 192.168.1.192 login succeeded
+power up + 00:00:00 [info] Event logging started at level warn
+power up + 00:00:00 [info] Running: Duet WiFi 1.02 or later: 3.4.0beta6 (2021-11-06 11:37:41)
+power up + 00:00:00 [warn] Error: Invalid number of visible axes
+power up + 00:00:00 [warn] Error: Heater 0 does not exist
+power up + 00:00:00 [warn] Warning: Heater 1 appears to be over-powered. If left on at full power, its temperature is predicted to reach 733C
+power up + 00:00:00 [warn] Warning: Heater 0 appears to be over-powered. If left on at full power, its temperature is predicted to reach 234C
+power up + 00:00:00 [warn] Warning: Heater 1 appears to be over-powered. If left on at full power, its temperature is predicted to reach 733C
+power up + 00:00:01 [warn] WiFi module started
+power up + 00:00:06 [warn] WiFi module is connected to access point Q, IP address 192.168.1.205
+power up + 00:00:39 [warn] HTTP client 192.168.1.104 login succeeded
+2024-08-24 08:55:49 [warn] Date and time set at power up + 00:00:39
+2024-08-24 08:57:59 [warn] Error: Invalid number of visible axes
+2024-08-24 09:01:07 [warn] Error: Invalid number of visible axes
+2024-08-24 09:01:28 [warn] Error: Invalid number of visible axes
+2024-08-24 09:02:56 [warn] Error: M584: Invalid number of visible axes
+2024-08-24 09:06:11 [info] Event logging stopped
+power up + 00:00:00 [info] Event logging started at level warn
+power up + 00:00:00 [info] Running: Duet WiFi 1.02 or later: 3.4.0beta6 (2021-11-06 11:37:41)
+power up + 00:00:00 [warn] Error: Heater 0 does not exist
+power up + 00:00:00 [warn] Warning: Heater 1 appears to be over-powered. If left on at full power, its temperature is predicted to reach 733C
+power up + 00:00:00 [warn] Warning: Heater 0 appears to be over-powered. If left on at full power, its temperature is predicted to reach 234C
+power up + 00:00:00 [warn] Warning: Heater 1 appears to be over-powered. If left on at full power, its temperature is predicted to reach 733C
+power up + 00:00:01 [warn] WiFi module started
+power up + 00:00:09 [warn] WiFi module is connected to access point Q, IP address 192.168.1.205
+power up + 00:00:09 [warn] HTTP client 192.168.1.104 login succeeded
+2024-08-24 09:06:21 [warn] Date and time set at power up + 00:00:09
+2024-08-24 09:06:21 [warn] HTTP client 192.168.1.104 login succeeded
+2024-08-24 09:09:58 [warn] Started printing file 0:/gcodes/First_Layer_Square_0.2.gcode
+2024-08-24 09:11:00 [warn] Leadscrew adjustments made: -0.030 -0.075 -0.044, points used 3, (mean, deviation) before (-0.050, 0.014) after (0.000, 0.000)
+2024-08-24 09:12:42 [warn] 25 points probed, min error -0.072, max error 0.071, mean 0.018, deviation 0.040
+Height map saved to file 0:/sys/heightmap.csv
+2024-08-24 09:19:22 [warn] Finished printing file 0:/gcodes/First_Layer_Square_0.2.gcode, print time was 0h 9m
+2024-08-24 09:21:11 [warn] Started printing file 0:/gcodes/First_Layer_Square_0.2.gcode
+2024-08-24 09:22:40 [warn] Leadscrew adjustments made: -0.024 -0.028 -0.024, points used 3, (mean, deviation) before (-0.025, 0.001) after (-0.000, 0.000)
+2024-08-24 09:24:22 [warn] 25 points probed, min error -0.080, max error 0.071, mean 0.014, deviation 0.041
+Height map saved to file 0:/sys/heightmap.csv
+2024-08-24 09:31:02 [warn] Finished printing file 0:/gcodes/First_Layer_Square_0.2.gcode, print time was 0h 9m
+2024-08-24 09:59:21 [warn] Started printing file 0:/gcodes/First_Layer_Square_0.2.gcode
+2024-08-24 10:00:13 [warn] Leadscrew adjustments made: -0.021 -0.029 -0.050, points used 3, (mean, deviation) before (-0.033, 0.011) after (0.000, 0.000)
+2024-08-24 10:01:55 [warn] 25 points probed, min error -0.093, max error 0.043, mean -0.006, deviation 0.039
+Height map saved to file 0:/sys/heightmap.csv
+2024-08-24 10:08:36 [warn] Finished printing file 0:/gcodes/First_Layer_Square_0.2.gcode, print time was 0h 9m
+2024-08-24 15:31:44 [warn] HTTP client 192.168.1.192 login succeeded
+2024-08-24 15:31:52 [info] Event logging stopped
+power up + 00:00:00 [info] Event logging started at level warn
+power up + 00:00:00 [info] Running: Duet WiFi 1.02 or later: 3.4.0beta6 (2021-11-06 11:37:41)
+power up + 00:00:00 [warn] Error: Heater 0 does not exist
+power up + 00:00:00 [warn] Warning: Heater 1 appears to be over-powered. If left on at full power, its temperature is predicted to reach 733C
+power up + 00:00:00 [warn] Warning: Heater 0 appears to be over-powered. If left on at full power, its temperature is predicted to reach 234C
+power up + 00:00:00 [warn] Warning: Heater 1 appears to be over-powered. If left on at full power, its temperature is predicted to reach 733C
+power up + 00:00:01 [warn] WiFi module started
+power up + 00:00:09 [warn] WiFi module is connected to access point Q, IP address 192.168.1.205
+power up + 00:00:09 [warn] HTTP client 192.168.1.192 login succeeded
+2024-08-24 15:32:05 [warn] Date and time set at power up + 00:00:09
+2024-08-24 15:32:06 [warn] HTTP client 192.168.1.192 login succeeded
+2024-08-24 15:33:19 [warn] HTTP client 192.168.1.192 login succeeded
+2024-08-24 15:33:20 [warn] HTTP client 192.168.1.192 disconnected
+2024-08-24 15:44:29 [warn] HTTP client 192.168.1.104 login succeeded
+2024-08-24 15:44:35 [warn] Started printing file 0:/gcodes/First_Layer_Square_0.2.gcode
+2024-08-24 15:45:31 [warn] Cancelled printing file 0:/gcodes/First_Layer_Square_0.2.gcode, print time was 0h 0m
+2024-08-24 15:45:31 [info] Event logging stopped
+power up + 00:00:00 [info] Event logging started at level warn
+power up + 00:00:00 [info] Running: Duet WiFi 1.02 or later: 3.4.0beta6 (2021-11-06 11:37:41)
+power up + 00:00:00 [warn] Error: Heater 0 does not exist
+power up + 00:00:00 [warn] Warning: Heater 1 appears to be over-powered. If left on at full power, its temperature is predicted to reach 733C
+power up + 00:00:00 [warn] Warning: Heater 0 appears to be over-powered. If left on at full power, its temperature is predicted to reach 234C
+power up + 00:00:00 [warn] Warning: Heater 1 appears to be over-powered. If left on at full power, its temperature is predicted to reach 733C
+power up + 00:00:01 [warn] WiFi module started
+power up + 00:00:09 [warn] WiFi module is connected to access point Q, IP address 192.168.1.205
+power up + 00:00:09 [warn] HTTP client 192.168.1.192 login succeeded
+2024-08-24 15:45:42 [warn] Date and time set at power up + 00:00:09
+2024-08-24 15:45:42 [warn] HTTP client 192.168.1.104 login succeeded
+2024-08-24 15:45:43 [warn] HTTP client 192.168.1.192 login succeeded
+2024-08-24 15:45:48 [warn] HTTP client 192.168.1.104 login succeeded
+2024-08-24 15:46:53 [warn] Started printing file 0:/gcodes/First_Layer_Square_0.2.gcode
+2024-08-24 15:48:03 [warn] Leadscrew adjustments made: -0.023 -0.080 -0.054, points used 3, (mean, deviation) before (-0.053, 0.017) after (-0.000, 0.000)
+2024-08-24 15:53:39 [warn] 81 points probed, min error -0.388, max error 0.142, mean -0.018, deviation 0.099
+Height map saved to file 0:/sys/heightmap.csv
+2024-08-24 16:18:56 [warn] Finished printing file 0:/gcodes/First_Layer_Square_0.2.gcode, print time was 0h 32m
+2024-08-24 16:26:46 [warn] HTTP client 192.168.1.192 login succeeded
+2024-08-24 16:26:47 [warn] HTTP client 192.168.1.192 disconnected
+2024-08-24 16:26:47 [warn] Started printing file 0:/gcodes/S.gcode
+2024-08-24 16:28:04 [warn] Leadscrew adjustments made: -0.045 -0.077 -0.033, points used 3, (mean, deviation) before (-0.053, 0.015) after (-0.000, 0.000)
+2024-08-24 16:29:46 [warn] 25 points probed, min error -0.102, max error 0.054, mean -0.005, deviation 0.043
+Height map saved to file 0:/sys/heightmap.csv
+2024-08-24 16:48:32 [warn] Finished printing file 0:/gcodes/S.gcode, print time was 0h 21m
+2024-08-24 17:01:52 [warn] HTTP client 192.168.1.192 login succeeded
+2024-08-24 17:01:53 [warn] HTTP client 192.168.1.192 disconnected
+2024-08-24 17:01:53 [warn] Started printing file 0:/gcodes/Shape-Cylinder.gcode
+2024-08-24 17:03:11 [warn] Leadscrew adjustments made: -0.059 -0.080 -0.079, points used 3, (mean, deviation) before (-0.073, 0.007) after (-0.000, 0.000)
+2024-08-24 17:04:53 [warn] 25 points probed, min error -0.115, max error 0.040, mean -0.010, deviation 0.042
+Height map saved to file 0:/sys/heightmap.csv
+2024-08-24 17:47:33 [warn] Finished printing file 0:/gcodes/Shape-Cylinder.gcode, print time was 0h 45m
+2024-08-24 20:05:28 [warn] HTTP client 192.168.1.192 login succeeded
+2024-08-24 20:05:32 [warn] HTTP client 192.168.1.192 disconnected
+2024-08-24 20:05:32 [warn] Started printing file 0:/gcodes/Round_Lid v1.gcode
+2024-08-24 20:06:51 [warn] Leadscrew adjustments made: -0.065 -0.103 -0.069, points used 3, (mean, deviation) before (-0.080, 0.013) after (-0.000, 0.000)
+2024-08-24 20:08:33 [warn] 25 points probed, min error -0.103, max error 0.065, mean 0.003, deviation 0.043
+Height map saved to file 0:/sys/heightmap.csv
+2024-08-24 21:00:15 [warn] Finished printing file 0:/gcodes/Round_Lid v1.gcode, print time was 0h 54m
+2024-08-24 21:56:59 [warn] HTTP client 192.168.1.192 login succeeded
+2024-08-24 21:57:04 [warn] HTTP client 192.168.1.192 disconnected
+2024-08-24 21:57:04 [warn] Started printing file 0:/gcodes/Round_Lid v2.gcode
+2024-08-24 21:58:24 [warn] Leadscrew adjustments made: -0.072 -0.059 -0.066, points used 3, (mean, deviation) before (-0.066, 0.004) after (-0.000, 0.000)
+2024-08-24 22:00:06 [warn] 25 points probed, min error -0.117, max error 0.051, mean -0.011, deviation 0.045
+Height map saved to file 0:/sys/heightmap.csv
+2024-08-24 22:48:52 [warn] Finished printing file 0:/gcodes/Round_Lid v2.gcode, print time was 0h 51m
+2024-08-25 00:42:38 [warn] HTTP client 192.168.1.192 login succeeded
+2024-08-25 00:42:43 [warn] HTTP client 192.168.1.192 disconnected
+2024-08-25 00:42:43 [warn] Started printing file 0:/gcodes/Round_Lid v2.gcode
+2024-08-25 00:44:38 [warn] Leadscrew adjustments made: -0.221 -0.196 -0.210, points used 3, (mean, deviation) before (-0.209, 0.008) after (-0.000, 0.000)
+2024-08-25 00:46:21 [warn] 25 points probed, min error -0.117, max error 0.031, mean -0.023, deviation 0.040
+Height map saved to file 0:/sys/heightmap.csv
+2024-08-25 01:33:59 [warn] Finished printing file 0:/gcodes/Round_Lid v2.gcode, print time was 0h 51m
+2024-08-25 08:20:50 [warn] HTTP client 192.168.1.192 login succeeded
+2024-08-25 08:20:55 [warn] HTTP client 192.168.1.192 disconnected
+2024-08-25 08:20:55 [warn] Started printing file 0:/gcodes/Round_Lid v4.gcode
+2024-08-25 08:22:10 [warn] Leadscrew adjustments made: -0.039 -0.087 -0.087, points used 3, (mean, deviation) before (-0.071, 0.017) after (-0.000, 0.000)
+2024-08-25 08:23:52 [warn] 25 points probed, min error -0.116, max error 0.052, mean -0.018, deviation 0.042
+Height map saved to file 0:/sys/heightmap.csv
+2024-08-25 09:12:13 [warn] Finished printing file 0:/gcodes/Round_Lid v4.gcode, print time was 0h 51m
+2024-08-25 11:01:34 [warn] HTTP client 192.168.1.192 login succeeded
+2024-08-25 11:01:46 [warn] HTTP client 192.168.1.192 disconnected
+2024-08-25 11:01:46 [warn] Started printing file 0:/gcodes/PLA_TempTower190-220.gcode
+2024-08-25 11:03:06 [warn] Leadscrew adjustments made: -0.102 -0.090 -0.055, points used 3, (mean, deviation) before (-0.083, 0.018) after (0.000, 0.000)
+2024-08-25 11:03:43 [warn] 9 points probed, min error -0.063, max error 0.040, mean 0.003, deviation 0.034
+Height map saved to file 0:/sys/heightmap.csv
+2024-08-25 13:46:03 [warn] Finished printing file 0:/gcodes/PLA_TempTower190-220.gcode, print time was 2h 44m
+2024-08-25 14:37:36 [warn] HTTP client 192.168.1.192 login succeeded
+2024-08-25 14:37:37 [warn] HTTP client 192.168.1.192 disconnected
+2024-08-25 14:37:37 [warn] Started printing file 0:/gcodes/four_square_cons.gcode
+2024-08-25 14:39:12 [warn] Leadscrew adjustments made: -0.053 -0.062 -0.060, points used 3, (mean, deviation) before (-0.059, 0.003) after (-0.000, 0.000)
+2024-08-25 14:39:49 [warn] 9 points probed, min error -0.032, max error 0.045, mean 0.013, deviation 0.025
+Height map saved to file 0:/sys/heightmap.csv
+2024-08-25 14:49:27 [warn] Finished printing file 0:/gcodes/four_square_cons.gcode, print time was 0h 11m
+2024-08-25 14:49:57 [warn] HTTP client 192.168.1.192 login succeeded
+2024-08-25 14:49:58 [warn] HTTP client 192.168.1.192 disconnected
+2024-08-25 14:49:58 [warn] Started printing file 0:/gcodes/four_square_cons.gcode
+2024-08-25 14:51:29 [warn] Leadscrew adjustments made: -0.025 -0.037 -0.027, points used 3, (mean, deviation) before (-0.030, 0.004) after (0.000, 0.000)
+2024-08-25 14:52:06 [warn] 9 points probed, min error -0.033, max error 0.052, mean 0.016, deviation 0.026
+Height map saved to file 0:/sys/heightmap.csv
+2024-08-25 15:01:44 [warn] Finished printing file 0:/gcodes/four_square_cons.gcode, print time was 0h 11m
+2024-08-25 16:15:18 [warn] HTTP client 192.168.1.192 login succeeded
+2024-08-25 16:15:19 [warn] HTTP client 192.168.1.192 disconnected
+2024-08-25 16:15:19 [warn] Started printing file 0:/gcodes/four_square_cons.gcode
+2024-08-25 16:18:56 [warn] Leadscrew adjustments made: 0.021 0.063 0.001, points used 3, (mean, deviation) before (0.030, 0.022) after (0.000, 0.000)
+2024-08-25 16:19:33 [warn] 9 points probed, min error -0.069, max error 0.006, mean -0.026, deviation 0.024
+Height map saved to file 0:/sys/heightmap.csv
+2024-08-25 16:29:12 [warn] Finished printing file 0:/gcodes/four_square_cons.gcode, print time was 0h 13m
+2024-08-25 16:35:28 [warn] HTTP client 192.168.1.192 login succeeded
+2024-08-25 16:35:29 [warn] HTTP client 192.168.1.192 disconnected
+2024-08-25 16:35:29 [warn] Started printing file 0:/gcodes/four_square_cons.gcode
+2024-08-25 16:37:30 [warn] Leadscrew adjustments made: -0.032 -0.048 -0.014, points used 3, (mean, deviation) before (-0.032, 0.012) after (0.000, 0.000)
+2024-08-25 16:38:07 [warn] 9 points probed, min error -0.045, max error 0.035, mean 0.002, deviation 0.025
+Height map saved to file 0:/sys/heightmap.csv
+2024-08-25 16:47:43 [warn] Finished printing file 0:/gcodes/four_square_cons.gcode, print time was 0h 12m
+2024-08-25 18:13:53 [warn] HTTP client 192.168.1.192 login succeeded
+2024-08-25 18:13:54 [warn] HTTP client 192.168.1.192 disconnected
+2024-08-25 18:13:54 [warn] Started printing file 0:/gcodes/four_square_cons.gcode
+2024-08-25 18:17:38 [warn] Leadscrew adjustments made: -0.009 0.047 0.007, points used 3, (mean, deviation) before (0.016, 0.018) after (-0.000, 0.000)
+2024-08-25 18:18:15 [warn] 9 points probed, min error -0.063, max error 0.008, mean -0.021, deviation 0.024
+Height map saved to file 0:/sys/heightmap.csv
+2024-08-25 18:27:50 [warn] Finished printing file 0:/gcodes/four_square_cons.gcode, print time was 0h 13m
+2024-08-25 18:53:01 [warn] HTTP client 192.168.1.192 login succeeded
+2024-08-25 18:53:02 [warn] HTTP client 192.168.1.192 disconnected
+2024-08-25 18:53:02 [warn] Started printing file 0:/gcodes/four_square_cons.gcode
+2024-08-25 18:55:46 [warn] Leadscrew adjustments made: -0.000 -0.026 -0.013, points used 3, (mean, deviation) before (-0.014, 0.008) after (-0.000, 0.000)
+2024-08-25 18:56:23 [warn] 9 points probed, min error -0.064, max error 0.005, mean -0.021, deviation 0.024
+Height map saved to file 0:/sys/heightmap.csv
+2024-08-25 19:06:01 [warn] Finished printing file 0:/gcodes/four_square_cons.gcode, print time was 0h 12m
+2024-08-25 20:50:38 [warn] HTTP client 192.168.1.192 login succeeded
+2024-08-25 20:50:44 [warn] HTTP client 192.168.1.192 disconnected
+2024-08-25 20:50:44 [warn] Started printing file 0:/gcodes/3DBenchy.gcode
+2024-08-25 20:54:28 [warn] Leadscrew adjustments made: -0.057 -0.021 -0.031, points used 3, (mean, deviation) before (-0.036, 0.011) after (0.000, 0.000)
+2024-08-25 20:55:29 [warn] 15 points probed, min error -0.060, max error 0.019, mean -0.009, deviation 0.024
+Height map saved to file 0:/sys/heightmap.csv
+2024-08-25 22:12:45 [warn] Finished printing file 0:/gcodes/3DBenchy.gcode, print time was 1h 22m
+2024-08-25 22:45:12 [warn] HTTP client 192.168.1.192 login succeeded
+2024-08-25 22:45:21 [warn] HTTP client 192.168.1.192 disconnected
+2024-08-25 22:45:30 [info] Event logging stopped
+power up + 00:00:00 [info] Event logging started at level warn
+power up + 00:00:00 [info] Running: Duet WiFi 1.02 or later: 3.4.0beta6 (2021-11-06 11:37:41)
+power up + 00:00:00 [warn] Error: Heater 0 does not exist
+power up + 00:00:00 [warn] Warning: Heater 1 appears to be over-powered. If left on at full power, its temperature is predicted to reach 733C
+power up + 00:00:00 [warn] Warning: Heater 0 appears to be over-powered. If left on at full power, its temperature is predicted to reach 234C
+power up + 00:00:00 [warn] Warning: Heater 1 appears to be over-powered. If left on at full power, its temperature is predicted to reach 733C
+power up + 00:00:01 [warn] WiFi module started
+power up + 00:00:11 [warn] WiFi module is connected to access point Q, IP address 192.168.1.205
+power up + 00:00:11 [warn] HTTP client 192.168.1.192 login succeeded
+2024-08-25 22:45:47 [warn] Date and time set at power up + 00:00:11
+2024-08-25 22:45:48 [warn] HTTP client 192.168.1.192 login succeeded
+2024-08-26 06:42:39 [info] Event logging stopped
+power up + 00:00:00 [info] Event logging started at level warn
+power up + 00:00:00 [info] Running: Duet WiFi 1.02 or later: 3.5.2 (2024-06-11 17:13:43)
+power up + 00:00:00 [warn] Error: Heater 0 does not exist
+power up + 00:00:00 [warn] Warning: Heater 1 predicted maximum temperature at full power is 733°C
+power up + 00:00:00 [warn] Warning: Heater 0 predicted maximum temperature at full power is 234°C
+power up + 00:00:00 [warn] Warning: Heater 1 predicted maximum temperature at full power is 733°C
+power up + 00:00:04 [warn] WiFi module started
+power up + 00:00:11 [warn] WiFi module is connected to access point Q, IP address 192.168.1.205
+power up + 00:00:11 [warn] HTTP client 192.168.1.192 login succeeded (session key 0)
+2024-08-26 06:43:02 [warn] Date and time set at power up + 00:00:11
+2024-08-26 06:45:23 [warn] HTTP client 192.168.1.192 login succeeded (session key 1578916808)
+2024-08-26 06:46:49 [info] Event logging stopped
+power up + 00:00:00 [info] Event logging started at level warn
+power up + 00:00:00 [info] Running: Duet WiFi 1.02 or later: 3.5.2 (2024-06-11 17:13:43)
+power up + 00:00:00 [warn] Warning: Heater 1 predicted maximum temperature at full power is 733°C
+power up + 00:00:00 [warn] Warning: Heater 0 predicted maximum temperature at full power is 234°C
+power up + 00:00:00 [warn] Warning: Heater 1 predicted maximum temperature at full power is 733°C
+power up + 00:00:01 [warn] WiFi module started
+power up + 00:00:12 [warn] WiFi module is connected to access point Q, IP address 192.168.1.205
+power up + 00:00:14 [warn] HTTP client 192.168.1.192 login succeeded (session key 1385316975)
+2024-08-26 06:47:05 [warn] Date and time set at power up + 00:00:14
+2024-08-26 06:53:17 [warn] HTTP client 192.168.1.192 login succeeded (session key 0)
+2024-08-26 06:53:36 [warn] HTTP client 192.168.1.192 disconnected
+2024-08-26 06:56:45 [warn] HTTP client 192.168.1.104 login succeeded (session key 0)
+2024-08-26 06:56:50 [warn] HTTP client 192.168.1.104 disconnected
+2024-08-26 06:56:55 [warn] HTTP client 192.168.1.104 login succeeded (session key 4698051)
+2024-08-26 06:57:13 [warn] HTTP client 192.168.1.104 disconnected
+2024-08-26 06:57:17 [warn] HTTP client 192.168.1.104 login succeeded (session key 1650731865)
+2024-08-26 06:57:41 [warn] Error: M21: Cannot initialise SD card 1: Card is unusable
+2024-08-26 06:58:16 [warn] Started printing file 0:/gcodes/CaliLantern 3 v24.gcode
+2024-08-26 06:59:23 [warn] Warning: Driver 2 stalled at Z height -0.05
+2024-08-26 06:59:25 [warn] Warning: Driver 9 stalled at Z height -0.02
+2024-08-26 06:59:25 [warn] Warning: Driver 2 stalled at Z height 0.46
+2024-08-26 06:59:25 [warn] Error: in GCode file line 935 column 6: M98: expected a string expression
+2024-08-26 06:59:25 [warn] Error: Bad command: G
+2024-08-26 07:04:53 [warn] 81 points probed, min error -0.148, max error 0.021, mean -0.051, deviation 0.045
+Height map saved to file 0:/sys/heightmap.csv
+2024-08-26 12:47:01 [warn] Finished printing file 0:/gcodes/CaliLantern 3 v24.gcode, print time was 5h 48m
+2024-08-26 13:18:58 [warn] HTTP client 192.168.1.192 login succeeded (session key 509219462)
+2024-08-26 13:25:06 [warn] Error: M0: Pause the print before attempting to cancel it
+2024-08-26 13:50:20 [warn] HTTP client 192.168.1.104 login succeeded (session key 729164539)
+2024-08-26 13:50:34 [warn] Started printing file 0:/gcodes/q-HEVO_pa_pattern.gcode
+2024-08-26 13:51:17 [warn] Error: No P or R parameter
+2024-08-26 13:51:33 [warn] Error: in GCode file line 111 column 10: M572: expected number after 'D'
+2024-08-26 13:53:02 [warn] Error: in GCode file line 358 column 10: M572: expected number after 'D'
+2024-08-26 13:53:09 [warn] Error: in GCode file line 381 column 14: M572: expected number after 'D'
+2024-08-26 13:53:16 [warn] Error: in GCode file line 404 column 13: M572: expected number after 'D'
+2024-08-26 13:53:23 [warn] Error: in GCode file line 427 column 14: M572: expected number after 'D'
+2024-08-26 13:53:29 [warn] Error: in GCode file line 450 column 13: M572: expected number after 'D'
+2024-08-26 13:53:36 [warn] Error: in GCode file line 473 column 14: M572: expected number after 'D'
+2024-08-26 13:53:43 [warn] Error: in GCode file line 496 column 13: M572: expected number after 'D'
+2024-08-26 13:53:49 [warn] Error: in GCode file line 519 column 14: M572: expected number after 'D'
+2024-08-26 13:53:56 [warn] Error: in GCode file line 542 column 13: M572: expected number after 'D'
+2024-08-26 13:54:03 [warn] Error: in GCode file line 565 column 14: M572: expected number after 'D'
+2024-08-26 13:54:10 [warn] Error: in GCode file line 588 column 13: M572: expected number after 'D'
+2024-08-26 13:54:16 [warn] Error: in GCode file line 611 column 14: M572: expected number after 'D'
+2024-08-26 13:54:23 [warn] Error: in GCode file line 634 column 13: M572: expected number after 'D'
+2024-08-26 13:54:30 [warn] Error: in GCode file line 657 column 14: M572: expected number after 'D'
+2024-08-26 13:54:37 [warn] Error: in GCode file line 680 column 13: M572: expected number after 'D'
+2024-08-26 13:54:43 [warn] Error: in GCode file line 703 column 14: M572: expected number after 'D'
+2024-08-26 13:54:50 [warn] Error: in GCode file line 726 column 13: M572: expected number after 'D'
+2024-08-26 13:54:57 [warn] Error: in GCode file line 751 column 10: M572: expected number after 'D'
+2024-08-26 13:55:16 [warn] Error: in GCode file line 1074 column 10: M572: expected number after 'D'
+2024-08-26 13:55:19 [warn] Error: in GCode file line 1097 column 14: M572: expected number after 'D'
+2024-08-26 13:55:22 [warn] Error: in GCode file line 1120 column 13: M572: expected number after 'D'
+2024-08-26 13:55:25 [warn] Error: in GCode file line 1143 column 14: M572: expected number after 'D'
+2024-08-26 13:55:28 [warn] Error: in GCode file line 1166 column 13: M572: expected number after 'D'
+2024-08-26 13:55:31 [warn] Error: in GCode file line 1189 column 14: M572: expected number after 'D'
+2024-08-26 13:55:35 [warn] Error: in GCode file line 1212 column 13: M572: expected number after 'D'
+2024-08-26 13:55:38 [warn] Error: in GCode file line 1235 column 14: M572: expected number after 'D'
+2024-08-26 13:55:41 [warn] Error: in GCode file line 1258 column 13: M572: expected number after 'D'
+2024-08-26 13:55:44 [warn] Error: in GCode file line 1281 column 14: M572: expected number after 'D'
+2024-08-26 13:55:47 [warn] Error: in GCode file line 1304 column 13: M572: expected number after 'D'
+2024-08-26 13:55:51 [warn] Error: in GCode file line 1327 column 14: M572: expected number after 'D'
+2024-08-26 13:55:54 [warn] Error: in GCode file line 1350 column 13: M572: expected number after 'D'
+2024-08-26 13:55:57 [warn] Error: in GCode file line 1373 column 14: M572: expected number after 'D'
+2024-08-26 13:56:00 [warn] Error: in GCode file line 1396 column 13: M572: expected number after 'D'
+2024-08-26 13:56:03 [warn] Error: in GCode file line 1419 column 14: M572: expected number after 'D'
+2024-08-26 13:56:07 [warn] Error: in GCode file line 1442 column 13: M572: expected number after 'D'
+2024-08-26 13:56:10 [warn] Error: in GCode file line 1466 column 10: M572: expected number after 'D'
+2024-08-26 13:56:13 [warn] Error: in GCode file line 1489 column 14: M572: expected number after 'D'
+2024-08-26 13:56:16 [warn] Error: in GCode file line 1512 column 13: M572: expected number after 'D'
+2024-08-26 13:56:20 [warn] Error: in GCode file line 1535 column 14: M572: expected number after 'D'
+2024-08-26 13:56:23 [warn] Error: in GCode file line 1558 column 13: M572: expected number after 'D'
+2024-08-26 13:56:26 [warn] Error: in GCode file line 1581 column 14: M572: expected number after 'D'
+2024-08-26 13:56:29 [warn] Error: in GCode file line 1604 column 13: M572: expected number after 'D'
+2024-08-26 13:56:32 [warn] Error: in GCode file line 1627 column 14: M572: expected number after 'D'
+2024-08-26 13:56:35 [warn] Error: in GCode file line 1650 column 13: M572: expected number after 'D'
+2024-08-26 13:56:39 [warn] Error: in GCode file line 1673 column 14: M572: expected number after 'D'
+2024-08-26 13:56:42 [warn] Error: in GCode file line 1696 column 13: M572: expected number after 'D'
+2024-08-26 13:56:45 [warn] Error: in GCode file line 1719 column 14: M572: expected number after 'D'
+2024-08-26 13:56:48 [warn] Error: in GCode file line 1742 column 13: M572: expected number after 'D'
+2024-08-26 13:56:51 [warn] Error: in GCode file line 1765 column 14: M572: expected number after 'D'
+2024-08-26 13:56:55 [warn] Error: in GCode file line 1788 column 13: M572: expected number after 'D'
+2024-08-26 13:56:58 [warn] Error: in GCode file line 1811 column 14: M572: expected number after 'D'
+2024-08-26 13:57:01 [warn] Error: in GCode file line 1834 column 13: M572: expected number after 'D'
+2024-08-26 13:57:04 [warn] Error: in GCode file line 1858 column 10: M572: expected number after 'D'
+2024-08-26 13:57:08 [warn] Error: in GCode file line 1881 column 14: M572: expected number after 'D'
+2024-08-26 13:57:11 [warn] Error: in GCode file line 1904 column 13: M572: expected number after 'D'
+2024-08-26 13:57:14 [warn] Error: in GCode file line 1927 column 14: M572: expected number after 'D'
+2024-08-26 13:57:17 [warn] Error: in GCode file line 1950 column 13: M572: expected number after 'D'
+2024-08-26 13:57:20 [warn] Error: in GCode file line 1973 column 14: M572: expected number after 'D'
+2024-08-26 13:57:24 [warn] Error: in GCode file line 1996 column 13: M572: expected number after 'D'
+2024-08-26 13:57:27 [warn] Error: in GCode file line 2019 column 14: M572: expected number after 'D'
+2024-08-26 13:57:30 [warn] Error: in GCode file line 2042 column 13: M572: expected number after 'D'
+2024-08-26 13:57:33 [warn] Error: in GCode file line 2065 column 14: M572: expected number after 'D'
+2024-08-26 13:57:36 [warn] Error: in GCode file line 2088 column 13: M572: expected number after 'D'
+2024-08-26 13:57:39 [warn] Error: in GCode file line 2111 column 14: M572: expected number after 'D'
+2024-08-26 13:57:43 [warn] Error: in GCode file line 2134 column 13: M572: expected number after 'D'
+2024-08-26 13:57:46 [warn] Error: in GCode file line 2157 column 14: M572: expected number after 'D'
+2024-08-26 13:57:49 [warn] Error: in GCode file line 2180 column 13: M572: expected number after 'D'
+2024-08-26 13:57:52 [warn] Error: in GCode file line 2203 column 14: M572: expected number after 'D'
+2024-08-26 13:57:55 [warn] Error: in GCode file line 2226 column 13: M572: expected number after 'D'
+2024-08-26 13:57:58 [warn] Error: in GCode file line 2244 column 10: M572: expected number after 'D'
+2024-08-26 13:57:59 [warn] Finished printing file 0:/gcodes/q-HEVO_pa_pattern.gcode, print time was 0h 7m
+2024-08-26 14:15:20 [warn] HTTP client 192.168.1.104 login succeeded (session key 1526717191)
+2024-08-26 14:15:28 [warn] Started printing file 0:/gcodes/q-HEVO_pa_pattern.gcode
+2024-08-26 14:17:06 [warn] Warning: Driver 2 stalled at Z height 6.42
+2024-08-26 14:17:31 [warn] Warning: Driver 2 stalled at Z height 11.39
+2024-08-26 14:17:33 [warn] Warning: Driver 2 stalled at Z height -0.09
+2024-08-26 14:18:00 [warn] Leadscrew adjustments made: -0.127 -0.142 -0.197, points used 3, (mean, deviation) before (-0.154, 0.027) after (-0.000, 0.000)
+2024-08-26 14:24:43 [warn] Finished printing file 0:/gcodes/q-HEVO_pa_pattern.gcode, print time was 0h 9m
+2024-08-26 16:33:54 [warn] HTTP client 192.168.1.104 login succeeded (session key 1401214781)
+2024-08-26 16:44:38 [warn] HTTP client 192.168.1.192 login succeeded (session key 911151265)
+2024-08-26 16:48:54 [warn] Started printing file 0:/gcodes/q-HEVO_pa_pattern (2).gcode
+2024-08-26 16:48:55 [warn] Warning: Driver 9 stalled at Z height 6.45
+2024-08-26 16:48:58 [warn] Error: G1: intermediate position outside machine limits
+2024-08-26 16:49:19 [warn] Warning: Driver 9 stalled at Z height 11.41
+2024-08-26 16:49:21 [warn] Warning: Driver 2 stalled at Z height -0.09
+2024-08-26 16:49:28 [warn] Cancelled printing file 0:/gcodes/q-HEVO_pa_pattern (2).gcode, print time was 0h 0m
+2024-08-26 16:49:28 [info] Event logging stopped
+power up + 00:00:00 [info] Event logging started at level warn
+power up + 00:00:00 [info] Running: Duet WiFi 1.02 or later: 3.5.2 (2024-06-11 17:13:43)
+power up + 00:00:00 [warn] Warning: Heater 1 predicted maximum temperature at full power is 733°C
+power up + 00:00:00 [warn] Warning: Heater 0 predicted maximum temperature at full power is 234°C
+power up + 00:00:00 [warn] Warning: Heater 1 predicted maximum temperature at full power is 733°C
+power up + 00:00:01 [warn] WiFi module started
+power up + 00:00:11 [warn] WiFi module is connected to access point Q, IP address 192.168.1.205
+power up + 00:00:13 [warn] HTTP client 192.168.1.192 login succeeded (session key 685288618)
+2024-08-26 16:49:44 [warn] Date and time set at power up + 00:00:13
+2024-08-26 17:03:04 [warn] Started printing file 0:/gcodes/q-HEVO_pa_pattern (2).gcode
+2024-08-26 17:04:00 [warn] Warning: Driver 2 stalled at Z height -0.09
+2024-08-26 17:04:02 [warn] Warning: Driver 2 stalled at Z height -0.10
+2024-08-26 17:04:02 [warn] Warning: Driver 9 stalled at Z height -0.08
+2024-08-26 17:04:18 [warn] HTTP client 192.168.1.104 login succeeded (session key 691003865)
+2024-08-26 17:04:20 [warn] HTTP client 192.168.1.104 login succeeded (session key 0)
+2024-08-26 17:04:24 [warn] Leadscrew adjustments made: -0.079 -0.109 -0.085, points used 3, (mean, deviation) before (-0.092, 0.010) after (0.000, 0.000)
+2024-08-26 17:19:38 [warn] Finished printing file 0:/gcodes/q-HEVO_pa_pattern (2).gcode, print time was 0h 16m
+2024-08-26 19:03:49 [warn] Started printing file 0:/gcodes/speed (1).gcode
+2024-08-26 19:04:18 [warn] Warning: Driver 1 stalled at Z height 6.42
+2024-08-26 19:04:20 [warn] Error: G1: intermediate position outside machine limits
+2024-08-26 19:04:45 [warn] Warning: Driver 2 stalled at Z height 2.89
+2024-08-26 19:04:46 [warn] Warning: Driver 2 stalled at Z height 0.38
+2024-08-26 19:10:26 [warn] HTTP client 192.168.1.104 login succeeded (session key 110396079)
+2024-08-26 19:20:19 [warn] Finished printing file 0:/gcodes/speed (1).gcode, print time was 0h 16m
+2024-08-26 20:34:20 [warn] HTTP client 192.168.1.192 login succeeded (session key 1028745)
+2024-08-26 20:49:32 [warn] HTTP client 192.168.1.192 login succeeded (session key 0)

@@ -36,14 +36,19 @@ G90                 ; Absolute positioning
 ;G0 U5 V5 F24000     ; Move 5
 M400                ; make sure everything has stopped before we make changes
 G92 U0 V0           ; Set UV position as 0 so to move the carriage 5mm towards center
-G0 X150 Y150 U155 V155 F24000 ; Move to where UV will be at 5
+
+;G0 X150 Y150 U155 V155 F24000 ; Move to where UV will be at 5
+G0 X0 Y0 U290 V295 F24000 ; Move to where UV will be at 5
+
 
 ; Return carriage home to back by inverting motors
 M400                ; make sure everything has stopped before we make changes
 M569 P4 S1          ; Drive 4 goes backwards U (W)
 M569 P8 S1          ; Drive 8 goes backwards V (A)
 
-G92 U150 V150           ; Set UV position as 5
+
+
+G92 U0 V0           ; Set UV position as 5
 
 ; Folowing are set in stallsettings again.
 ; M584 U10 V11 P3

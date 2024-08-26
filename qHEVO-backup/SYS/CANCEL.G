@@ -11,3 +11,5 @@ G90
 G0 X10 Y290 F2400 ; position for easy part removal
 
 M84		; Steppers off
+
+M300 P300 S4000 ; Play sound

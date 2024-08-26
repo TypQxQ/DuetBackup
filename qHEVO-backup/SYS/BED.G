@@ -4,8 +4,8 @@
 if !move.axes[0].homed || !move.axes[1].homed || !move.axes[2].homed
   G28
 
-M568 S130		  ; Start heating extruder to probing temperature
-M109 R130 		  ; Wait for extruder to reach probing before proceeding
+;M568 S130		  ; Start heating extruder to probing temperature
+;M109 R130 		  ; Wait for extruder to reach probing before proceeding
 
 M98 P"/sys/speeds4probing.g"
 
@@ -18,11 +18,11 @@ G90                       ; absolute positioning
 
 ; Using 3 independent leadscrews to adjust them independently.
 ; Probe the bed and do auto calibration
-G1 X0 Y38 Z10 F10000        ; go to just above the first probe point
+G1 X20 Y38 F10000        ; go to just above the first probe point
 while true
   if iterations = 5
     abort "Too many auto calibration attempts"
-  G30 P0 X0 Y38 Z-99999
+  G30 P0 X20 Y38 Z-99999
   if result != 0
     echo "Failed first calibration point. Restarting"
     continue
@@ -39,7 +39,7 @@ while true
   echo "Repeating calibration because deviation is too high (" ^ move.calibration.initial.deviation ^ "mm)"
 ; end loop
 echo "Auto calibration successful, deviation", move.calibration.final.deviation ^ "mm"
-G1 X5 Y5 Z10 F10000                ; get the head out of the way
+;G1 X5 Y5 Z10 F10000                ; get the head out of the way
 G29 S1 ; Load Heightmap
 M98 P"/sys/speeds4printing.g"
 
