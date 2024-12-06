@@ -2,8 +2,8 @@
 
 M400               ; make sure everything has stopped before we make changes
 
-;M584 X0:4 Y6:8 U10 V10 R0 S0 P3    ; Använd bara XY Bara stepper 10 för 11,12 och 13 finns ej klagar den.
-M584 X0 Y6 U10 V11 P3    ; Använd bara XY men utan DynamicCarriage
+m584 X0:4 Y6:8 U10 V10 R0 S0 P3    ; Använd bara XY Bara stepper 10 för 11,12 och 13 finns ej klagar den.
+;M584 X0 Y6 U10 V11 P3    ; Använd bara XY men utan DynamicCarriage
 
 M906 X1500 Y1500
 ;M913 X100 Y100 U100 V100 W100 A100 E100 Z100             ; Return power to the motors.
